@@ -5,7 +5,7 @@ const getNearByLocation = (payload, onSuccess, onFailure) => {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.nearByVehicle;
   const URL = `${baseUrl}${endpoint}`;
-
+  
   axios
     .get(URL, {
       // cancelToken: source?.token,

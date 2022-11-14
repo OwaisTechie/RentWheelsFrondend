@@ -11,6 +11,7 @@ import store from './App/Redux/store/store';
 import {Provider} from 'react-redux';
 import Custom_Loader from './App/Components/Custom_Loader/Custom_Loader';
 import { NativeBaseProvider } from 'native-base';
+
 LogBox.ignoreAllLogs(true);
 const App = props => {
   return (

@@ -22,15 +22,15 @@ import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import VehicleRegistration from '../../containers/Rental/VehicleRegistration/VehicleRegistration';
 import DateAndLocation from '../../containers/Booking.js/DateAndLocation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Card from '../../containers/Card/PaymentCard';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const AppStack = () => {
   // const [state, dispatch] = useContext(AuthContext);
   const {userMode, users, isLoading} = useSelector(state => state.auth);
-  console.log("USER ->> ",userMode);
+  console.log('USER ->> ', userMode);
   const Drawer = createDrawerNavigator();
   const RightDrawer = createDrawerNavigator();
-
 
   function HeaderLeft(properties) {
     console.log('sds', properties);
@@ -47,10 +47,10 @@ const AppStack = () => {
   function Headercenter(props) {
     console.log('PROPS ', props);
     return (
-      <View style={{alignItems: 'center',justifyContent:'center'}}>
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <Text
           style={{
-            color: Colors.header_left_btn_color,
+            color: Colors.lightPurple,
             fontWeight: 'bold',
             alignSelf: 'center',
             fontSize: 16,
@@ -63,7 +63,7 @@ const AppStack = () => {
   function HeaderRight(props) {
     return <Icon name={'chevron-back'} size={27} color={Colors.White} />;
   }
-  
+
   const header = {
     headerStyle: {
       height: height / 14,
@@ -79,17 +79,21 @@ const AppStack = () => {
     },
     headerTintColor: Colors.primary_green,
   };
-  
+
   function LeftDrawerScreen() {
     return (
       <Drawer.Navigator
         id="LeftDrawer"
         useLegacyImplementation
         // initialRouteName={userMode === 'P' ? 'Home' : 'RenterVehicles'}
-        initialRouteName={'DateAndLocation'}
+        initialRouteName={'HomeNavigator'}
         screenOptions={{
           drawerPosition: 'left',
           // headerShown: false,
+          headerTintColor: Colors.lightPurple,
+          // headerStyle: {
+          //   backgroundColor: 'red',
+          // },
           drawerActiveBackgroundColor: Colors.lightPurple,
           drawerActiveTintColor: '#fff',
           drawerInactiveTintColor: '#333',
@@ -103,10 +107,20 @@ const AppStack = () => {
         {userMode === 'P' ? (
           <>
             <Drawer.Screen
+              name="Card"
+              component={Card}
+              options={{
+                drawerLabel: () => null,
+                title: 'Add Card',
+                drawerIcon: () => null,
+                headerTitle: props => <Headercenter {...props} />,
+              }}
+            />
+            <Drawer.Screen
               name="HomeNavigator"
               component={HomeNavigator}
               options={{
-                headerShown:false,
+                headerShown: false,
                 drawerLabel: 'Home',
                 drawerIcon: ({color}) => (
                   <CustomIcons
@@ -122,7 +136,7 @@ const AppStack = () => {
               name="AllVehicle"
               component={Vehicle}
               options={{
-                headerShown:false,
+                headerShown: false,
                 drawerLabel: 'Vehicles',
                 drawerIcon: ({color}) => (
                   <CustomIcons
@@ -155,10 +169,20 @@ const AppStack = () => {
                 // headerRight: props => <HeaderRight {...props} />,
               }}
             />
-            
           </>
         ) : (
           <>
+            <Drawer.Screen
+              name={'RegisteredVehicles'}
+              component={RegisteredVehicles}
+              options={{
+                drawerIcon: ({color}) => (
+                  <Ionicons name="home-outline" size={22} color={color} />
+                ),
+                title: 'Vehicle Registration',
+                headerTitle: props => <Headercenter {...props} />,
+              }}
+            />
             <Drawer.Screen
               name="RentalVehicle"
               component={RentalVehicle}
@@ -179,16 +203,13 @@ const AppStack = () => {
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),
+
                 headerTitle: props => <Headercenter {...props} />,
                 // headerLeft: props => <HeaderLeft {...props} />,
                 // headerRight: props => <HeaderRight {...props} />,
               }}
             />
-            <Drawer.Screen
-              name={'RegisteredVehicles'}
-              component={RegisteredVehicles}
-              options={{headerShown: false}}
-            />
+
             {/* <Drawer.Screen
               name={'VehicleRegistration'}
               component={VehicleRegistration}
@@ -218,7 +239,6 @@ const AppStack = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  
   return <LeftDrawerScreen />;
 };
 

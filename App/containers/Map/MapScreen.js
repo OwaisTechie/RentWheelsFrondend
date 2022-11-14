@@ -91,14 +91,15 @@ const MapScreen = props => {
   const [isplaces, setIsPlaces] = useState(false);
   const [showfilterModal, setShowFilterModal] = useState(false);
 
-  const [vehicleLoading, setVehicleLoading] = useState(false);
+  const [vehicleLoading, setVehicleLoading] = useState(true);
   const placesRef = useRef();
 
   useEffect(() => {
     if (vehicles?.length < 1 && userLatLong) {
       let pickupLocation = [24.954179757526536, 67.14250599750613];
-      setVehicleLoading(true)
-      getNearByLocation(pickupLocation, onSuccess, onFailure);
+      setVehicleLoading(true);
+      console.log("first")
+      getNearByLocation(pickupLocation,10000, onSuccess, onFailure);
     }
 
     // return () => {
@@ -124,7 +125,7 @@ const MapScreen = props => {
 
   const onFailure = err => {
     console.log('onFailure =>> ', err);
-    setVehicleLoading(false);
+    setVehicleLoading(true);
   };
 
   const fall = new Animated.Value(1);
@@ -283,6 +284,9 @@ const MapScreen = props => {
         customMapStyle={mapStyle}
         provider={PROVIDER_GOOGLE}
         loadingEnabled={vehicles?.length > 0 ? false : true}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+
         loadingIndicatorColor={Colors.lightPurple}
         style={{
           width: Dimensions.get('window').width,

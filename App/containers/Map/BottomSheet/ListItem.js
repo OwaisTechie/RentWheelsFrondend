@@ -30,6 +30,7 @@ export function ListItem(props) {
   let image = item?.images[0];
   // const [skeletonLoader, setskeletonLoader] = useState(true);
   image = getLocalHost(image);
+  
   return (
     <Pressable
       style={({pressed}) => [

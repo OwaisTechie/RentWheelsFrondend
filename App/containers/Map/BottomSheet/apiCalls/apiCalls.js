@@ -1,14 +1,22 @@
 import { Config } from '../../../../Config/Config';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-export function getNearByLocation(payload, onSuccess, onFailure) {
+export function getNearByLocation(payload,timeout, onSuccess, onFailure) {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.nearByVehicle;
   const URL = `${baseUrl}${endpoint}`;
-
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+  console.log("timeout ->> ",timeout)
+  let id =
+    timeout &&
+    setTimeout(() => {
+      id = 0;
+      source.cancel(`Timeout of ${timeout}ms.`);
+    }, timeout);
   axios
     .get(URL, {
-      // cancelToken: source?.token,
+      cancelToken: source?.token,
       params: {pickupLocation: payload[0] + ',' + payload[1]},
     })
     // .get(URL,{ params: `selfDriveCharges.selfDriveDailyCharges[gte]=${payload.noOfSeats}||noOfSeats=${payload.noOfSeats}||noOfDoors${payload}`})
@@ -36,6 +44,17 @@ export function getNearByLocation(payload, onSuccess, onFailure) {
     //         console.log("another error happened:" + error.message);
     //     }
     // }
+    if (axios.isCancel(error)) {
+      Toast.show({
+        topOffset: 60,
+        type: 'error',
+        text1: 'Request TimeOut!',
+        text2: `500`,
+        visibilityTime: 5000,
+        autoHide: true,
+      });
+      console.log('Request canceled', error.message);
+    }
       if (error.response) {
         console.log('ERR =>> ', error.response.data);
         onFailure(error.response.status);
@@ -99,6 +118,8 @@ export function getNearByLocation(payload, onSuccess, onFailure) {
         //   autoHide :true
         // });
       }
+    }).finally(() => {
+      id && clearTimeout(id);
     });
 };
 export function getVehicle(payload, onSuccess, onFailure) {

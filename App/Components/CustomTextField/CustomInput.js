@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import TextInputMask from 'react-native-text-input-mask';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors, Images, CustomIcons} from '../../Theme';
 // import MaskInput from 'react-native-mask-input';
@@ -34,6 +35,7 @@ const CustomInput = forwardRef(
     ref,
   ) => {
     // let masked = props.masked;
+    const masked = '+1 ([000]) [000]-[0000]';
     // console.log("MASKED ",masked)
     const [isFocused, setIsFocused] = useState(false);
     const [hidePassword, setHidePassword] = useState(password);
@@ -60,7 +62,9 @@ const CustomInput = forwardRef(
               ref={ref}
               value={value}
               onFocus={onFocus()}
+              keyboardType={props.keyboardType}
               onChangeText={onChangeText}
+              render={(props) => <TextInputMask {...props} mask={masked} />}
               // onFocus={() => {
               //   onFocus();
               //   setIsFocused(true);

@@ -34,8 +34,8 @@ export function useMap(props) {
       mapRef.current.animateToRegion(
         {
 
-          latitude: 24.860966,
-            longitude: 66.990501,
+            latitude: LocationMarker?.latitude,
+            longitude: LocationMarker?.longitude,
             latitudeDelta: 0.003,
             longitudeDelta: 0.003,
         },

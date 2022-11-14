@@ -86,7 +86,9 @@ const VehicleDetails = props => {
   );
 
   const handleSubmit = () => {
-    console.log('RENT WHEELS');
+    navigation.navigate('DateAndLocation', {
+      vehicleId: Vehicle._id,
+    });
   };
 
   //   useEffect(() => {

@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, StatusBar, StyleSheet, Button} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {Colors} from '../../Theme';
-import {getBookings} from './apiCalls/apiCalls';
+import {addBooking, getBookings} from './apiCalls/apiCalls';
 import {mapStyle} from '../../Theme/mapStyle';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -12,7 +12,8 @@ import {extendMoment} from 'moment-range';
 import DatePicker from 'react-native-date-picker';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import CustomInput from '../../Components/CustomTextField/CustomInput';
-const DateAndLocation = () => {
+const DateAndLocation = props => {
+  const {navigation, route} = props;
   const [vehicle, setVehicle] = useState({});
   const [startOpen, setStartOpen] = useState(false);
   const [selectedStartTime, setStartTime] = useState(new Date());
@@ -22,6 +23,7 @@ const DateAndLocation = () => {
   let mapRef = useRef();
   // const userLatLong = useSelector(state => state?.address?.userLatLong);
   const carLatLong = useSelector(state => state?.address?.carLatLong);
+  console.log('carLatLong ->> ', carLatLong);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectEndDate] = useState(null);
   const [count, setCount] = useState(0);
@@ -29,7 +31,6 @@ const DateAndLocation = () => {
   const [disableDates, setDisableDates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [active, setActive] = useState(false);
-
   const date = useRef();
   const timeRef = useRef();
   const startDate = selectedStartDate
@@ -50,8 +51,10 @@ const DateAndLocation = () => {
   };
 
   useEffect(() => {
+    // const vehicleId=route?.params.vehicleId
+    // console.log("vehicleId ->> ",vehicleId)
     const payload = {
-      abc: 'abc',
+      vehicleId: '634e74d0d5a0a75f21179e4c',
     };
     getBookings(payload, onSuccess, onFailure);
   }, []);
@@ -109,6 +112,12 @@ const DateAndLocation = () => {
       setSelectedStartDate(date);
     }
   };
+  const onPrevious = () => {
+    setSelectedStartDate(null);
+    setSelectEndDate(null);
+    setStartTime(new Date());
+    setEndTime(new Date());
+  };
 
   const defaultScrollViewProps = {
     keyboardShouldPersistTaps: 'handled',
@@ -128,11 +137,41 @@ const DateAndLocation = () => {
     },
   };
 
+  const onSubmit = () => {
+    console.log("selectedStartDate ->> ",selectedStartDate);
+    console.log("selectedStartDate ->> ",selectedEndDate);
+    console.log("selectedStartDate ->> ",selectedStartTime);
+    console.log("selectedStartDate ->> ",selectedEndTime);
+    
+    var StartTime = moment(selectedStartDate).format('yyyy-MM-DD') +" "+ moment(selectedStartTime).format('HH:mm:ss');
+    console.log("StartTime ->> ",StartTime);
+    var endTime = moment(selectedEndDate).format('yyyy-MM-DD') +" "+ moment(selectedEndTime).format('HH:mm:ss');
+    console.log("StartTime ->> ",StartTime);
+    console.log("endTime ->> ",endTime);
+
+    const payload ={
+      startTime:StartTime,
+      endTime:endTime,
+      vehicle:'634e74d0d5a0a75f21179e4c',
+      rentee:'62e165869d8d61530a35d082',
+    }
+    
+    addBooking(payload,onBookingSuccess,onBookingFailure)
+
+  }
+
+  const onBookingSuccess = (data) => {
+    console.log(data)
+  }
+  const onBookingFailure = () => {
+    console.log("BookingFailure")
+  }
+
   const ProgressStepStyles = {
     activeStepIconBorderColor: Colors.lightPurple,
     labelColor: Colors.lightPurple,
     activeLabelColor: Colors.lightPurple,
-    borderWidth: 3,
+    borderWidth: 2,
     marginBottom: 15,
     topOffset: 2,
     activeStepNumColor: Colors.lightPurple,
@@ -150,19 +189,21 @@ const DateAndLocation = () => {
     justifyContent: 'center',
     backgroundColor: Colors.header_background,
     position: 'absolute',
+    elevation: 3,
     bottom: 70,
   };
   const SubmitTextStyle = {
     color: Colors.lightPurple,
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 16,
     borderRadius: 20,
-    paddingHorizontal: 10,
+    padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.header_background,
+    backgroundColor: '#ffffff',
     position: 'absolute',
     bottom: 70,
+    elevation: 3,
     right: 1,
   };
 
@@ -241,8 +282,9 @@ const DateAndLocation = () => {
             previousBtnTextStyle={buttonTextStyle}
             nextBtnText=">"
             previousBtnText="<"
-            finishBtnText="Confirm"
-            onSubmit={() => console.log('Submit')}
+            onPrevious={onPrevious}
+            finishBtnText="Confirm "
+            onSubmit={onSubmit}
             label="Date & Time">
             <View style={styles.Calender}>
               <CalendarPicker
@@ -309,7 +351,7 @@ const DateAndLocation = () => {
                       .toString()}`}
                     iconName="date-range"
                     type="material"
-                    label="Start Date"
+                    label="Pick-up Date"
                     ref={date}
                     value={startDate}
                     returnKeyType="next"
@@ -334,7 +376,7 @@ const DateAndLocation = () => {
                       .toString()}`}
                     iconName="ios-timer-sharp"
                     type="ionicon"
-                    label="Start Time"
+                    label="Pick-up Time"
                     // onChangeText={onChangeText}
                     ref={timeRef}
                     value={startTime}
@@ -368,7 +410,7 @@ const DateAndLocation = () => {
                       .toString()}`}
                     iconName="date-range"
                     type="material"
-                    label="End Date"
+                    label="Drop-off Date"
                     ref={date}
                     value={endDate}
                     autoCompleteType="off"
@@ -386,7 +428,7 @@ const DateAndLocation = () => {
                       .toString()}`}
                     iconName="ios-timer-sharp"
                     type="ionicon"
-                    label="End Time"
+                    label="Drop-off Time"
                     ref={timeRef}
                     value={endTime}
                     onPress={() => setEndOpen(!endOpen)}
@@ -412,8 +454,7 @@ const DateAndLocation = () => {
               date={selectedStartTime}
               onConfirm={date => {
                 setStartOpen(false);
-                console.log('Start TIME ->> ', date);
-                setStartTime(date);
+                setEndTime(date);
               }}
               onCancel={() => {
                 setStartOpen(false);
@@ -426,7 +467,7 @@ const DateAndLocation = () => {
               date={selectedEndTime}
               onConfirm={date => {
                 setEndOpen(false);
-                console.log('End TIME ->> ', date);
+                
                 setEndTime(date);
               }}
               onCancel={() => {
