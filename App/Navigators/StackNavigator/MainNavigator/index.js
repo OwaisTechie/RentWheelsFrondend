@@ -210,8 +210,8 @@ const MainApp = () => {
 
   return (
     <NavigationContainer>
-      {/* {users.userToken == null ? <AuthNavigator /> : <AppStack />} */}
-      <AppStack/>
+      {users.userToken == null ? <AuthNavigator /> : <AppStack />}
+      {/* <AppStack/> */}
     </NavigationContainer>
   );
 };

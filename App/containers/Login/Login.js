@@ -354,10 +354,10 @@ export default Login = ({navigation}) => {
       validationSchema: LoginSchema,
       initialValues: {username: '', password: ''},
       onSubmit: payload => {
-        // setLoader(!loader);
-        console.log("navigation.navigate --> ",navigation.navigate)
-        navigation.navigate('HomeNavigator');
-        // loginRequest(payload, onSuccess, onFailure);
+        setLoader(!loader);
+        // console.log("navigation.navigate --> ",navigation.navigate)
+        // navigation.navigate('HomeNavigator');
+        loginRequest(payload, onSuccess, onFailure);
       },
     });
 

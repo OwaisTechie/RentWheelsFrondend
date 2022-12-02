@@ -119,9 +119,9 @@ const CustomDrawer = props => {
               fontFamily: 'Roboto-Medium',
               marginBottom: 5,
             }}>
-            John Doe
+            Nabeegh
           </Text>
-          <View style={{flexDirection: 'row'}}>
+          {/* <View style={{flexDirection: 'row'}}>
             <Text
               style={{
                 color: '#fff',
@@ -131,7 +131,7 @@ const CustomDrawer = props => {
               280 Coins
             </Text>
             {/* <FontAwesome5 name="coins" size={14} color="#fff" /> */}
-          </View>
+          {/* </View> */} 
         </ImageBackground>
         <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>
           <DrawerItemList {...props} />
