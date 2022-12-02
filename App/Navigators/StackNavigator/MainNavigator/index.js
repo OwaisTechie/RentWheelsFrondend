@@ -46,7 +46,7 @@ import mainReducer from '../../../Redux/auth/Reducer';
 import {AuthContext} from '../../../Context/MainContextProvider';
 import { useSelector,useDispatch } from 'react-redux';
 import { logout,login,retrieveToken,modeChange } from '../../../Redux/auth/Reducer/authReducer';
-import RentalNavigator from '../../DrawerNavigator/RentalNavigator';
+// import RentalNavigator from '../../DrawerNavigator/RentalNavigator';
 import CustomModal from '../../../Components/CustomModal/CustomModal';
 // function HeaderLeft(properties) {
 //   console.log('sds', properties);
@@ -100,9 +100,6 @@ const MainApp = () => {
   const {userMode,users} = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [modalState,setModalState] = useState(false);
-
-  // const [state, dispatch] = useContext(AuthContext);
-  // console.log("MAIN =>> ",state);
   useEffect(() => {
     // Subscribe
     const unsubscribe = NetInfo.addEventListener(netInfo => {
@@ -118,15 +115,19 @@ const MainApp = () => {
 
     async function check() {
       var userToken = await AsyncStorage.getItem('userToken');
-      var userMode = await AsyncStorage.getItem('userMode')
+      var userMode = await AsyncStorage.getItem('userMode');
+      
       console.log("CHECK ->> ",userMode)
+      console.log("userToken -> ",userToken);
       let payload={
         user:userMode
       }
+      
       dispatch(modeChange(payload))
       if (userToken != null || userToken != undefined) {
         AuthToken(onSuccess, onFailure);
       } else {
+        console.log("LOGOUT")
         dispatch(logout());
         // dispatch({type: 'LOGOUT'});
       }
@@ -136,14 +137,24 @@ const MainApp = () => {
    
   }, []);
 
-  const onSuccess = (data, userToken) => {
+  const onSuccess = async (data, userToken) => {
     // userToken = await AsyncStorage.getItem('userToken', userToken);
     // console.log('ONSUCCESS =>> ', data);
-    console.log('ONSUCCESS Token =>> ', userToken);
+    console.log('ONSUCCESS Token =>> ', userToken.headers.authorization);
+    var userDetail = await AsyncStorage.getItem('userDetail');
+    let Token = userToken.headers.authorization
     let payload={
-      userToken:userToken
+      userToken:Token.includes("Bearer") ? Token.substring(7, Token.length - 1) : Token
     }
-    dispatch(retrieveToken(payload));
+
+    let userPayload = {
+      userToken: Token.includes("Bearer") ? Token.substring(7, Token.length - 1) : Token,
+      user: userDetail,
+      isLoading: false,
+    }
+
+    dispatch(login(userPayload));
+    // dispatch(retrieveToken(payload));
     // dispatch({type: 'RETRIEVE_TOKEN', userToken: payload});
   };
   const onFailure = async () => {
@@ -193,28 +204,15 @@ const MainApp = () => {
         />
       )}
       </View>
-      // <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      //   <ActivityIndicator size="large" />
-      // </View>
+     
     );
   }
 
   return (
     <NavigationContainer>
-      {/* {state.users.userToken === null ? <AuthNavigator /> : <AppStack />} */}
+      {/* {users.userToken == null ? <AuthNavigator /> : <AppStack />} */}
       <AppStack/>
     </NavigationContainer>
-    // {/* {loginState.userToken === null ? (
-    //   <AuthNavigator />
-    // ) :  */}
-    // {/* <Drawer.Navigator useLegacyImplementation  screenOptions={{headerShown:false}}
-    //   >
-    //     <Drawer.Screen name='Home' component={Home}  />
-    //   </Drawer.Navigator> */}
-    // {/* <Drawer  /> */}
-    // {/* } */}
-
-    // </AuthContext.Provider>
   );
 };
 

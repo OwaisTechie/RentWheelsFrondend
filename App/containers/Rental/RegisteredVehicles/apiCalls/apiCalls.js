@@ -1,70 +1,43 @@
-import {Config} from '../../../Config/Config';
-import Toast from 'react-native-toast-message';
 import axios from 'axios';
-const getNearByLocation = (payload, onSuccess, onFailure) => {
-  const baseUrl = Config.baseUrl.main;
-  const endpoint = Config.endpoint.vehicles.nearByVehicle;
-  const URL = `${baseUrl}${endpoint}`;
-  
-  axios
-    .get(URL, {
-      // cancelToken: source?.token,
-      params: {pickupLocation: payload[0] + ',' + payload[1]},
-    })
-    // .get(URL,{ params: { filter: `noOfSeats=${payload.noOfSeats}||noOfDoors${payload}` })
-    .then(res => {
-      // if (res.data.responseCode === 200) {
+// import config from "../../../../config";
+import {Config} from '../../../../Config/Config';
+import Toast from 'react-native-toast-message';
+import {getHeaders} from '../../../Constant/requestHeaders';
 
-      Toast.show({
-        // topOffset: 30,
-        topOffset: 60,
-        type: 'success',
-        text1: `Success ${res.data.responseCode}`,
-        text2: res.data.Message,
-        visibilityTime: 3000,
-        autoHide: true,
-      });
-      onSuccess(res.data.Payload);
+export function getVehicleCategies(onSuccess, onFailure) {
+  const baseUrl = Config.baseUrl.main;
+  const endpoint = Config.endpoint;
+  console.log('baseURL ==>', baseUrl);
+  console.log('Config ==>', Config);
+  const URL = `${baseUrl}${endpoint.vehicles.getVehiclesCategory}`;
+  console.log('baseURL1 ==>', URL);
+
+  axios
+    .get(URL)
+    .then(res => {
+      onSuccess(res.data);
     })
     .catch(error => {
       console.log(error, 'Error...');
-    //   if (!unmounted) {
-    //     if (axios.isCancel(error)) {
-    //         console.log(`request cancelled:${error.message}`);
-    //     } else {
-    //         console.log("another error happened:" + error.message);
-    //     }
-    // }
+
       if (error.response) {
-        console.log('ERR =>> ', error.response.data);
         onFailure(error.response.status);
-        if (error.response.status !== 404) {
-          Toast.show({
-            topOffset: 60,
-            type: 'error',
-            text1: 'NetWork Error!',
-            text2: `500`,
-            // visibilityTime: 5000,
-            // autoHide: true,
-          });
-        } else {
-          Toast.show({
-            topOffset: 60,
-            type: 'error',
-            text1: error.response.data.Message,
-            text2: error.response.data.responseCode,
-            visibilityTime: 5000,
-            autoHide: true,
-          });
-        }
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         // onFailure(error.request.status);
+        Toast.show({
+          topOffset: 60,
+          type: 'error',
+          text1: error.response.data.Message,
+          text2: `${error.response.status}`,
+          visibilityTime: 5000,
+          autoHide: true,
+        });
 
         console.log('error.response: ', error.response);
         console.log(error.response.data);
         console.log(error.response.status);
-        // console.log(error.response.data.message);
+        console.log(error.response.data.message);
         console.log(error.response.headers);
       } else if (error.request) {
         console.log('error.request: ', error.request);
@@ -99,6 +72,4 @@ const getNearByLocation = (payload, onSuccess, onFailure) => {
         // });
       }
     });
-};
-
-export default getNearByLocation;
+}

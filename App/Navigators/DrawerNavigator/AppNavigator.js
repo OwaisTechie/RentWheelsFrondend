@@ -13,19 +13,19 @@ import {Colors, CustomIcons} from '../../Theme';
 import RegisteredVehicles from '../../containers/Rental/RegisteredVehicles/RegisteredVehicles';
 import {useNavigation} from '@react-navigation/native';
 
-import RentalVehicle from '../../containers/Rental/RentalVehicle/RentalVehicle';
+// import RentalVehicle from '../../containers/Rental/RentalVehicle/RentalVehicle';
 import Vehicle from '../../containers/Vehicle/Vehicle';
 import HomeNavigator from '../StackNavigator/HomeNavigator/HomeNavigator';
 import VehicleMap from '../../containers/Vehicle/VehicleMap';
 // import FilterDrawerContent from '../../containers/Home/FilterDrawerContent';
 import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
-import VehicleRegistration from '../../containers/Rental/VehicleRegistration/VehicleRegistration';
 import DateAndLocation from '../../containers/Booking.js/DateAndLocation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Card from '../../containers/Card/PaymentCard';
+import Bookings from '../../containers/Rental/Bookings/Bookings';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-const AppStack = () => {
+const AppStack = (props) => {
   // const [state, dispatch] = useContext(AuthContext);
   const {userMode, users, isLoading} = useSelector(state => state.auth);
   console.log('USER ->> ', userMode);
@@ -85,8 +85,8 @@ const AppStack = () => {
       <Drawer.Navigator
         id="LeftDrawer"
         useLegacyImplementation
-        // initialRouteName={userMode === 'P' ? 'Home' : 'RenterVehicles'}
-        initialRouteName={'HomeNavigator'}
+        initialRouteName={userMode === 'R' ? 'HomeNavigator' : 'RegisteredVehicles'}
+        // initialRouteName={'HomeNavigator'}
         screenOptions={{
           drawerPosition: 'left',
           // headerShown: false,
@@ -104,18 +104,8 @@ const AppStack = () => {
           },
         }}
         drawerContent={props => <CustomDrawer {...props} />}>
-        {userMode === 'P' ? (
+        {userMode === 'R' ? (
           <>
-            <Drawer.Screen
-              name="Card"
-              component={Card}
-              options={{
-                drawerLabel: () => null,
-                title: 'Add Card',
-                drawerIcon: () => null,
-                headerTitle: props => <Headercenter {...props} />,
-              }}
-            />
             <Drawer.Screen
               name="HomeNavigator"
               component={HomeNavigator}
@@ -132,6 +122,16 @@ const AppStack = () => {
                 ),
               }}
             />
+            {/* <Drawer.Screen
+              name="Card"
+              component={Card}
+              options={{
+                drawerLabel: () => null,
+                title: 'Add Card',
+                drawerIcon: () => null,
+                headerTitle: props => <Headercenter {...props} />,
+              }}
+            /> */}
             <Drawer.Screen
               name="AllVehicle"
               component={Vehicle}
@@ -184,8 +184,8 @@ const AppStack = () => {
               }}
             />
             <Drawer.Screen
-              name="RentalVehicle"
-              component={RentalVehicle}
+              name="Bookings"
+              component={Bookings}
               options={{
                 // drawerLabel:'Hello',
                 drawerIcon: ({color}) => (
@@ -239,7 +239,7 @@ const AppStack = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  return <LeftDrawerScreen />;
+  return <LeftDrawerScreen  />;
 };
 
 export default AppStack;

@@ -19,6 +19,7 @@ import TwoPointSlider from '../../Components/Two_Points_Slider/TwoPointSlider';
 // import Animated from 'react-native-reanimated';
 import {Colors, CustomIcons, Fonts, Images} from '../../Theme';
 import FilterList from './BottomSheet/FilterList';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const Section = ({containerStyle, title, children}) => {
   return (
@@ -453,7 +454,7 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
           </View>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: 200}}>
+            contentContainerStyle={{paddingBottom: hp('20%')}}>
             {/* BodyType */}
 
             {renderBodyType()}
@@ -478,10 +479,9 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
               bottom: 70,
               left: 0,
               right: 0,
-              height: 110,
               paddingHorizontal: Fonts.SIZES.padding,
               paddingVertical: Fonts.SIZES.radius,
-              backgroundColor: Colors.White,
+              // backgroundColor: Colors.White,
             }}>
             <TextButton
               label="Apply Filters"

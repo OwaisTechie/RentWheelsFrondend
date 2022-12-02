@@ -213,10 +213,11 @@ const VisionCamera = () => {
 
             <View style={styles.leftAndRightOverlay} />
           </View>
-          {/* <View style={{position:'relative',bottom:12}}>
-            <Button title="Reactivate" onPress={startScan} />
-          </View> */}
           <View style={styles.bottomOverlay} />
+          <View style={{position:'absolute',bottom:12}}>
+             <Button title="Reactivate" onPress={startScan} />
+          </View>
+
         </View>
       }
     />

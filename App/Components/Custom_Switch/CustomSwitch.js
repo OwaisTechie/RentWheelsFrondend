@@ -18,12 +18,13 @@ export default function CustomSwitch({
     <View
       style={{
         height: 44,
-        width: '100%',
+        width: '95%',
         backgroundColor: '#e4e4e4',
         borderRadius: 10,
         borderColor: '#AD40AF',
         flexDirection: 'row',
         justifyContent: 'center',
+        
       }}>
       <TouchableOpacity
         activeOpacity={1}

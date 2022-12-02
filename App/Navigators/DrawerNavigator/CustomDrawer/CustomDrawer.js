@@ -16,11 +16,12 @@ import {Colors, CustomIcons, Images} from '../../../Theme';
 import {AuthContext} from '../../../Context/MainContextProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector,useDispatch } from 'react-redux';
-import { modeChange ,globalLoader} from '../../../Redux/auth/Reducer/authReducer';
+import { modeChange ,globalLoader, logout} from '../../../Redux/auth/Reducer/authReducer';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const CustomDrawer = props => {
   const [mode, setMode] = useState(true);
+  console.log("PROPS ->> ",props)
   // const [state, dispatch] = useContext(AuthContext);
   const dispatch = useDispatch();
   const navigation =useNavigation();
@@ -62,10 +63,15 @@ const CustomDrawer = props => {
     dispatch(globalLoader(false));
   }
 
-  const logOut = () => {
-    // authContext.signOut();
-
-    props.navigation.popToTop();
+  const logOut = async () => {
+    console.log("ssss",navigation)
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.log('ERR ', e);
+    }
+    dispatch(logout())
+    navigation.navigate('AuthNavigator', { screen: 'Login' });
   };
   const changeUserMode = async () => {
     navigation.dispatch(DrawerActions.toggleDrawer());

@@ -47,7 +47,7 @@ const DateAndLocation = props => {
     : '';
 
   const onChangeText = () => {
-    console.log('first');
+
   };
 
   useEffect(() => {
@@ -78,12 +78,10 @@ const DateAndLocation = props => {
     if (selectedEndDate != null) {
       const start = new Date(selectedStartDate),
         end = new Date(selectedEndDate);
-      console.log('AA BHI JA');
+
       if (
         hasBlockedDatesInBetweenStartAndEnd(disableDates, start, end) == true
       ) {
-        console.log('selectedStartDate =>> ', selectedStartDate);
-        console.log('selectedEndDate =>> ', selectedEndDate);
         setSelectedStartDate(selectedEndDate);
         // setSelectEndDate(selectedEndDate);
       }
@@ -91,21 +89,16 @@ const DateAndLocation = props => {
   }, [selectedEndDate]);
 
   const onSuccess = data => {
-    console.log('Res ->> ', data);
     setDisableDates(data?.dates);
     setVehicle(data?.vehicle);
     setIsLoading(true);
   };
 
   const onFailure = err => {
-    // console.log('onFailure =>> ', err);
     setIsLoading(true);
-    // setLoading(false);
-    // // setIsLoading(false);
   };
 
   const onDateChange = (date, type) => {
-    console.log('changed Type', type);
     if (type === 'END_DATE') {
       setSelectEndDate(date);
     } else {
@@ -138,17 +131,10 @@ const DateAndLocation = props => {
   };
 
   const onSubmit = () => {
-    console.log("selectedStartDate ->> ",selectedStartDate);
-    console.log("selectedStartDate ->> ",selectedEndDate);
-    console.log("selectedStartDate ->> ",selectedStartTime);
-    console.log("selectedStartDate ->> ",selectedEndTime);
+
     
     var StartTime = moment(selectedStartDate).format('yyyy-MM-DD') +" "+ moment(selectedStartTime).format('HH:mm:ss');
-    console.log("StartTime ->> ",StartTime);
     var endTime = moment(selectedEndDate).format('yyyy-MM-DD') +" "+ moment(selectedEndTime).format('HH:mm:ss');
-    console.log("StartTime ->> ",StartTime);
-    console.log("endTime ->> ",endTime);
-
     const payload ={
       startTime:StartTime,
       endTime:endTime,

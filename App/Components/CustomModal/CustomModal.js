@@ -11,7 +11,6 @@ import styles from './CustomModalStyle';
 //onPress_item(item)
 
 const CustomModal = props => {
-  console.log('MODAL PROPS ', props);
   return (
     <Overlay
       visible={props.visible}

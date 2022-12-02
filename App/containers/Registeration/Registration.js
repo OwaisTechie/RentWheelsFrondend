@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Button
+  Button,
 } from 'react-native';
 
 import {useFormik} from 'formik';
@@ -54,45 +54,50 @@ const heighto = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const icon_color = Colors.White;
 // import {Config} from '../../Config/Config';
-
+import PhoneInput from 'react-native-phone-number-input';
 export default Registration = ({navigation}) => {
   // const dispatch = useDispatch();
 
   const username = useRef(null);
-  const phone = useRef(null);
+  const phoneInput = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
   const confirmPassword = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [registerInfo,setRegisterInfo] = useState({});
+  const [registerInfo, setRegisterInfo] = useState({});
   // console.log("Config",Config.baseUrl.main)
+
+  const [value, setValue] = useState('');
+  const [formattedValue, setFormattedValue] = useState('');
+  const [valid, setValid] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     username: Yup.string()
       .min(3, 'Too Short!')
       .max(20, 'Too Long!')
       .required('Username is Required'),
-    phone: Yup.string()
-      .min(11, 'Too Short')
-      .max(11, 'Phone Number must be less than 12')
-      .matches(/^03[0-9]+$/, 'Invalid Mobile No use 03XXXXXXXXX')
+      phoneInput: Yup.string()
       .required('Mobile No is required!'),
     email: Yup.string()
       .min(3, 'Too Short!')
       .max(50, 'Too Long!')
       .email('Invalid Email')
       .required('Email is required!'),
-    password: Yup.string().min(6,'Password must be 6 or more characters long').required('Password is required'),
-    confirmPassword: Yup.string().min(6,'Password must be 6 or more characters long')
+    password: Yup.string()
+      .min(6, 'Password must be 6 or more characters long')
+      .required('Password is required'),
+    confirmPassword: Yup.string()
+      .min(6, 'Password must be 6 or more characters long')
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm Password is required'),
   });
 
   useEffect(() => {
-    if(JSON.stringify(registerInfo) !== '{}'){
-      Validation(registerInfo,onSuccess,onFailure);
+    if (JSON.stringify(registerInfo) !== '{}') {
+      Validation(registerInfo, onSuccess, onFailure);
     }
-  },[registerInfo])
+  }, [registerInfo]);
 
   const {
     handleChange,
@@ -107,26 +112,32 @@ export default Registration = ({navigation}) => {
   } = useFormik({
     validationSchema: LoginSchema,
     initialValues: {
-      username: 'owais',
-      email: 'owais@gmail.com',
-      password: '123456',
-      confirmPassword: '123456',
-      phone: '03323766916',
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      phoneInput: '',
     },
     onSubmit: payload => {
-      const phone = {
-        phone: payload?.phone.substring(1).replace(/^/, '+92'),
-      };
-      const responseObj = {...payload, ...phone};
-      setIsLoading(true);
-      setRegisterInfo(responseObj);
+      // const phone = {
+      //   phone: payload?.phone.substring(1).replace(/^/, '+92'),
+      // };
+      console.log("payload ->> ",payload)
+      console.log("formattedValue ->> ",formattedValue)
+      // const checkValid = phoneInput.current?.isValidNumber(value);
+      // setShowMessage(true);
+      // setValid(checkValid ? checkValid : false);
+
+      // const responseObj = {...payload, ...phone};
+      // setIsLoading(true);
+      // setRegisterInfo(responseObj);
     },
   });
 
-  const onSuccess = (data) => {
+  const onSuccess = data => {
     // const { isLoading, islogin } = this.state;
     setIsLoading(false);
-    navigation.navigate('OTP',{registerInfo});
+    navigation.navigate('OTP', {registerInfo});
     // props.navigation.navigate('OTP');
     // let Data = data;
     // this.setState({
@@ -136,10 +147,10 @@ export default Registration = ({navigation}) => {
     // });
   };
 
-  const onFailure = (err) => {
-    console.log("onFailure =>> ",err)
+  const onFailure = err => {
+    console.log('onFailure =>> ', err);
     setIsLoading(false);
-    
+
     // const { isLoading, islogin } = this.state;
     // let Data = data;
     // this.setState({
@@ -199,6 +210,7 @@ export default Registration = ({navigation}) => {
                 <CustomInput
                   placeholder="Enter your email"
                   iconName="email-check-outline"
+                  type="materialCommunity"
                   label="Email"
                   ref={email}
                   returnKeyType="next"
@@ -220,10 +232,11 @@ export default Registration = ({navigation}) => {
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onSubmitEditing={() => {
-                    phone.current?.focus();
+                    phoneInput.current?.focus();
                   }}
                   placeholder="Enter your username"
                   iconName="account-key-outline"
+                  type="materialCommunity"
                   label="Username"
                   autoCapitalize="none"
                   keyboardAppearance="dark"
@@ -232,7 +245,56 @@ export default Registration = ({navigation}) => {
                   error={errors.username}
                   touched={touched.username}
                 />
-                <CustomInput
+                <View >
+                  <Text
+                    style={{
+                      marginVertical: hp('1%'),
+                      fontSize: 16,
+                      color: '#05375a',
+                      // color:Colors.grey,
+                    }}>
+                    Phone
+                  </Text>
+                </View>
+                <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={value}
+                  containerStyle={{
+                    height: hp('8%'),
+                    width: hp('42%'),
+                    backgroundColor: Colors.White,
+                    borderRadius: 18,
+                    borderWidth: 1,
+                    marginBottom: hp('1%'),
+                    borderColor: Colors.darkgrey,
+                  }}
+                  textContainerStyle={{
+                    backgroundColor: Colors.White,
+                    paddingVertical: 6,
+                    borderRadius: 18,
+                  }}
+                  defaultCode="PK"
+                  layout="first"
+                  onChangeText={handleChange('phoneInput')}
+                  onChangeFormattedText={text => {
+                    setFormattedValue(text);
+                  }}
+                  withDarkTheme
+                  withShadow
+                  // autoFocus
+                />
+                {errors.phoneInput && (
+          <Text
+            style={{
+              color: '#FF5A5F',
+              fontSize: 12,
+              paddingBottom: hp('1%'),
+              marginHorizontal: wp('3%'),
+            }}>
+            {errors.phoneInput}
+          </Text>
+        )}
+                {/* <CustomInput
                   ref={phone}
                   returnKeyType="next"
                   returnKeyLabel="next"
@@ -250,7 +312,8 @@ export default Registration = ({navigation}) => {
                   error={errors.phone}
                   touched={touched.phone}
                   // masked={mobileNumberMask}
-                />
+                /> */}
+
                 <CustomInput
                   ref={password}
                   returnKeyType="next"
@@ -260,6 +323,7 @@ export default Registration = ({navigation}) => {
                   }}
                   placeholder="Enter your password"
                   iconName="lock-outline"
+                  type="material"
                   label="Password"
                   password
                   autoCapitalize="none"
@@ -277,6 +341,7 @@ export default Registration = ({navigation}) => {
                   onSubmitEditing={handleSubmit}
                   placeholder="Enter your confirm Password"
                   iconName="lock-outline"
+                  type="material"
                   label="Confirm Password"
                   // autoCompleteType="confirmPassword"
                   password

@@ -26,20 +26,24 @@ const CustomInput = forwardRef(
       value,
       onChangeText,
       Styles,
+      description,
       autoCorrect = false,
       touched,
       onPress,
+      editable,
+      multiline = false,
+      maxLength,
+      numberOfLines,
       onFocus = () => {},
       ...props
     },
     ref,
   ) => {
-    // let masked = props.masked;
+
+    
     const masked = '+1 ([000]) [000]-[0000]';
-    // console.log("MASKED ",masked)
     const [isFocused, setIsFocused] = useState(false);
     const [hidePassword, setHidePassword] = useState(password);
-    // console.log("TOUCH ==>",touched)
     const validationColor = !touched
       ? '#05375a'
       : error
@@ -50,16 +54,21 @@ const CustomInput = forwardRef(
       <View style={{marginBottom: 10}}>
         {label ? <Text style={styles.label}>{label}</Text> : null}
         <TouchableOpacity onPress={onPress}>
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer,{height:multiline ? 120 : 60,alignItems: multiline ? 'flex-start' : 'center'}]}>
             <CustomIcons
               name={iconName}
               type={type}
               style={{fontSize: 22, color: validationColor, marginRight: 10}}
             />
+            {/* {description ? } */}
             <TextInput
               secureTextEntry={hidePassword}
               autoCorrect={autoCorrect}
               ref={ref}
+              editable={editable}
+              maxLength={maxLength}
+              multiline={multiline}
+              numberOfLines={numberOfLines}
               value={value}
               onFocus={onFocus()}
               keyboardType={props.keyboardType}
@@ -84,7 +93,7 @@ const CustomInput = forwardRef(
               //     mask={masked}
               //   />
               // )}
-              style={{flex: 1, color: Colors.Black}}
+              style={{color: Colors.Black,width:wp('65%')}}
               {...props}
             />
             {password && (
@@ -120,11 +129,13 @@ const styles = StyleSheet.create({
     // color:Colors.grey,
   },
   inputContainer: {
-    height: 60,
+    // height: 60,
+    // padding:2,
     backgroundColor: Colors.White,
     borderRadius: 18,
     flexDirection: 'row',
-    alignItems: 'center',
+    // justifyContent:'flex',
+    width:'100%',
     paddingHorizontal: 15,
     // shadowColor: Colors.Black,
     // shadowOpacity: 1,

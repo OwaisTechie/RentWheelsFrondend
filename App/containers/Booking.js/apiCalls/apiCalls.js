@@ -10,7 +10,7 @@ export const getBookings = (payload, onSuccess, onFailure) => {
     .get(URL)
     // .get(URL,{ params: { filter: `noOfSeats=${payload.noOfSeats}||noOfDoors${payload}` })
     .then(res => {
-      // if (res.data.responseCode === 200) {
+
 
       Toast.show({
         // topOffset: 30,
@@ -22,17 +22,10 @@ export const getBookings = (payload, onSuccess, onFailure) => {
         autoHide: true,
       });
       onSuccess(res.data.Payload);
-      // console.log(`onSuccess Passing : ${JSON.stringify({cnic:cnic,...res.data})}`)
     })
     .catch(error => {
       console.log(error, 'Error...');
-      //   if (!unmounted) {
-      //     if (axios.isCancel(error)) {
-      //         console.log(`request cancelled:${error.message}`);
-      //     } else {
-      //         console.log("another error happened:" + error.message);
-      //     }
-      // }
+
       if (error.response) {
         console.log('ERR =>> ', error.response.data);
         onFailure(error.response.status);

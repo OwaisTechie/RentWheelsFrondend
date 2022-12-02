@@ -69,7 +69,8 @@ const Home = props => {
   // const theme = useTheme();
   const placesRef = useRef();
   const dispatch = useDispatch();
-  // const {userMode, users} = useSelector(state => state.auth);
+  const {userMode, users} = useSelector(state => state.auth);
+
   
   // const [vehicles, setVehicles] = useState(useSelector(getAllVehicle));
   const sheetRef = useRef(null);
@@ -176,7 +177,6 @@ const Home = props => {
   };
 
   const onFailure = err => {
-    console.log('onFailure =>> ', err);
     setLoading(false);
     // setIsLoading(false);
   };

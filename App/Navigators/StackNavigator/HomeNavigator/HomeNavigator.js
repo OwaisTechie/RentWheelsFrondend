@@ -21,6 +21,7 @@ import DateAndLocation from '../../../containers/Booking.js/DateAndLocation';
 import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import VisionCamera from '../../../containers/VisionCamera/VisionCamera';
+import PaymentCard from '../../../containers/Card/PaymentCard';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const HomeNavigator = () => {
@@ -77,7 +78,7 @@ const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
       screenOptions={header}
-      initialRouteName={'VisionCamera'}>
+      initialRouteName={'Home'}>
       <HomeStack.Screen
         name="Home"
         component={Home}
@@ -117,6 +118,14 @@ const HomeNavigator = () => {
           headerShown: false,
         }}
       />
+       <HomeStack.Screen
+               name="Card"
+               component={PaymentCard}
+               options={{
+                 headerShown: false,
+               }}
+              
+            />
       <HomeStack.Screen
         name="VisionCamera"
         component={VisionCamera}

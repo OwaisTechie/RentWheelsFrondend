@@ -23,15 +23,15 @@ export function getNearByLocation(payload,timeout, onSuccess, onFailure) {
     .then(res => {
       // if (res.data.responseCode === 200) {
 
-      Toast.show({
-        // topOffset: 30,
-        topOffset: 60,
-        type: 'success',
-        text1: `Success ${res.data.responseCode}`,
-        text2: res.data.Message,
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+      // Toast.show({
+      //   // topOffset: 30,
+      //   topOffset: 60,
+      //   type: 'success',
+      //   text1: `Success ${res.data.responseCode}`,
+      //   text2: res.data.Message,
+      //   visibilityTime: 3000,
+      //   autoHide: true,
+      // });
       onSuccess(res.data.Payload);
       // console.log(`onSuccess Passing : ${JSON.stringify({cnic:cnic,...res.data})}`)
     })

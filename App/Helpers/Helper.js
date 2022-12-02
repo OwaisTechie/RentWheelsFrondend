@@ -1,5 +1,7 @@
 import * as yup from "yup";
 import {Dimensions} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const width = Dimensions.get('screen').width;
 const heighto = Dimensions.get('screen').height;
 export const btnStandard = width / 3;
@@ -125,6 +127,67 @@ const statusCode = {
   SUCCESS: 200,
 };
 
+// async function requestUserPermission() {
+//   const authStatus = await messaging().requestPermission();
+//   const enabled =
+//     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+//     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+//   if (enabled) {
+//     console.log('Authorization status:', authStatus);
+//     return getToken();
+//   }
+//   else{
+//     console.log("NOT AUTHORIZED")
+//   }
+// }
+
+// async function getToken(){
+//   let token = await AsyncStorage.getItem("fcmtoken");
+//   if(!token){
+//     try{
+//       await messaging().registerDeviceForRemoteMessages();
+//       const token = await messaging().getToken();
+//       console.log("firebaseToken -> ",token)
+//       if(token){
+//         console.log('New Token ->>',token)
+//         AsyncStorage.setItem("fcmtoken",token)
+//       }
+//     }
+//     catch(error){
+//       console.log(error,"error in fcmtoken")
+//     }
+//   }
+//   return token;
+// }
+
+// const NotificationListner = () => {
+//   // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+//   messaging().onNotificationOpenedApp(remoteMessage => {
+//     console.log(
+//       'Notification caused app to open from background state:',
+//       remoteMessage.notification,
+//     );
+//   });
+
+//   // Check whether an initial notification is available
+//   messaging()
+//     .getInitialNotification()
+//     .then(remoteMessage => {
+//       if (remoteMessage) {
+//         console.log(
+//           'Notification caused app to open from quit state:',
+//           remoteMessage.notification,
+//         );
+//       }
+//     });
+
+//     messaging().onMessage(async remoteMessage => {
+//       console.log('notification on foreground state....',remoteMessage)
+//     })
+// }
+
 export {
   cnicRegex,
   mobileNumberRegex,
@@ -137,6 +200,8 @@ export {
   pinValidation,
   headerInfo,
   isFirstTimeloging,
+  // requestUserPermission,
+  // NotificationListner,
 //   requestUrls,
   messages,
   errorResponseCode,

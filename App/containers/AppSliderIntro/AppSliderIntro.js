@@ -18,27 +18,17 @@ const width = Dimensions.get('screen').width;
 
 const AppSliderIntro = (props) => {
   const [page, setCurrentPage] = useState(0);
-  // const [isScrollEnabled, setisScrollEnabled] = useState(false);
   const swiper = useRef(null);
   const [enable, setEnable] = useState(true);
-  // console.log({page})
+
 
   const onChangeIndex = (index) => {
     setCurrentPage(index)
   }
 
-  // const _onMomentumScrollEnd=(e,state,context) => {
-  //   console.log(state.index)
-  //   setCurrentPage(state.index);
-
-  // }
-
   return (
     <View style={styles.container}>
-      {/* <Image
-        source={Images.Login_bg}
-        style={{width: width, height: height, position: 'absolute'}}
-      /> */}
+
       <Swiper
       loop={false}
         onIndexChanged={ (index) => onChangeIndex(index)}

@@ -14,12 +14,13 @@ export const AuthSlice = createSlice({
   reducers: {
     login: (state,action) => {
         state.users=action.payload;
-
     },
     logout: (state) => {
+      console.log("LOG State");
       state.users.user = null;
       state.users.isLoading= false;
       state.users.userToken= null;
+      state.userMode='P'
     },
     register: (state) => {
       state.users.user = null;
@@ -27,8 +28,9 @@ export const AuthSlice = createSlice({
       state.users.userToken= null;
     },
     retrieveToken: (state,action) => {
+      console.log("action.payload ->> ",action.payload)
       state.users.userToken=action.payload.userToken;
-      isLoading=false;
+      state.users.isLoading=false;
     },
     modeChange: (state,action) => {
       console.log("MODE CHANGE =>> ",action.payload)

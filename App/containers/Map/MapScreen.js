@@ -48,6 +48,7 @@ import {
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import FilterList from './BottomSheet/FilterList';
 import FilterModal from './FilterModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -62,6 +63,7 @@ const MapScreen = props => {
     handelResetInitialPosition,
   } = useMap(props);
   const {LocationMarker} = props;
+
   const [vehicles, setVehicles] = useState([]);
   // const [filter, setFilter] = useState({
   //   vehicleType: '',
@@ -98,17 +100,16 @@ const MapScreen = props => {
     if (vehicles?.length < 1 && userLatLong) {
       let pickupLocation = [24.954179757526536, 67.14250599750613];
       setVehicleLoading(true);
-      console.log("first")
       getNearByLocation(pickupLocation,10000, onSuccess, onFailure);
     }
 
-    // return () => {
-    //   setVehicles([]);
-    // };
+    return () => {
+      setVehicles([]);
+      setVehicleLoading(false);
+    };
   }, []);
 
   const onSuccess = data => {
-    console.log("FILTER data ->> ",data)
     setVehicleLoading(false);
     setVehicles(data.vehicles);
     // dispatch(setNearByVehicle(data.vehicles));
@@ -116,7 +117,6 @@ const MapScreen = props => {
   };
 
   const onFilterSuccess = payload => {
-    console.log("FILTER data ->> ",payload)
     setVehicleLoading(false);
     setVehicles(payload.data);
     // dispatch(setNearByVehicle(data.vehicles));
@@ -124,7 +124,6 @@ const MapScreen = props => {
   };
 
   const onFailure = err => {
-    console.log('onFailure =>> ', err);
     setVehicleLoading(true);
   };
 
@@ -136,7 +135,6 @@ const MapScreen = props => {
 
   // callbacks
   const handleRefresh = () => {
-    console.log('handleRefresh');
 
     let location = [userLatLong.latitude, userLatLong.longitude];
     let pickupLocation = [24.954179757526536, 67.14250599750613];
@@ -284,7 +282,7 @@ const MapScreen = props => {
         customMapStyle={mapStyle}
         provider={PROVIDER_GOOGLE}
         loadingEnabled={vehicles?.length > 0 ? false : true}
-        showsUserLocation={true}
+        // showsUserLocation={true}
         showsMyLocationButton={true}
 
         loadingIndicatorColor={Colors.lightPurple}
