@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 import {Colors, General_Styles, Images} from '../../Theme';
 
 const width = Dimensions.get('screen').width;
@@ -55,6 +56,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
+  fieldContainer: {paddingHorizontal: widthPercentageToDP('4%')},
   columnText: {flexDirection: 'column', alignSelf: 'center'},
   titleText: {fontSize: width / 25, color: Colors.grey},
   dot: {

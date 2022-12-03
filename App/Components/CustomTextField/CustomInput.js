@@ -93,14 +93,14 @@ const CustomInput = forwardRef(
               //     mask={masked}
               //   />
               // )}
-              style={{color: Colors.Black,width:wp('65%')}}
+              style={{color: Colors.Black}}
               {...props}
             />
             {password && (
               <Icon
                 onPress={() => setHidePassword(!hidePassword)}
                 name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
-                style={{fontSize: 22, color: validationColor}}
+                style={{fontSize: 22, color: validationColor,position:'absolute',right:wp('5%')}}
               />
             )}
           </View>

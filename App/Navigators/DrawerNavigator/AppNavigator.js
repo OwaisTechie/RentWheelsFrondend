@@ -40,7 +40,7 @@ const AppStack = (props) => {
         onPress={() => {
           properties.onPress();
         }}>
-        <Icon size={width / 12} color={'grey'} name={'ios-arrow-back-circle'} />
+        <Icon size={width / 12} color={'black'} name={'ios-arrow-back-circle'} />
       </TouchableOpacity>
     );
   }
@@ -53,7 +53,7 @@ const AppStack = (props) => {
             color: Colors.lightPurple,
             fontWeight: 'bold',
             alignSelf: 'center',
-            fontSize: 16,
+            fontSize: 20,
           }}>
           {props.children}
         </Text>
@@ -85,7 +85,7 @@ const AppStack = (props) => {
       <Drawer.Navigator
         id="LeftDrawer"
         useLegacyImplementation
-        initialRouteName={userMode === 'R' ? 'HomeNavigator' : 'RegisteredVehicles'}
+        initialRouteName={userMode === 'R' ? 'Profile' : 'RegisteredVehicles'}
         // initialRouteName={'HomeNavigator'}
         screenOptions={{
           drawerPosition: 'left',
@@ -156,6 +156,7 @@ const AppStack = (props) => {
               name="Profile"
               component={Profile}
               options={{
+                // headerShown: false,
                 drawerIcon: ({color}) => (
                   <CustomIcons
                     type="ionicon"
@@ -164,8 +165,9 @@ const AppStack = (props) => {
                     color={color}
                   />
                 ),
-                // headerTitle: props => <Headercenter {...props} />,
-                // headerLeft: props => <HeaderLeft {...props} />,
+                
+                headerTitle: props => <Headercenter {...props} />,
+                headerLeft: props => <HeaderLeft {...props} />,
                 // headerRight: props => <HeaderRight {...props} />,
               }}
             />
