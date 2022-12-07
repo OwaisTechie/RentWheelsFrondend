@@ -21,7 +21,6 @@ import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const CustomDrawer = props => {
   const [mode, setMode] = useState(true);
-  console.log("PROPS ->> ",props)
   // const [state, dispatch] = useContext(AuthContext);
   const dispatch = useDispatch();
   const navigation =useNavigation();

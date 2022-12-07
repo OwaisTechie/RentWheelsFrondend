@@ -23,6 +23,7 @@ import DateAndLocation from '../../containers/Booking.js/DateAndLocation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Card from '../../containers/Card/PaymentCard';
 import Bookings from '../../containers/Rental/Bookings/Bookings';
+import BookingNavigator from '../StackNavigator/BookingNavigator/BookingNavigator';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const AppStack = (props) => {
@@ -80,7 +81,7 @@ const AppStack = (props) => {
     headerTintColor: Colors.primary_green,
   };
 
-  function LeftDrawerScreen() {
+  function LeftDrawerScreen(props) {
     return (
       <Drawer.Navigator
         id="LeftDrawer"
@@ -186,18 +187,21 @@ const AppStack = (props) => {
               }}
             />
             <Drawer.Screen
-              name="Bookings"
-              component={Bookings}
+              name="BookingNavigator"
+              component={BookingNavigator}
               options={{
-                // drawerLabel:'Hello',
+                headerShown:false,
+                drawerLabel:'List of Bookings',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),
-                headerTitle: props => <Headercenter {...props} />,
+                // title: 'List Of Bookings',
+                // headerTitle: props => <Headercenter {...props} />,
                 // headerLeft: props => <HeaderLeft {...props} />,
                 // headerRight: props => <HeaderRight {...props} />,
               }}
             />
+
             <Drawer.Screen
               name="Profile"
               component={Profile}
@@ -241,7 +245,7 @@ const AppStack = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  return <LeftDrawerScreen  />;
+  return <LeftDrawerScreen props={props} />;
 };
 
 export default AppStack;

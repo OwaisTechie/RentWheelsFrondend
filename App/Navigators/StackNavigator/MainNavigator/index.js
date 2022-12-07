@@ -98,16 +98,18 @@ import CustomModal from '../../../Components/CustomModal/CustomModal';
 
 const MainApp = () => {
   const {userMode,users} = useSelector(state => state.auth);
+  const [checkInternet,setCheckInternet] = useState(false);
   const dispatch = useDispatch();
   const [modalState,setModalState] = useState(false);
   useEffect(() => {
     // Subscribe
     const unsubscribe = NetInfo.addEventListener(netInfo => {
       if(netInfo.isConnected){
-        
+        console.log("NETWORK ON")
         check();
       }
       else{
+        console.log("NETWORK OFF")
         setModalState(true);
         console.log("INTERNET ISSUE")
       }
@@ -135,14 +137,14 @@ const MainApp = () => {
     // Unsubscribe
     unsubscribe();
    
-  }, []);
+  }, [checkInternet]);
 
   const onSuccess = async (data, userToken) => {
     // userToken = await AsyncStorage.getItem('userToken', userToken);
     // console.log('ONSUCCESS =>> ', data);
-    console.log('ONSUCCESS Token =>> ', userToken.headers.authorization);
+    console.log('ONSUCCESS Token =>> ', userToken.headers);
     var userDetail = await AsyncStorage.getItem('userDetail');
-    let Token = userToken.headers.authorization
+    let Token = userToken.headers.Authorization
     let payload={
       userToken:Token.includes("Bearer") ? Token.substring(7, Token.length - 1) : Token
     }
@@ -172,6 +174,8 @@ const MainApp = () => {
   if (users.isLoading) {
 
     const isModalOpen = () => {
+      console.log("first")
+        setCheckInternet(true);
         setModalState(false);
     }
 
@@ -210,8 +214,8 @@ const MainApp = () => {
 
   return (
     <NavigationContainer>
-      {/* {users.userToken == null ? <AuthNavigator /> : <AppStack />} */}
-      <AppStack/>
+      {users.userToken == null ? <AuthNavigator /> : <AppStack />}
+      {/* <AppStack/> */}
     </NavigationContainer>
   );
 };

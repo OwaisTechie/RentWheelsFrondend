@@ -38,7 +38,9 @@ const RegisteredVehicles = () => {
   const [value, setValue] = useState(null);
   const [active, setActive] = useState(false);
   const userId = useSelector(state => state?.auth?.users?.user?._id);
+  const auth = useSelector(state => state?.auth);
   console.log('userId ->> ', userId);
+  console.log('auth ->> ', auth);
   // code remains same
   const [indexSelected, setIndexSelected] = useState(0);
   const vehicle = useRef(null);

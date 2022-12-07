@@ -1,14 +1,16 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import { Colors } from '../../Theme';
+import {Colors} from '../../Theme';
 
 export default function CustomSwitch({
   selectionMode,
   option1,
   option2,
   option3,
+  option4,
   onSelectSwitch,
-  Thirdbtn
+  Thirdbtn,
+  Fourthbtn,
 }) {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
 
@@ -27,14 +29,14 @@ export default function CustomSwitch({
         borderColor: '#AD40AF',
         flexDirection: 'row',
         justifyContent: 'center',
-        
       }}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={() => updateSwitchData(1)}
         style={{
           flex: 1,
-          backgroundColor: getSelectionMode == 1 ? Colors.lightPurple : Colors.darkgrey,
+          backgroundColor:
+            getSelectionMode == 1 ? Colors.lightPurple : Colors.darkgrey,
           borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
@@ -53,7 +55,8 @@ export default function CustomSwitch({
         onPress={() => updateSwitchData(2)}
         style={{
           flex: 1,
-          backgroundColor: getSelectionMode == 2 ? Colors.lightPurple  : Colors.darkgrey,
+          backgroundColor:
+            getSelectionMode == 2 ? Colors.lightPurple : Colors.darkgrey,
           borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
@@ -67,28 +70,48 @@ export default function CustomSwitch({
           {option2}
         </Text>
       </TouchableOpacity>
-      {
-        Thirdbtn && (<TouchableOpacity
+      {Thirdbtn && (
+        <TouchableOpacity
           activeOpacity={1}
           onPress={() => updateSwitchData(3)}
           style={{
             flex: 1,
-            backgroundColor: getSelectionMode == 3 ? '#AD40AF' : '#e4e4e4',
+            backgroundColor: getSelectionMode == 3 ? Colors.lightPurple : Colors.darkgrey,
             borderRadius: 10,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             style={{
-              color: getSelectionMode == 3 ? 'white' : '#AD40AF',
+              color: getSelectionMode == 3 ? 'white' : Colors.lightPurple,
               fontSize: 16,
               fontFamily: 'Roboto-Medium',
             }}>
             {option3}
           </Text>
-        </TouchableOpacity>)
-      }
-      
+        </TouchableOpacity>
+      )}
+      {Fourthbtn && (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => updateSwitchData(4)}
+          style={{
+            flex: 1,
+            backgroundColor: getSelectionMode == 4 ? Colors.lightPurple : Colors.darkgrey,
+            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: getSelectionMode == 4 ? 'white' : Colors.lightPurple,
+              fontSize: 16,
+              fontFamily: 'Roboto-Medium',
+            }}>
+            {option4}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

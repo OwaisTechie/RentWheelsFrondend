@@ -14,6 +14,7 @@ import {Colors, Images, CustomIcons} from '../../Theme';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
+  widthPercentageToDP,
 } from 'react-native-responsive-screen';
 const CustomInput = forwardRef(
   (
@@ -93,7 +94,7 @@ const CustomInput = forwardRef(
               //     mask={masked}
               //   />
               // )}
-              style={{color: Colors.Black}}
+              style={{color: Colors.Black,width:widthPercentageToDP('80%')}}
               {...props}
             />
             {password && (

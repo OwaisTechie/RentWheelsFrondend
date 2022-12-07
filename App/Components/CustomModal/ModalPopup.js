@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
 });
 

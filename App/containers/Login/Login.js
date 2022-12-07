@@ -78,6 +78,7 @@ export default Login = ({navigation}) => {
   const [loader, setLoader] = useState(false);
   const username = useRef(null);
   const [forgotEmail, setForgotEmail] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
   const [otpToken, setOtpToken] = useState('');
   const password = useRef(null);
   const [showfilterModal, setShowFilterModal] = useState(false);
@@ -165,11 +166,7 @@ export default Login = ({navigation}) => {
         console.log('token', token);
         if (token) {
           console.log('New Token ->>', token);
-          await axios
-            .post('http://192.168.0.109:8000/api/v1/users/noti', {token})
-            .then(res => {
-              console.log('Response ->> ', res.data);
-            });
+          setFcmToken(token);
 
           //   } catch (err) {
           //     //Do nothing
@@ -354,10 +351,14 @@ export default Login = ({navigation}) => {
       validationSchema: LoginSchema,
       initialValues: {username: '', password: ''},
       onSubmit: payload => {
-        setLoader(!loader);
+        setLoader(!loader); 
+        var Payload = {
+          ...payload,
+          fcmToken
+        }
         // console.log("navigation.navigate --> ",navigation.navigate)
         // navigation.navigate('HomeNavigator');
-        loginRequest(payload, onSuccess, onFailure);
+        loginRequest(Payload, onSuccess, onFailure);
       },
     });
 

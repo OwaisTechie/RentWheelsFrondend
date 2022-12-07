@@ -1,4 +1,10 @@
-import React, {useSelector, useContext, useState, useRef} from 'react';
+import React, {
+  useSelector,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 import {
   View,
   Text,
@@ -6,6 +12,12 @@ import {
   ImageBackground,
   ScrollView,
   TouchableOpacity,
+  PermissionsAndroid,
+  Linking,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+  Alert,
 } from 'react-native';
 import {Colors, CustomIcons, General_Styles, Images} from '../../Theme';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
@@ -24,12 +36,30 @@ import {
 import PhoneInput from 'react-native-phone-number-input';
 import CustomButton from '../../Components/Custom_btn/CustomButton';
 import ImagePicker from 'react-native-image-crop-picker';
+// import ImagePicker from 'reac';
+import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {set} from 'immer/dist/internal';
+import ModalPoup from '../../Components/CustomModal/ModalPopup';
+import {SIZES} from '../../Theme/Fonts';
+import axios from 'axios';
+
+const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
+
+
+const maskRowHeight = Math.round((height - 300) / 20);
+    const maskColWidth = (width - 300) / 2;
+
 const Profile = () => {
   const username = useRef();
   const phoneInput = useRef();
   const email = useRef();
   const [cnicFront, setCnicFront] = useState('');
+
+  const [cnicFrontImage, setCnicFrontImage] = useState('');
+  
+  const [openCamera,setOpenCamera] = useState(false);
+  const [documentValue, setDocumentValue] = useState('');
 
   const [cnicBack, setCnicBack] = useState('');
 
@@ -37,9 +67,11 @@ const Profile = () => {
 
   const [licenseBack, setlicenseBack] = useState('');
 
-  const [UtilityBills, setUtilityBills] = useState('');
+  const [utilityBills, setUtilityBills] = useState('');
 
   const [cnicVerification, setCnicVerification] = useState('');
+
+  const [showfilterModal, setShowFilterModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [tab, setTab] = useState(1);
   const [value, setValue] = useState('');
@@ -50,6 +82,22 @@ const Profile = () => {
   // const {signIn} =userAuth();
   // console.log('loginState', loginState.user);
 
+  const devices = useCameraDevices();
+  const device = devices.back;
+  const camera = useRef(null);
+  const onPressButton = async () => {
+    const photo = await camera.current.takePhoto({
+      flash: 'off',
+      qualityPrioritization: 'speed',
+    });
+
+    let photoUrl ='file://'+photo.path
+    console.log("PHOTO->>",photoUrl)
+    setCnicFront(photoUrl)
+    setOpenCamera(false);
+    
+  };
+  
   const onSelectSwitch = value => {
     setTab(value);
   };
@@ -60,6 +108,55 @@ const Profile = () => {
     address: 'R-20 Bagh-e-Malir',
     gender: 'male',
   };
+
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Access to photos',
+            message: 'Our App would like to access your photos n your device',
+            buttonNegative: 'Deny',
+            buttonPositive: 'Allow',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          return granted;
+        } else {
+          await Linking.openSettings();
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const updateDocument = () => {
+        const formData = new FormData();
+        cnicFrontImage
+        formData.append('image', {
+          name: cnicFrontImage.path.split('/').pop(),
+          type: cnicFrontImage.mime,
+          uri: Platform.OS === 'android' ? cnicFrontImage.path : files.path.replace('file://', ''),
+        });
+        axios.post('http://192.168.0.105:8000/api/v1/users/verification', formData, {
+          headers: { "Content-type": "multipart/form-data" }
+        }).then((response) => {
+          console.log("RES ->> ",response);
+          // this.cleanupImages();
+          Alert.alert('Upload Post Successfully ' + '');
+        }).catch((error) => {
+          console.log(error);
+          Alert.alert('image Upload Post Failed  , Try again !');
+        });
+      }
+
+  useEffect(() => {
+    requestExternalWritePermission();
+  }, []);
 
   function ProfileView() {
     return (
@@ -205,37 +302,6 @@ const Profile = () => {
     );
   }
 
-  const openImageLibrary = (e) => {
-    ImagePicker.openPicker({
-      // multiple: true,
-      compressImageQuality: 0.5,
-      // maxFiles: `4`,
-      mediaType: 'photo',
-      showsSelectedCount: true,
-    }).then(
-      async imgs => {
-        const img = await ImagePicker.openCropper({
-          mediaType: 'photo',
-          path: imgs.path,
-          cropping: true,
-        });
-        let imageData = {
-          image: img.path,
-        };
-        console.log('IMAGE ->> ', imageData);
-        if(e == 'cnicFront'){
-
-          setCnicFront(img.path);
-        }
-        else{
-          setCnicBack(img.path)
-        }
-      },
-      // setImages(result);
-      // return result;
-    );
-  };
-
   function DocumentView() {
     return (
       <View style={{flex: 1, marginVertical: hp('1%')}}>
@@ -268,14 +334,14 @@ const Profile = () => {
                     borderRadius: 20,
                     borderWidth: 2,
                     alignItems: 'center',
-                    justifyContent:'center',
+                    justifyContent: 'center',
                     borderStyle: 'dotted',
                     height: 150,
                     // width: '100%',
                     borderColor: Colors.backgroundMedium,
                   }}>
                   {cnicFront == '' ? (
-                    <TouchableOpacity onPress={openImageLibrary('cnicFront')}>
+                    <TouchableOpacity onPress={() => ModalOpen('cnicFront')}>
                       <View
                         style={{
                           flex: 1,
@@ -305,10 +371,10 @@ const Profile = () => {
                             flexDirection: 'row',
                             flexWrap: 'wrap',
                             borderRadius: 16,
-                            borderWidth: 4,
+                            // borderWidth: 4,
                             // borderColor:
                             //   index === indexSelected ? Colors.lightPurple : 'white',
-                            borderColor: Colors.lightPurple,
+                            // borderColor: Colors.lightPurple,
                           }}
                           source={{uri: cnicFront}}
                           resizeMode="contain"
@@ -316,8 +382,7 @@ const Profile = () => {
 
                         <TouchableOpacity
                           style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setCnicFront('')}
-                        >
+                          onPress={() => setCnicFront('')}>
                           <CustomIcons
                             name={'ios-close-circle'}
                             type={'ionicon'}
@@ -340,20 +405,20 @@ const Profile = () => {
               <Text style={{fontSize: 12}}>Required</Text>
             </View>
             <View>
-              <View style={{ marginVertical: 10}}>
-              <View
+              <View style={{marginVertical: 10}}>
+                <View
                   style={{
                     borderRadius: 20,
                     borderWidth: 2,
                     alignItems: 'center',
-                    justifyContent:'center',
+                    justifyContent: 'center',
                     borderStyle: 'dotted',
                     height: 150,
                     // width: '100%',
                     borderColor: Colors.backgroundMedium,
                   }}>
                   {cnicBack == '' ? (
-                    <TouchableOpacity onPress={openImageLibrary('cnicBack')}>
+                    <TouchableOpacity onPress={() => ModalOpen('cnicBack')}>
                       <View
                         style={{
                           flex: 1,
@@ -394,8 +459,7 @@ const Profile = () => {
 
                         <TouchableOpacity
                           style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setCnicBack('')}
-                        >
+                          onPress={() => setCnicBack('')}>
                           <CustomIcons
                             name={'ios-close-circle'}
                             type={'ionicon'}
@@ -427,33 +491,71 @@ const Profile = () => {
             </View>
             <View>
               <View style={{marginVertical: 10}}>
-                <TouchableOpacity
-                  // onPress={openImageLibrary}
+                <View
                   style={{
                     borderRadius: 20,
                     borderWidth: 2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderStyle: 'dotted',
                     height: 150,
-                    width: '100%',
+                    // width: '100%',
                     borderColor: Colors.backgroundMedium,
                   }}>
-                  {/* <View > */}
-                  <View
-                    style={{
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <CustomIcons
-                      type="fa"
-                      name="id-card-o"
-                      size={30}
-                      color={Colors.lightPurple}
-                    />
-                    {/* <Text>Add Photos</Text> */}
-                    {/* </View> */}
-                  </View>
-                </TouchableOpacity>
+                  {licenseFront == '' ? (
+                    <TouchableOpacity onPress={() => ModalOpen('licenseFront')}>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <CustomIcons
+                          type="fa"
+                          name="id-card-o"
+                          size={30}
+                          color={Colors.lightPurple}
+                        />
+                        {/* <Text>Add Photos</Text> */}
+                        {/* </View> */}
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={{position: 'relative'}}>
+                      <TouchableOpacity
+                        style={{justifyContent: 'center', alignItems: 'center'}}
+                        activeOpacity={0.9}>
+                        <Image
+                          style={{
+                            width: 120,
+                            height: 100,
+                            // marginRight: 10,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            borderRadius: 16,
+                            borderWidth: 4,
+                            // borderColor:
+                            //   index === indexSelected ? Colors.lightPurple : 'white',
+                            borderColor: Colors.lightPurple,
+                          }}
+                          source={{uri: licenseFront}}
+                          resizeMode="contain"
+                        />
+
+                        <TouchableOpacity
+                          style={{position: 'absolute', right: 4, top: 5}}
+                          onPress={() => setLicenseFront('')}>
+                          <CustomIcons
+                            name={'ios-close-circle'}
+                            type={'ionicon'}
+                            color={Colors.White}
+                            size={25}
+                          />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
           </View>
@@ -465,34 +567,72 @@ const Profile = () => {
               <Text style={{fontSize: 12}}>Required</Text>
             </View>
             <View>
-              <View style={{alignItems: 'center', marginVertical: 10}}>
-                <TouchableOpacity
-                  // onPress={openImageLibrary}
+              <View style={{marginVertical: 10}}>
+                <View
                   style={{
                     borderRadius: 20,
                     borderWidth: 2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderStyle: 'dotted',
                     height: 150,
-                    width: '100%',
+                    // width: '100%',
                     borderColor: Colors.backgroundMedium,
                   }}>
-                  {/* <View > */}
-                  <View
-                    style={{
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <CustomIcons
-                      type="fa"
-                      name="id-card-o"
-                      size={30}
-                      color={Colors.lightPurple}
-                    />
-                    {/* <Text>Add Photos</Text> */}
-                    {/* </View> */}
-                  </View>
-                </TouchableOpacity>
+                  {licenseBack == '' ? (
+                    <TouchableOpacity onPress={() => ModalOpen('licenseBack')}>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <CustomIcons
+                          type="fa"
+                          name="id-card-o"
+                          size={30}
+                          color={Colors.lightPurple}
+                        />
+                        {/* <Text>Add Photos</Text> */}
+                        {/* </View> */}
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={{position: 'relative'}}>
+                      <TouchableOpacity
+                        style={{justifyContent: 'center', alignItems: 'center'}}
+                        activeOpacity={0.9}>
+                        <Image
+                          style={{
+                            width: 120,
+                            height: 100,
+                            // marginRight: 10,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            borderRadius: 16,
+                            borderWidth: 4,
+                            // borderColor:
+                            //   index === indexSelected ? Colors.lightPurple : 'white',
+                            borderColor: Colors.lightPurple,
+                          }}
+                          source={{uri: licenseBack}}
+                          resizeMode="contain"
+                        />
+
+                        <TouchableOpacity
+                          style={{position: 'absolute', right: 4, top: 5}}
+                          onPress={() => setlicenseBack('')}>
+                          <CustomIcons
+                            name={'ios-close-circle'}
+                            type={'ionicon'}
+                            color={Colors.White}
+                            size={25}
+                          />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
           </View>
@@ -514,33 +654,71 @@ const Profile = () => {
             </View>
             <View>
               <View style={{marginVertical: 10}}>
-                <TouchableOpacity
-                  // onPress={openImageLibrary}
+                <View
                   style={{
                     borderRadius: 20,
                     borderWidth: 2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderStyle: 'dotted',
                     height: 150,
-                    width: '100%',
+                    // width: '100%',
                     borderColor: Colors.backgroundMedium,
                   }}>
-                  {/* <View > */}
-                  <View
-                    style={{
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <CustomIcons
-                      type="fa"
-                      name="id-card-o"
-                      size={30}
-                      color={Colors.lightPurple}
-                    />
-                    {/* <Text>Add Photos</Text> */}
-                    {/* </View> */}
-                  </View>
-                </TouchableOpacity>
+                  {utilityBills == '' ? (
+                    <TouchableOpacity onPress={() => ModalOpen('utilityBills')}>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <CustomIcons
+                          type="fa"
+                          name="id-card-o"
+                          size={30}
+                          color={Colors.lightPurple}
+                        />
+                        {/* <Text>Add Photos</Text> */}
+                        {/* </View> */}
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={{position: 'relative'}}>
+                      <TouchableOpacity
+                        style={{justifyContent: 'center', alignItems: 'center'}}
+                        activeOpacity={0.9}>
+                        <Image
+                          style={{
+                            width: 120,
+                            height: 100,
+                            // marginRight: 10,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            borderRadius: 16,
+                            borderWidth: 4,
+                            // borderColor:
+                            //   index === indexSelected ? Colors.lightPurple : 'white',
+                            borderColor: Colors.lightPurple,
+                          }}
+                          source={{uri: utilityBills}}
+                          resizeMode="contain"
+                        />
+
+                        <TouchableOpacity
+                          style={{position: 'absolute', right: 4, top: 5}}
+                          onPress={() => setUtilityBills('')}>
+                          <CustomIcons
+                            name={'ios-close-circle'}
+                            type={'ionicon'}
+                            color={Colors.White}
+                            size={25}
+                          />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
           </View>
@@ -554,41 +732,75 @@ const Profile = () => {
               <Text style={{fontSize: 12}}>Required</Text>
             </View>
             <View>
-              <View style={{alignItems: 'center', marginVertical: 10}}>
-                <TouchableOpacity
-                  // onPress={openImageLibrary}
+              <View style={{marginVertical: 10}}>
+                <View
                   style={{
                     borderRadius: 20,
                     borderWidth: 2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderStyle: 'dotted',
                     height: 150,
-                    width: '100%',
+                    // width: '100%',
                     borderColor: Colors.backgroundMedium,
                   }}>
-                  {/* <View > */}
-                  <View
-                    style={{
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <CustomIcons
-                      type="fa"
-                      name="id-card-o"
-                      size={30}
-                      color={Colors.lightPurple}
-                    />
-                    <Text
-                      style={{
-                        color: Colors.lightPurple,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                      }}>
-                      Your face with Cnic without mask and glasses
-                    </Text>
-                    {/* </View> */}
-                  </View>
-                </TouchableOpacity>
+                  {cnicVerification == '' ? (
+                    <TouchableOpacity
+                      onPress={() => ModalOpen('cnicVerification')}>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <CustomIcons
+                          type="fa"
+                          name="id-card-o"
+                          size={30}
+                          color={Colors.lightPurple}
+                        />
+                        <Text style={{textAlign: 'center'}}>
+                          Cnic Verification with face Without glasses and mask.
+                        </Text>
+                        {/* </View> */}
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <View style={{position: 'relative'}}>
+                      <TouchableOpacity
+                        style={{justifyContent: 'center', alignItems: 'center'}}
+                        activeOpacity={0.9}>
+                        <Image
+                          style={{
+                            width: 120,
+                            height: 100,
+                            // marginRight: 10,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            borderRadius: 16,
+                            borderWidth: 4,
+                            // borderColor:
+                            //   index === indexSelected ? Colors.lightPurple : 'white',
+                            borderColor: Colors.lightPurple,
+                          }}
+                          source={{uri: cnicVerification}}
+                          resizeMode="contain"
+                        />
+
+                        <TouchableOpacity
+                          style={{position: 'absolute', right: 4, top: 5}}
+                          onPress={() => setCnicVerification('')}>
+                          <CustomIcons
+                            name={'ios-close-circle'}
+                            type={'ionicon'}
+                            color={Colors.White}
+                            size={25}
+                          />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
           </View>
@@ -598,10 +810,151 @@ const Profile = () => {
     );
   }
 
+  function renderCamera() {
+    if (device == null) {
+      console.log('first');
+      return <View style={{flex: 1}} />;
+    } else {
+      console.log('HEWL');
+      return (
+        <View style={{flex: 1}}>
+          <Camera
+            ref={camera}
+            style={StyleSheet.absoluteFill}
+            device={device}
+            isActive={true}
+            enableZoomGesture
+            photo={true}
+          />
+
+          <View style={styles.maskOutter}>
+            <View
+              style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
+            />
+            <View style={[{flex: 30}, styles.maskCenter]}>
+              <View style={[{width: maskColWidth}, styles.maskFrame]} />
+              <View style={styles.maskInner} />
+              <View style={[{width: maskColWidth}, styles.maskFrame]} />
+            </View>
+            <View
+              style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
+            />
+          </View>
+
+          <View
+            style={{
+              position: 'absolute',
+              alignItems: 'center',
+              bottom: SIZES.padding,
+              left: 0,
+              right: 0,
+            }}>
+            <TouchableOpacity
+              style={{
+                height: 60,
+                width: 60,
+                borderRadius: 30,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: Colors.White,
+              }}
+              onPress={onPressButton}>
+              <CustomIcons
+                type="fa"
+                name="camera-retro"
+                size={35}
+                // style={{window}}
+                color={Colors.lightPurple}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+  }
+
+  const ModalOpen = e => {
+    setDocumentValue(e);
+    setShowFilterModal(true);
+  };
+
+  const openImageLibrary = () => {
+    ImagePicker.openPicker({
+      // multiple: true,
+      compressImageQuality: 0.7,
+      // maxFiles: `4`,
+      mediaType: 'photo',
+      showsSelectedCount: true,
+    }).then(
+      async imgs => {
+        const img = await ImagePicker.openCropper({
+          mediaType: 'photo',
+          path: imgs.path,
+          cropping: true,
+        });
+        let imageData = {
+          image: img.path,
+        };
+        console.log('IMAGE ->> ', imageData);
+
+        switch (documentValue) {
+          case 'cnicFront':
+            setCnicFrontImage(img);
+            setCnicFront(img.path);
+            break;
+          case 'cnicBack':
+            setCnicBack(img.path);
+            break;
+          case 'licenseFront':
+            setLicenseFront(img.path);
+            break;
+          case licenseBack:
+            setlicenseBack(img.path);
+            break;
+          case 'utilityBills':
+            setUtilityBills(img.path);
+            break;
+          case 'cnicVerification':
+            setCnicVerification(img.path);
+        }
+
+        setShowFilterModal(false);
+      },
+      // setImages(result);
+      // return result;
+    );
+  };
+
+  const openCameraLibray = () => {
+    // setOpenCamera(true)
+    setShowFilterModal(false);
+    // setSwitchValue('2');
+    ImagePicker.openCamera({
+      compressImageMaxHeight:300,
+      compressImageMaxWidth:300,
+      // width: 300,
+      // height: 400,
+      compressImageQuality:0.7,
+      cropping: true,
+    }).then(image => {
+      setCnicFrontImage(image);
+      console.log(image.path);
+      setCnicFront(image.path);
+    });
+  };
+
+  // if (device == null) {
+  //   return <ActivityIndicator size={20} color={'red'} />;
+  // }
+
   return (
     <View
-      style={{backgroundColor: 'white', flex: 1, paddingHorizontal: wp('2%')}}>
-      <View
+      style={{backgroundColor: 'white', flex: 1, paddingHorizontal: wp('2%'),paddingBottom:hp('10%')}}>
+
+        {/* { */}
+           {/* openCamera ? renderCamera() : */}
+            <View>
+            <View
         style={{
           // height: General_Styles.generalHeight / 4,
           marginBottom: hp('1%'),
@@ -618,19 +971,97 @@ const Profile = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {switchValue == '1' ? ProfileView() : DocumentView()}
-      </ScrollView>
+      {switchValue == '1' ? ProfileView() : DocumentView()} 
+      
       <View>
         {switchValue == '1' ? (
           <CustomButton loader={loader} onPress={() => 'Login'} title="Login" />
         ) : (
           <CustomButton
             loader={loader}
-            onPress={() => console.log('Submit')}
+            onPress={updateDocument}
             title="Update Document"
           />
         )}
       </View>
+      </ScrollView>
+          </View>
+          
+        {/* } */}
+      
+
+      
+
+      <ModalPoup
+        visible={showfilterModal}
+        onClose={() => setShowFilterModal(false)}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            width: '100%',
+          }}>
+          <View
+            style={{
+              borderRadius: 20,
+              borderWidth: 2,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // borderStyle: 'dotted',
+              height: hp('15%'),
+              width: wp('40%'),
+              borderColor: Colors.backgroundMedium,
+            }}>
+            <TouchableOpacity onPress={openImageLibrary}>
+              {/* onPress={() => console.log("Touch ",touchValue)}> */}
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <CustomIcons
+                  type="ant"
+                  name="picture"
+                  size={30}
+                  color={Colors.lightPurple}
+                />
+                <Text>Using Gallery</Text>
+                {/* </View> */}
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              borderRadius: 20,
+              borderWidth: 2,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // borderStyle: 'dotted',
+              height: hp('15%'),
+              width: wp('40%'),
+              borderColor: Colors.backgroundMedium,
+            }}>
+            <TouchableOpacity onPress={openCameraLibray}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <CustomIcons
+                  type="ionicon"
+                  name="ios-camera"
+                  size={30}
+                  color={Colors.lightPurple}
+                />
+                <Text>Using Camera</Text>
+                {/* </View> */}
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ModalPoup>
     </View>
   );
 };

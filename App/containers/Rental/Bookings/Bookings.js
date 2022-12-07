@@ -1,50 +1,215 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, StatusBar, Dimensions} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  StatusBar,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
 import {Colors} from '../../../Theme';
-import {TabView, SceneMap} from 'react-native-tab-view';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import CardView from 'react-native-cardview';
+import {getRentalBookings} from './apiCalls/apiCall';
+import {useSelector} from 'react-redux';
+import { BookingItems } from './BookingItems';
+// import {TabView, SceneMap} from 'react-native-tab-view';
 
-const FirstRoute = () => (
-  <View style={[styles.scene, {backgroundColor: '#ff4081'}]} />
-);
+// const FirstRoute = () => (
+//   <View style={[styles.scene, {backgroundColor: '#ff4081'}]} />
+// );
 
-const SecondRoute = () => (
-  <View style={[styles.scene, {backgroundColor: '#673ab7'}]} />
-);
+// const SecondRoute = () => (
+//   <View style={[styles.scene, {backgroundColor: '#673ab7'}]} />
+// );
 
 // This is our placeholder component for the tabs
 // This will be rendered when a tab isn't loaded yet
 // You could also customize it to render different content depending on the route
-const LazyPlaceholder = ({route}) => (
-    <View style={styles.scene}>
-      <Text>Loading {route.title}…</Text>
-    </View>
-  );
-const bookings = () => {
+// const LazyPlaceholder = ({route}) => (
+//     <View style={styles.scene}>
+//       <Text>Loading {route.title}…</Text>
+//     </View>
+//   );
+const Bookings = () => {
+  const [switchValue, setSwitchValue] = useState(1);
   const [index, setIndex] = useState(0);
   const [routes, setRoute] = useState([
     {key: 'first', title: 'First'},
     {key: 'second', title: 'Second'},
   ]);
 
-  
+  const [pending, setPending] = useState([]);
+  const [approve, setApprove] = useState([]);
+  const [rejected, setRejected] = useState([]);
+  const [completed, setCompleted] = useState([]);
 
-  const _renderLazyPlaceholder = ({ route }) => <LazyPlaceholder route={route} />;
-  const _handleIndexChange = index => this.setState({index});
+  useEffect(() => {
+    getRentalBookings(onSuccess, onFailure);
+  }, []);
+
+  function bookingView() {
+    switch (switchValue) {
+      case 1:
+        return (
+          <View>
+            <FlatList
+            data={pending}
+            // renderItem={({item}) => (
+            //   <TouchableOpacity
+            //     onPress={() => {
+            //       console.log(item.vehicle.registrationNumber);
+            //     }}>
+            //     <Text style={{margin: 3, fontSize: 15}}>{item.vehicle.registrationNumber}</Text>
+            //     <Text style={{margin: 3, fontSize: 15}}>{item.renter.username}</Text>
+            //     <Text style={{margin: 3, fontSize: 15}}>{item.renter.email}</Text>
+            //   </TouchableOpacity>
+            // )}
+            contentContainerStyle={styles.contentContainer}
+            refreshing={true}
+            style={{height: '95%'}}
+            keyExtractor={key => {
+              return key._id;
+            }}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => (
+              <BookingItems item={item} onPressElement={() => console.log("first")} />
+            )}
+          />
+          </View>
+          
+        );
+      case 2:
+        return (
+          <View>
+
+            <FlatList
+              data={approve}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log(item.vehicle.registrationNumber);
+                  }}>
+                  <Text style={{margin: 3, fontSize: 15}}>{item.vehicle.registrationNumber}</Text>
+                <Text style={{margin: 3, fontSize: 15}}>{item.renter.username}</Text>
+                <Text style={{margin: 3, fontSize: 15}}>{item.renter.email}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={item => item._id}
+            />
+          </View>
+        );
+      case 3:
+        return (
+          <View>
+
+            <FlatList
+              data={rejected}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log(item.vehicle.registrationNumber);
+                  }}>
+                 <Text style={{margin: 3, fontSize: 15}}>{item.vehicle.registrationNumber}</Text>
+                <Text style={{margin: 3, fontSize: 15}}>{item.renter.username}</Text>
+                <Text style={{margin: 3, fontSize: 15}}>{item.renter.email}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={item => item._id}
+            />
+          </View>
+        );
+      default:
+        return (
+          <View>
+
+            <FlatList
+              data={completed}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log(item.vehicle.registrationNumber);
+                  }}>
+                 <Text style={{margin: 3, fontSize: 15}}>{item.vehicle.registrationNumber}</Text>
+                <Text style={{margin: 3, fontSize: 15}}>{item.renter.username}</Text>
+                <Text style={{margin: 3, fontSize: 15}}>{item.renter.email}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={item => item._id}
+            />
+          </View>
+        );
+    }
+  }
+
+  const onSuccess = data => {
+    const {
+      Payload: {pending, approved, rejected, completed},
+    } = data;
+    setPending(pending);
+    setApprove(approved);
+    setRejected(rejected);
+    setCompleted(completed);
+  };
+
+  const onFailure = () => {
+    console.log('onFailure');
+  };
+
+  // const _renderLazyPlaceholder = ({ route }) => <LazyPlaceholder route={route} />;
+  // const _handleIndexChange = index => this.setState({index});
 
   return (
-    <TabView
-      lazy
-      navigationState={{ index, routes }}
-      renderScene={SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-      })}
-      renderLazyPlaceholder={LazyPlaceholder}
-      onIndexChange={setIndex}
-      initialLayout={{width: Dimensions.get('window').width}}
-      style={styles.container}
-    />
+    <View
+      style={{backgroundColor: 'white', flex: 1, paddingHorizontal: wp('2%')}}>
+      {/* { */}
+      {/* openCamera ? renderCamera() : */}
+      <View>
+        <View
+          style={{
+            // height: General_Styles.generalHeight / 4,
+            marginVertical: hp('1%'),
+            // paddingVertical:hp('5%'),
+            // width: General_Styles.generalWidth,
+            // backgroundColor: Colors,
+            justifyContent: 'center',
+          }}>
+          <CustomSwitch
+            selectionMode={1}
+            option1="Request"
+            option2="Approve"
+            option3="Rejected"
+            option4="Completed"
+            Thirdbtn={true}
+            Fourthbtn={true}
+            onSelectSwitch={e => setSwitchValue(e)}
+          />
+          
+
+          {bookingView()}
+          
+        </View>
+      </View>
+    </View>
+
+    // <TabView
+    //   lazy
+    //   navigationState={{ index, routes }}
+    //   renderScene={SceneMap({
+    //     first: FirstRoute,
+    //     second: SecondRoute,
+    //   })}
+    //   renderLazyPlaceholder={LazyPlaceholder}
+    //   onIndexChange={setIndex}
+    //   initialLayout={{width: Dimensions.get('window').width}}
+    //   style={styles.container}
+    // />
   );
 };
 
@@ -104,6 +269,11 @@ const styles = StyleSheet.create({
     //  borderColor:'blue',
     //  outline: "none"
   },
+  contentContainer: {
+    paddingBottom: hp('3%'),
+    // height:hp('100%'),
+    backgroundColor: Colors.White,
+  },
 });
 
-export default bookings;
+export default Bookings;
