@@ -112,6 +112,13 @@ const BookingNavigator = (props) => {
         component={BookingDetails}
         options={{headerShown: false}}
       />
+       <BookingStack.Screen
+          name="BookingDetailseMap"
+          component={VehicleMap}
+          options={{
+            headerShown: false,
+          }}
+        />
     </BookingStack.Navigator>
   );
 };

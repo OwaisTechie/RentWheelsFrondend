@@ -76,7 +76,7 @@ const AppSliderIntro = (props) => {
               alignSelf: 'center',
             }}
           />
-          <Text style={styles.main_text}>Self drive Cars near You</Text>
+          <Text style={styles.main_text}>Rent Cars near You</Text>
           <View style={styles.little_gap}></View>
           <Text style={styles.sub_text}>
             Conveinent locations just a short walk away.

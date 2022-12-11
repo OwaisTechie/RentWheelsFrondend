@@ -46,7 +46,7 @@ import * as Animatable from 'react-native-animatable';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const BookingDetails = props => {
+const CompletedBookingDetails = props => {
   const {navigation, route} = props;
 
   const camera = useRef(null);
@@ -889,4 +889,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookingDetails;
+export default CompletedBookingDetails;

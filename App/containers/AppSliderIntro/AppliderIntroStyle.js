@@ -30,7 +30,7 @@ export default StyleSheet.create({
     height: height / 50,
   },
   sub_text: {
-    color: Colors.grey,
+    color: Colors.backgroundMedium,
     fontSize: 18,
     // alignSelf: 'center',
     textAlign: 'center',

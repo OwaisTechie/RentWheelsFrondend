@@ -20,7 +20,7 @@ import {getLocalHost} from '../../../Constant/ConvertLocalHost';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 
-export function BookingItems(props) {
+export function CompletedBookingsItem(props) {
   const {item} = props;
   const navigation = useNavigation();
   const vehicleCategory = item?.vehicleCategory;

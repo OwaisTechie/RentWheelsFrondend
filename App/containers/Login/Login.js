@@ -354,7 +354,7 @@ export default Login = ({navigation}) => {
         setLoader(!loader); 
         var Payload = {
           ...payload,
-          fcmToken
+          firebaseToken:fcmToken
         }
         // console.log("navigation.navigate --> ",navigation.navigate)
         // navigation.navigate('HomeNavigator');

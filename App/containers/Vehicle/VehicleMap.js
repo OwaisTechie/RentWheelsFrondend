@@ -18,8 +18,8 @@ const VehicleMap = ({navigation, route}) => {
   });
 
   const initialRegion = {
-    latitude: LocationMarker[1],
-    longitude: LocationMarker[0],
+    latitude: LocationMarker[0],
+    longitude: LocationMarker[1],
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -59,8 +59,8 @@ const VehicleMap = ({navigation, route}) => {
         customMapStyle={mapStyle}
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude:LocationMarker[1],
-          longitude: LocationMarker[0],
+          latitude:LocationMarker[0],
+          longitude: LocationMarker[1],
           latitudeDelta: 0.003,
           longitudeDelta: 0.003,
         }}
@@ -68,8 +68,8 @@ const VehicleMap = ({navigation, route}) => {
         onMapReady={() => {
             mapRef.current.animateToRegion(
               {
-                latitude: LocationMarker[1],
-                longitude: LocationMarker[0],
+                latitude: LocationMarker[0],
+                longitude: LocationMarker[1],
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
               },
@@ -82,8 +82,8 @@ const VehicleMap = ({navigation, route}) => {
         {/*marker to a nearby location */}
         <Marker
           coordinate={{
-            latitude: LocationMarker[1],
-            longitude: LocationMarker[0],
+            latitude: LocationMarker[0],
+            longitude: LocationMarker[1],
           }}
           
         />

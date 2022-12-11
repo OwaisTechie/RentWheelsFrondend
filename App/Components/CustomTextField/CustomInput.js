@@ -45,6 +45,7 @@ const CustomInput = forwardRef(
     const masked = '+1 ([000]) [000]-[0000]';
     const [isFocused, setIsFocused] = useState(false);
     const [hidePassword, setHidePassword] = useState(password);
+    
     const validationColor = !touched
       ? '#05375a'
       : error
@@ -71,7 +72,10 @@ const CustomInput = forwardRef(
               multiline={multiline}
               numberOfLines={numberOfLines}
               value={value}
-              onFocus={onFocus()}
+              onFocus={() => {
+                onFocus();
+                setIsFocused(true);
+              }}
               keyboardType={props.keyboardType}
               onChangeText={onChangeText}
               render={(props) => <TextInputMask {...props} mask={masked} />}

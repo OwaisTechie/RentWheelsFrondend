@@ -39,7 +39,7 @@ import { useFocusEffect } from '@react-navigation/native';
 //       <Text>Loading {route.title}…</Text>
 //     </View>
 //   );
-const Bookings = () => {
+const CompletedAndOngoing = () => {
   const [switchValue, setSwitchValue] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [index, setIndex] = useState(0);
@@ -313,4 +313,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Bookings;
+export default CompletedAndOngoing;

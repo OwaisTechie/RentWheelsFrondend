@@ -9,6 +9,7 @@ import {
   ToastAndroid,
   StatusBar,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -31,10 +32,29 @@ import CustomInput from '../../../Components/CustomTextField/CustomInput';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 const GoogleApikey = 'AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g';
 const RegisteredVehicles = () => {
+  const [inputs, setInputs] = useState({
+    vehicleCategory: '',
+    images: [],
+    yearItems: '',
+    brand: '',
+    model: '',
+    registrationNumber: '',
+    noOfSeats: '',
+    noOfDoors: '',
+    noOfAirbags: '',
+    description: '',
+    selfDriveDailyCharges: '',
+  });
+  const [errors, setErrors] = useState({});
+
+  const [isValid, setIsValid] = useState(true);
+  const [SchemaSteps, setSchemaSteps] = useState(0);
+  const [formikErrors, setFormikErrors] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAvailableForSelfDrive, setIsAvailableForSelfDrive] = useState(false);
   const [isAircondition, setIsAircondition] = useState(false);
   const [isAutomatic, setIsisAutomatic] = useState(false);
+
   const [value, setValue] = useState(null);
   const [active, setActive] = useState(false);
   const userId = useSelector(state => state?.auth?.users?.user?._id);
@@ -43,16 +63,16 @@ const RegisteredVehicles = () => {
   console.log('auth ->> ', auth);
   // code remains same
   const [indexSelected, setIndexSelected] = useState(0);
-  const vehicle = useRef(null);
-  const year = useRef(null);
-  const brand = useRef(null);
-  const model = useRef(null);
-  const registrationNumber = useRef(null);
-  const noOfSeats = useRef(null);
-  const noOfDoors = useRef(null);
-  const noOfAirbags = useRef(null);
-  const description = useRef(null);
-  const selfDriveDailyCharges = useRef(null);
+  // const vehicleCategory = useRef(null);
+  // const year = useRef(null);
+  // const brand = useRef(null);
+  // const model = useRef(null);
+  // const registrationNumber = useRef(null);
+  // const noOfSeats = useRef(null);
+  // const noOfDoors = useRef(null);
+  // const noOfAirbags = useRef(null);
+  // const description = useRef(null);
+  // const selfDriveDailyCharges = useRef(null);
   const onSelect = indexSelected => {
     setIndexSelected(indexSelected);
   };
@@ -170,16 +190,19 @@ const RegisteredVehicles = () => {
         // setImages([...images]);
         ToastAndroid.show('Maximum of 4 images allowed', ToastAndroid.SHORT);
       }
-      setImages(result);
+      handleOnChange(result, 'images');
+      handleError(null,'images');
+      // setImages(result);
       return result;
     });
   };
 
   const deleteImageById = id => {
     console.log('INDEX -> ', id);
-    const filteredData = images.filter(item => item.id !== id);
+    console.log(inputs.images)
+    const filteredData =  inputs.images.filter(item => item.id !== id);
     console.log('FILTER', filteredData);
-    setImages(filteredData);
+    handleOnChange(filteredData, 'images');
     // this.setState({ data: filteredData });
   };
 
@@ -247,60 +270,152 @@ const RegisteredVehicles = () => {
 
   const onPrevious = () => {
     console.log('PRe');
+    setFormikErrors(true);
   };
 
   const onSubmit = () => {
     console.log('SUBMIT');
   };
 
-  const LoginSchema = Yup.object().shape({
-    // fuelTypeItem: Yup.string().required('fuelType is Required'),
-    yearItem: Yup.string().required('Year is Required'),
-    vehicle: Yup.string().required('vehicleType is Required'),
-    brand: Yup.string().required('brand is Required'),
-  });
+  // const LoginSchema = Yup.object().shape({
+  //   // vehicleCategory: Yup.string().required('fuelType is Required'),
+  //   // yearItem: Yup.string().required('Year is Required'),
+  //   // vehicle: Yup.string().required('vehicleType is Required'),
+  //   brand: Yup.string().required('brand is Required'),
+  // });
 
-  const {
-    handleChange,
-    handleSubmit,
-    handleBlur,
-    values,
-    setFieldValue,
-    errors,
-    touched,
-  } = useFormik({
-    validationSchema: LoginSchema,
-    initialValues: {
-      fuelTypeItem: '',
-      isAvailableForSelfDrive: false,
-      isAircondition: false,
-      isAutomatic: false,
-      model: '',
-      yearItem: '',
-      vehicleCategory: '',
-      brand: '',
-      images: [],
-      vehiclePapers: [],
-      vehicleInsurance: [],
-      noOfDoors: '',
-      noOfAirbags: '',
-      noOfSeats: '',
-      description: '',
-      registrationNumber: '',
-      selfDriveDailyCharges: '',
-    },
-    onSubmit: payload => {
-      console.log('PAY ->> ', payload);
-      // setLoader(!loader);
-      // loginRequest(payload, onSuccess, onFailure);
-      // signIn()
-    },
-  });
+  // const LoginSchema1 = Yup.object().shape({
+  //   vehiclePapers: Yup.string().required('fuelType is Required'),
+  // });
 
-  const onChange = e => {
-    setFieldValue('vehicle', e.value);
-    setIsFocus(false);
+  // const LoginSchemaSteps = [LoginSchema, LoginSchema1];
+
+  // const {
+  //   handleChange,
+  //   handleSubmit,
+  //   handleBlur,
+  //   values,
+  //   setFieldValue,
+  //   errors,
+  //   touched,
+  // } = useFormik({
+  //   validationSchema: LoginSchemaSteps[SchemaSteps],
+  //   // validationSchema: LoginSchema,
+  //   initialValues: {
+  //     // fuelTypeItem: '',
+  //     // isAvailableForSelfDrive: false,
+  //     // isAircondition: false,
+  //     // isAutomatic: false,
+  //     // model: '',
+  //     // yearItem: '',
+  //     // vehicleCategory: '',
+  //     brand: '',
+  //     // images: [],
+  //     vehiclePapers: '',
+  //     // vehicleInsurance: [],
+  //     // noOfDoors: '',
+  //     // noOfAirbags: '',
+  //     // noOfSeats: '',
+  //     // description: '',
+  //     // registrationNumber: '',
+  //     // selfDriveDailyCharges: '',
+  //   },
+  //   onSubmit: payload => {
+  //     console.log('PAY ->> ', payload);
+  //     // setLoader(!loader);
+  //     // loginRequest(payload, onSuccess, onFailure);
+  //     // signIn()
+  //   },
+  // });
+
+  const onNextStep = async () => {
+    // setSchemaSteps(step);
+    // console.log(errors, 'gg');
+    valid =await validate();
+    console.log("ERRORS ->> ",isValid)
+    if (isValid) {
+      setFormikErrors(true);
+    } else {
+      setFormikErrors(false);
+    }
   };
+
+  // const onChange = e => {
+  //   setFieldValue('vehicle', e.value);
+  //   setIsFocus(false);
+  // };
+
+  const handleOnChange = (value, input) => {
+    setInputs(prevState => ({...prevState, [input]: value}));
+  };
+  const handleError = (errorMessage, input) => {
+    setErrors(prevState => ({...prevState, [input]: errorMessage}));
+  };
+
+  const validate = () => {
+    Keyboard.dismiss();
+    console.log("!inputs.vehicleCategory ->> ",!inputs.vehicleCategory)
+    console.log("!inputs.yearItems->> ",!inputs.yearItems)
+    console.log("inputs.images.length",inputs.images.length)
+    console.log("!inputs.brand",!inputs.brand)
+    if (!inputs.vehicleCategory) {
+      handleError('Car Type is Required', 'vehicleCategory');
+      setIsValid(false);
+    }
+
+    if (!inputs.yearItems) {
+      handleError('Year is Required', 'yearItems');
+      setIsValid(false);
+    }
+
+    if (!inputs.brand) {
+      handleError('Please input brand', 'brand');
+      setIsValid(false);
+    }
+
+    if (!inputs.model) {
+      handleError('Model is Required', 'model');
+      setIsValid(false);
+    }
+    if (!inputs.registrationNumber) {
+      handleError('Registration Number is Required', 'registrationNumber');
+      setIsValid(false);
+    }
+    if (!inputs.noOfSeats) {
+      handleError('No of Seats is Required', 'noOfSeats');
+      setIsValid(false);
+    }
+    if (!inputs.noOfDoors) {
+      handleError('No of Doors is Required', 'noOfDoors');
+      setIsValid(false);
+    }
+    if (!inputs.noOfAirbags) {
+      handleError('No of Airbags is Required', 'noOfAirbags');
+      setIsValid(false);
+    }
+    if (!inputs.description) {
+      handleError('Description is Required', 'description');
+      setIsValid(false);
+    }
+
+    if (!inputs.selfDriveDailyCharges) {
+      handleError(
+        'Rent Charges is Required',
+        'selfDriveDailyCharges',
+      );
+      setIsValid(false);
+    }
+
+    if (inputs.images.length < 1) {
+      handleError('Please upload images', 'images');
+      setIsValid(false);
+    }
+    console.log("VALIDATION ->> ",isValid)
+  };
+
+  console.log("INPUTS ->> ",inputs);
+  console.log("isValid ->> ",isValid);
+  console.log("errors.vehicleCategory ->> ",errors);
 
   return (
     <View style={styles.container}>
@@ -314,9 +429,9 @@ const RegisteredVehicles = () => {
             label="Vehicle Details"
             scrollViewProps={ScrollViewProps}
             nextBtnText="next"
-            onNext={handleSubmit}
+            onNext={onNextStep}
             nextBtnTextStyle={buttonTextStyle}
-            errors={active}>
+            errors={formikErrors}>
             <View
               style={{
                 marginBottom: 15,
@@ -345,30 +460,46 @@ const RegisteredVehicles = () => {
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={items}
-                  ref={vehicle}
+                  // ref={vehicleCategory}
                   // searchs
                   maxHeight={300}
                   labelField="vehicleType"
                   valueField="_id"
                   placeholder={'Select item'}
                   // searchPlaceholder="Search..."
-                  value={values['vehicleCategory']}
+                  // value={values['vehicleCategory']}
                   // onFocus={() => setIsFocus(true)}
                   // onBlur={handleBlur('vehicle')}
-                  onChange={item => setFieldValue('vehicleCategory', item._id)}
+                  // onChange={item => setFieldValue('vehicleCategory', item._id)}
+                  onFocus={() => {
+                    handleError(null,'vehicleCategory')
+                  }}
+                  onChange={item => handleOnChange(item._id, 'vehicleCategory')}
                   // onChange={onChange}
                 />
+
+                {errors.vehicleCategory && (
+                  <Text
+                    style={{
+                      color: '#FF5A5F',
+                      fontSize: 12,
+                      paddingVertical: hp('1%'),
+                      marginHorizontal: wp('3%'),
+                    }}>
+                    {errors.vehicleCategory}
+                  </Text>
+                )}
               </View>
               <View>
                 <View style={{alignItems: 'center'}}>
                   <Text>Photo Upload</Text>
-                  <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text>
+                  <Text>{`Photos · ${inputs.images.length} / 10 - You can add up to 20 photos.`}</Text>
                 </View>
 
-                {images.length > 0 ? (
+                {inputs.images.length > 0 ? (
                   <FlatList
                     horizontal={true}
-                    data={images}
+                    data={inputs.images}
                     // style={{ position: 'absolute', bottom: 80 }}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
@@ -433,7 +564,7 @@ const RegisteredVehicles = () => {
                         width: '90%',
                         borderColor: Colors.backgroundMedium,
                       }}>
-                      {/* <View > */}
+                      {/* <View >  */}
                       <View
                         style={{
                           flex: 1,
@@ -447,12 +578,23 @@ const RegisteredVehicles = () => {
                           color={Colors.lightPurple}
                         />
                         <Text>Add Photos</Text>
-                        {/* </View> */}
                       </View>
+                      {/* </View> */}
                     </TouchableOpacity>
                   </View>
                 )}
               </View>
+              {errors.images && (
+                  <Text
+                    style={{
+                      color: '#FF5A5F',
+                      fontSize: 12,
+                      paddingVertical: hp('1%'),
+                      marginHorizontal: wp('3%'),
+                    }}>
+                    {errors.images}
+                  </Text>
+                )}
               <View style={{marginBottom: 2}}>
                 <View>
                   <Text
@@ -475,47 +617,54 @@ const RegisteredVehicles = () => {
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={yearItem}
-                  ref={year}
+                  // ref={year}
                   // searchs
                   maxHeight={300}
                   labelField="label"
                   valueField="value"
                   placeholder={'Select Year'}
                   searchPlaceholder="Search..."
-                  value={values['yearItem']}
+                  // value={values['yearItem']}
                   // onFocus={() => setIsFocus(true)}
                   // onBlur={handleBlur('vehicle')}
-                  onChange={item => setFieldValue('yearItem', item.value)}
+                  // onChange={item => setFieldValue('yearItem', item.value)}
+                  onFocus={() => {
+                    handleError(null,'yearItems')
+                  }}
+                  onChange={item => handleOnChange(item.value, 'yearItems')}
                   // onChange={onChange}
                 />
-                {errors.yearItem && (
+                {errors.yearItems && (
                   <Text
                     style={{
                       color: '#FF5A5F',
                       fontSize: 12,
-                      paddingBottom: hp('1%'),
+                      paddingVertical: hp('1%'),
                       marginHorizontal: wp('3%'),
                     }}>
-                    {errors.yearItem}
+                    {errors.yearItems}
                   </Text>
                 )}
               </View>
               <View>
                 <CustomInput
                   placeholder="Enter your brand"
+                  onFocus={() => {
+                    handleError(null,'brand')
+                  }}
                   // iconName="account-key-outline"
                   // type="materialCommunity"
                   label="Brand"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    password.current.focus();
-                  }}
-                  ref={brand}
-                  onBlur={handleBlur('brand')}
+                  // onSubmitEditing={() => {
+                  //   password.current.focus();
+                  // }}
+                  name="brand"
+                  // onBlur={handleBlur}
                   error={errors.brand}
-                  touched={touched.brand}
-                  onChangeText={handleChange('brand')}
+                  // touched={touched.brand}
+                  onChangeText={text => handleOnChange(text, 'brand')}
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -529,14 +678,14 @@ const RegisteredVehicles = () => {
                   label="Model"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    password.current.focus();
+                  onFocus={() => {
+                    handleError(null,'model')
                   }}
-                  ref={model}
-                  onBlur={handleBlur('model')}
+                  // ref={model}
+                  // onBlur={handleBlur('model')}
                   error={errors.model}
-                  touched={touched.model}
-                  onChangeText={handleChange('model')}
+                  // touched={touched.model}
+                  onChangeText={text => handleOnChange(text, 'model')}
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -550,14 +699,16 @@ const RegisteredVehicles = () => {
                   label="Registration Number"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    password.current.focus();
+                  onFocus={() => {
+                    handleError(null,'registrationNumber')
                   }}
-                  ref={registrationNumber}
-                  onBlur={handleBlur('registrationNumber')}
+                  // ref={registrationNumber}
+                  // onBlur={handleBlur('registrationNumber')}
                   error={errors.registrationNumber}
-                  touched={touched.registrationNumber}
-                  onChangeText={handleChange('registrationNumber')}
+                  // touched={touched.registrationNumber}
+                  onChangeText={text =>
+                    handleOnChange(text, 'registrationNumber')
+                  }
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -571,14 +722,14 @@ const RegisteredVehicles = () => {
                   label="Number Of Seats"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    password.current.focus();
+                  onFocus={() => {
+                    handleError(null,'noOfSeats')
                   }}
-                  ref={noOfSeats}
-                  onBlur={handleBlur('noOfSeats')}
+                  // ref={noOfSeats}
+                  // onBlur={handleBlur('noOfSeats')}
                   error={errors.noOfSeats}
-                  touched={touched.noOfSeats}
-                  onChangeText={handleChange('noOfSeats')}
+                  // touched={touched.noOfSeats}
+                  onChangeText={text => handleOnChange(text, 'noOfSeats')}
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -592,14 +743,14 @@ const RegisteredVehicles = () => {
                   label="Number Of Doors"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    password.current.focus();
+                  onFocus={() => {
+                    handleError(null,'noOfDoors')
                   }}
-                  ref={noOfDoors}
-                  onBlur={handleBlur('noOfDoors')}
+                  // ref={noOfDoors}
+                  // onBlur={handleBlur('noOfDoors')}
                   error={errors.noOfDoors}
-                  touched={touched.noOfDoors}
-                  onChangeText={handleChange('noOfDoors')}
+                  // touched={touched.noOfDoors}
+                  onChangeText={text => handleOnChange(text, 'noOfDoors')}
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -613,14 +764,14 @@ const RegisteredVehicles = () => {
                   label="Number Of Airbags"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    password.current.focus();
+                  onFocus={() => {
+                    handleError(null,'noOfAirbags')
                   }}
-                  ref={noOfAirbags}
-                  onBlur={handleBlur('noOfAirbags')}
+                  // ref={noOfAirbags}
+                  // onBlur={handleBlur('noOfAirbags')}
                   error={errors.noOfAirbags}
-                  touched={touched.noOfAirbags}
-                  onChangeText={handleChange('noOfAirbags')}
+                  // touched={touched.noOfAirbags}
+                  onChangeText={text => handleOnChange(text, 'noOfAirbags')}
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -634,15 +785,18 @@ const RegisteredVehicles = () => {
                   label="Vehicle Description"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  ref={description}
+                  // ref={description}
                   editable={true}
                   multiline={true}
                   numberOfLines={4}
                   maxLength={200}
-                  onBlur={handleBlur('description')}
+                  onFocus={() => {
+                    handleError(null,'description')
+                  }}
+                  // onBlur={handleBlur('description')}
                   error={errors.description}
-                  touched={touched.description}
-                  onChangeText={handleChange('description')}
+                  // touched={touched.description}
+                  onChangeText={text => handleOnChange(text, 'description')}
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -656,11 +810,16 @@ const RegisteredVehicles = () => {
                   label="Rent Price"
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  ref={selfDriveDailyCharges}
-                  onBlur={handleBlur('selfDriveDailyCharges')}
+                  // ref={selfDriveDailyCharges}
+                  // onBlur={handleBlur('selfDriveDailyCharges')}
+                  onFocus={() => {
+                    handleError(null,'selfDriveDailyCharges')
+                  }}
                   error={errors.selfDriveDailyCharges}
-                  touched={touched.selfDriveDailyCharges}
-                  onChangeText={handleChange('selfDriveDailyCharges')}
+                  // touched={touched.selfDriveDailyCharges}
+                  onChangeText={text =>
+                    handleOnChange(text, 'selfDriveDailyCharges')
+                  }
                   keyboardAppearance="dark"
                   // returnKeyType='next'
                   // returnKeyLabel='next'
@@ -668,13 +827,13 @@ const RegisteredVehicles = () => {
               </View>
 
               {/* <View style={{alignItems: 'center'}}>
-                <CustomSwitch 
-                selectionMode={1}
-                option1='Hello'
-                option='Hello2'
-                onSelectSwitch={(e) => console.log("SWITVH",e)}
-                />
-              </View> */}
+                  <CustomSwitch
+                    selectionMode={1}
+                    option1="Hello"
+                    option="Hello2"
+                    onSelectSwitch={e => console.log('SWITVH', e)}
+                  /> */}
+              {/* </View> */}
             </View>
           </ProgressStep>
 
@@ -686,14 +845,14 @@ const RegisteredVehicles = () => {
             previousBtnText="<"
             onPrevious={onPrevious}
             finishBtnText="Confirm "
-            onSubmit={onSubmit}
+            onSubmit={() => onNextStep(1)}
             label="Vehicle Papers and more..">
             <View
               style={{
                 marginBottom: 15,
                 paddingHorizontal: wp('4%'),
               }}>
-              <View style={{marginBottom: 2}}>
+              {/* <View style={{marginBottom: 2}}>
                 <View>
                   <Text
                     style={{
@@ -782,7 +941,7 @@ const RegisteredVehicles = () => {
                     {errors.yearItem}
                   </Text>
                 )} */}
-              </View>
+              {/* </View> */}
 
               <View>
                 <View>
@@ -886,7 +1045,7 @@ const RegisteredVehicles = () => {
                   </View>
                 )}
               </View>
-              <View>
+              {/* <View>
                 <View>
                   <Text
                     style={{
@@ -898,9 +1057,9 @@ const RegisteredVehicles = () => {
                     Upload Vehicle Insurance
                   </Text>
                   {/* <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> */}
-                </View>
+              {/* </View> */}
 
-                {images.length > 0 ? (
+              {/* {images.length > 0 ? (
                   <FlatList
                     horizontal={true}
                     data={images}
@@ -969,7 +1128,7 @@ const RegisteredVehicles = () => {
                         borderColor: Colors.backgroundMedium,
                       }}>
                       {/* <View > */}
-                      <View
+              {/* <View
                         style={{
                           flex: 1,
                           alignItems: 'center',
@@ -982,7 +1141,7 @@ const RegisteredVehicles = () => {
                           color={Colors.lightPurple}
                         />
                         <Text>Add Photos</Text>
-                        {/* </View> */}
+                        {/* </View> 
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -1000,7 +1159,7 @@ const RegisteredVehicles = () => {
                     }}>
                     Characteristics:
                   </Text>
-                  {/* <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> */}
+                  {/* <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> 
                 </View>
                 <View>
                   <View>
@@ -1030,7 +1189,7 @@ const RegisteredVehicles = () => {
                     </View>
                   </View>
                 </View>
-              </View>
+              </View> */}
 
               {/* <View style={{alignItems: 'center'}}>
                 <CustomSwitch 
@@ -1104,4 +1263,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
 export default RegisteredVehicles;

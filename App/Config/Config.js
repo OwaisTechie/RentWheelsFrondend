@@ -1,6 +1,6 @@
 export const Config = {
   baseUrl: {
-    main: 'http://192.168.43.197:8000/api/v1/'
+    main: 'http://192.168.0.109:8000/api/v1/'
   },
   endpoint: {
     user:{
@@ -21,7 +21,10 @@ export const Config = {
     },
     bookings:{
       getBookings:'bookings',
-      getmybookings:'bookings/getmybookings'
+      getmybookings:'bookings/getmybookings',
+      approveReject:'bookings/approveorrejectbooking',
+      startrental:'bookings/startrental',
+      endrental:'bookings/endrental'
     },
     compareFace: '/test',
   }

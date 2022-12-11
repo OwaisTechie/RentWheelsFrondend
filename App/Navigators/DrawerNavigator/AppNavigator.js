@@ -26,7 +26,7 @@ import Bookings from '../../containers/Rental/Bookings/Bookings';
 import BookingNavigator from '../StackNavigator/BookingNavigator/BookingNavigator';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-const AppStack = (props) => {
+const AppStack = props => {
   // const [state, dispatch] = useContext(AuthContext);
   const {userMode, users, isLoading} = useSelector(state => state.auth);
   console.log('USER ->> ', userMode);
@@ -41,7 +41,11 @@ const AppStack = (props) => {
         onPress={() => {
           properties.onPress();
         }}>
-        <Icon size={width / 12} color={'black'} name={'ios-arrow-back-circle'} />
+        <Icon
+          size={width / 12}
+          color={'black'}
+          name={'ios-arrow-back-circle'}
+        />
       </TouchableOpacity>
     );
   }
@@ -86,7 +90,7 @@ const AppStack = (props) => {
       <Drawer.Navigator
         id="LeftDrawer"
         useLegacyImplementation
-        initialRouteName={userMode === 'R' ? 'Profile' : 'RegisteredVehicles'}
+        // initialRouteName={userMode === 'R' ? 'Profile' : 'RegisteredVehicles'}
         // initialRouteName={'HomeNavigator'}
         screenOptions={{
           drawerPosition: 'left',
@@ -166,7 +170,7 @@ const AppStack = (props) => {
                     color={color}
                   />
                 ),
-                
+
                 headerTitle: props => <Headercenter {...props} />,
                 headerLeft: props => <HeaderLeft {...props} />,
                 // headerRight: props => <HeaderRight {...props} />,
@@ -176,6 +180,21 @@ const AppStack = (props) => {
         ) : (
           <>
             <Drawer.Screen
+              name="BookingNavigator"
+              component={BookingNavigator}
+              options={{
+                headerShown: false,
+                drawerLabel: 'List of Bookings',
+                drawerIcon: ({color}) => (
+                  <Ionicons name="home-outline" size={22} color={color} />
+                ),
+                // title: 'List Of Bookings',
+                // headerTitle: props => <Headercenter {...props} />,
+                // headerLeft: props => <HeaderLeft {...props} />,
+                // headerRight: props => <HeaderRight {...props} />,
+              }}
+            />
+            <Drawer.Screen
               name={'RegisteredVehicles'}
               component={RegisteredVehicles}
               options={{
@@ -184,21 +203,6 @@ const AppStack = (props) => {
                 ),
                 title: 'Vehicle Registration',
                 headerTitle: props => <Headercenter {...props} />,
-              }}
-            />
-            <Drawer.Screen
-              name="BookingNavigator"
-              component={BookingNavigator}
-              options={{
-                headerShown:false,
-                drawerLabel:'List of Bookings',
-                drawerIcon: ({color}) => (
-                  <Ionicons name="home-outline" size={22} color={color} />
-                ),
-                // title: 'List Of Bookings',
-                // headerTitle: props => <Headercenter {...props} />,
-                // headerLeft: props => <HeaderLeft {...props} />,
-                // headerRight: props => <HeaderRight {...props} />,
               }}
             />
 
