@@ -10,17 +10,6 @@ export const getBookings = (payload, onSuccess, onFailure) => {
     .get(URL)
     // .get(URL,{ params: { filter: `noOfSeats=${payload.noOfSeats}||noOfDoors${payload}` })
     .then(res => {
-
-
-      Toast.show({
-        // topOffset: 30,
-        topOffset: 60,
-        type: 'success',
-        text1: `Success ${res.data.responseCode}`,
-        text2: res.data.Message,
-        visibilityTime: 3000,
-        autoHide: true,
-      });
       onSuccess(res.data.Payload);
     })
     .catch(error => {

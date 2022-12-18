@@ -9,18 +9,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
-import {Colors} from '../../../Theme';
+import CustomSwitch from '../../../../Components/Custom_Switch/CustomSwitch';
+import {Colors} from '../../../../Theme'
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import CardView from 'react-native-cardview';
-import {getRentalBookings} from './apiCalls/apiCall';
+// import {getRentalBookings} from './apiCalls/apiCall';
 import {useSelector} from 'react-redux';
-import {BookingItems} from './BookingItems';
-import BottomSheetSkelton from '../../Map/BottomSheet/BottomSheetSkelton';
+// import {BookingItems} from './BookingItems';
+import BottomSheetSkelton from '../../../Map/BottomSheet/BottomSheetSkelton';
 import { useFocusEffect } from '@react-navigation/native';
+import { activeRentals } from '../apiCalls/apiCall';
+import { BookingItems } from '../BookingItems';
+import { CompletedBookingsItem } from './CompletedBookingsItem';
 // import {TabView, SceneMap} from 'react-native-tab-view';
 
 // const FirstRoute = () => (
@@ -48,20 +51,17 @@ const CompletedAndOngoing = () => {
     {key: 'second', title: 'Second'},
   ]);
 
-  const [pending, setPending] = useState([]);
-  const [approve, setApprove] = useState([]);
-  const [rejected, setRejected] = useState([]);
+  const [onGoing, setOnGoing] = useState([]);
   const [completed, setCompleted] = useState([]);
+
 
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
-      getRentalBookings(onSuccess, onFailure);
+      activeRentals(onSuccess, onFailure);
       // Do something when the screen is focused
       return (() => {
-        setPending([]);
-        setApprove([]);
-        setRejected([]);
+        setOnGoing([]);
         setCompleted([]);
         setIsLoading(false);
       });
@@ -76,10 +76,10 @@ const CompletedAndOngoing = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            ) : (
+            )  : onGoing.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View> : (
               <View>
                 <FlatList
-                  data={pending}
+                  data={onGoing}
                   contentContainerStyle={styles.contentContainer}
                   refreshing={true}
                   style={{height: '95%'}}
@@ -88,7 +88,7 @@ const CompletedAndOngoing = () => {
                   }}
                   showsVerticalScrollIndicator={false}
                   renderItem={({item}) => (
-                    <BookingItems
+                    <CompletedBookingsItem
                       item={item}
                       onPressElement={() => console.log('first')}
                     />
@@ -103,10 +103,10 @@ const CompletedAndOngoing = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            ) : (
+            ) : completed.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : (
               <View>
                 <FlatList
-                  data={approve}
+                  data={completed}
                   // renderItem={({item}) => (
                   //   <TouchableOpacity
                   //     onPress={() => {
@@ -130,55 +130,17 @@ const CompletedAndOngoing = () => {
                     return key._id;
                   }}
                   showsVerticalScrollIndicator={false}
-                  renderItem={({item}) => (
-                    <BookingItems
+                  renderItem={({item}) => {
+                    console.log("ITEM ->> ",item)
+                    return (
+                      <CompletedBookingsItem
                       item={item}
                       onPressElement={() => console.log('first')}
                     />
-                  )}
-                />
-              </View>
-            )}
-          </View>
-        );
-      case 3:
-        return (
-          <View style={{height: '100%'}}>
-            {isLoading ? (
-              <BottomSheetSkelton />
-            ) : (
-              <View>
-                <FlatList
-                  data={rejected}
-                  // renderItem={({item}) => (
-                  //   <TouchableOpacity
-                  //     onPress={() => {
-                  //       console.log(item.vehicle.registrationNumber);
-                  //     }}>
-                  //     <Text style={{margin: 3, fontSize: 15}}>
-                  //       {item.vehicle.registrationNumber}
-                  //     </Text>
-                  //     <Text style={{margin: 3, fontSize: 15}}>
-                  //       {item.renter.username}
-                  //     </Text>
-                  //     <Text style={{margin: 3, fontSize: 15}}>
-                  //       {item.renter.email}
-                  //     </Text>
-                  //   </TouchableOpacity>
-                  // )}
-                  contentContainerStyle={styles.contentContainer}
-                  refreshing={true}
-                  style={{height: '95%'}}
-                  keyExtractor={key => {
-                    return key._id;
-                  }}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({item}) => (
-                    <BookingItems
-                      item={item}
-                      onPressElement={() => console.log('first')}
-                    />
-                  )}
+                    );
+                  }
+                   
+                  }
                 />
               </View>
             )}
@@ -189,12 +151,10 @@ const CompletedAndOngoing = () => {
 
   const onSuccess = data => {
     const {
-      Payload: {pending, approved, rejected, completed},
+      Payload: {onGoing,completed},
     } = data;
     
-    setPending(pending);
-    setApprove(approved);
-    setRejected(rejected);
+    setOnGoing(onGoing);
     setCompleted(completed);
     setIsLoading(false);
   };
@@ -221,12 +181,8 @@ const CompletedAndOngoing = () => {
           }}>
           <CustomSwitch
             selectionMode={1}
-            option1="Request"
-            option2="Approve"
-            option3="Rejected"
-            // option4="Completed"
-            Thirdbtn={true}
-            // Fourthbtn={true}
+            option1="Active Rentals"
+            option2="Completed Rentals"
             onSelectSwitch={e => setSwitchValue(e)}
           />
 

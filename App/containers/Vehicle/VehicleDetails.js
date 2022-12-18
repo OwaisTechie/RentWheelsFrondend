@@ -31,10 +31,12 @@ import Geocoder from 'react-native-geocoding';
 import CustomButton from '../../Components/Custom_btn/CustomButton';
 import {getVehicleById} from '../../Redux/auth/Reducer/vehicleReducer';
 import { setCarAddress, setCarLatLong } from '../../Redux/auth/Reducer/AddressReducer';
+import { isVerified } from './apiCalls/apiCalls';
 
 const VehicleDetails = props => {
   const {navigation, route} = props;
   const [Destination, setDestination] = useState('');
+  const [loader,setLoader] = useState(false);
   const Vehicle = route?.params.vehicle;
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
@@ -86,9 +88,33 @@ const VehicleDetails = props => {
   );
 
   const handleSubmit = () => {
-    navigation.navigate('DateAndLocation', {
-      vehicleId: Vehicle._id,
-    });
+    setLoader(true);
+    isVerified(onSuccess,onFailure);
+    
+    // navigation.navigate('DateAndLocation', {
+    //   vehicleId: Vehicle._id,
+    // });
+  };
+
+  const onSuccess = data => {
+    const {
+      Success,
+    } = data;
+    if(Success === true){
+      setLoader(false);
+      navigation.navigate('DateAndLocation', {
+          vehicleId: Vehicle._id,
+        });
+    }
+    else{
+      setLoader(false);
+      navigation.navigate('Profile');
+    }
+  };
+
+  const onFailure = () => {
+    console.log('onFailure');
+    setIsLoading(false);
   };
 
   //   useEffect(() => {
@@ -404,7 +430,7 @@ const VehicleDetails = props => {
               </TouchableOpacity>
             </View>
             <View style={{marginVertical: wp('5%')}}>
-              <CustomButton onPress={handleSubmit} title="Rent Now" />
+              <CustomButton loader={loader} onPress={handleSubmit} title="Book Now" />
             </View>
           </View>
         </View>

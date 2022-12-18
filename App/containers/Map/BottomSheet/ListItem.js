@@ -61,6 +61,7 @@ export function ListItem(props) {
             ratingColor={Colors.paleorange}
             // ratingBackgroundColor="#c8c7c8"
             readonly
+            startingValue={item?.averageRating}
             ratingCount={5}
             imageSize={15}
             // onFinishRating={this.ratingCompleted}

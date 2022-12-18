@@ -8,15 +8,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import CardView from 'react-native-cardview';
-import {Colors, CustomIcons, Images} from '../../../Theme';
+import {Colors, CustomIcons, Images} from '../../../../Theme';
 import {useNavigation} from '@react-navigation/native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {Rating, AirbnbRating} from 'react-native-ratings';
-import CustomButton from '../../../Components/Custom_btn/CustomButton';
-import {getLocalHost} from '../../../Constant/ConvertLocalHost';
+import CustomButton from '../../../../Components/Custom_btn/CustomButton';
+import {getLocalHost} from '../../../../Constant/ConvertLocalHost';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 
@@ -42,7 +42,7 @@ export function CompletedBookingsItem(props) {
         styles.item,
       ]}
       onPress={() =>
-        navigation.navigate('BookingDetails', {
+        navigation.navigate('CompletedBookingDetails', {
           BookingInfo: item,
         })
       }
@@ -93,7 +93,7 @@ export function CompletedBookingsItem(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Status :</Text>
           <Text style={styles.userDetail}>
-           {item.rentalStatus == "0" ? "Pending " : item.rentalStatus == "1" ? "Approve" : item.rentalStatus == "2" ? "Rejected" : null}
+           {item.rentalStatus == "4" ? "Active Bookings " : item.rentalStatus == "5" ? "Completed Bookings" : null}
           </Text>
         </View>
         <View

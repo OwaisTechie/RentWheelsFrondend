@@ -34,13 +34,12 @@ export function loginRequest(payload, onSuccess, onFailure){
   axios
     .post(URL, payload)
     .then(res => {
-      if (res.status === 200) {
         Toast.show({
           topOffset: 60,
           type: 'success',
           text1: 'Success',
           text2: 'Successfully Logged In',
-          visibilityTime: 5000,
+          visibilityTime: 2000,
           autoHide: true,
         });
         let header = res.headers['set-cookie'][0];
@@ -51,19 +50,7 @@ export function loginRequest(payload, onSuccess, onFailure){
         res['Token'] = Token;
 
         onSuccess(res);
-        // console.log(`onSuccess Passing : ${JSON.stringify({cnic:cnic,...res.data})}`)
-      }
-      // else{
-      //   Toast.show({
-      //     topOffset: 60,
-      //     type: 'success',
-      //     text1: res.data.Message,
-      //     text2: res.data.status,
-      //     visibilityTime:5000,
-      //     autoHide :true
-      //   });
-      //   onFailure(error.request.status);
-      // }
+        
     })
     .catch(error => {
       console.log(error, 'Error...');

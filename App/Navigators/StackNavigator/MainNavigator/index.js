@@ -127,6 +127,7 @@ const MainApp = () => {
       
       dispatch(modeChange(payload))
       if (userToken != null || userToken != undefined) {
+        console.log("HAHA")
         AuthToken(onSuccess, onFailure);
       } else {
         console.log("LOGOUT")

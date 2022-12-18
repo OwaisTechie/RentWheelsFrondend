@@ -24,6 +24,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Card from '../../containers/Card/PaymentCard';
 import Bookings from '../../containers/Rental/Bookings/Bookings';
 import BookingNavigator from '../StackNavigator/BookingNavigator/BookingNavigator';
+import OnGoingBookingNavigator from '../StackNavigator/BookingNavigator/OnGoingBookingNavigator';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const AppStack = props => {
@@ -172,7 +173,7 @@ const AppStack = props => {
                 ),
 
                 headerTitle: props => <Headercenter {...props} />,
-                headerLeft: props => <HeaderLeft {...props} />,
+                // headerLeft: props => <HeaderLeft {...props} />,
                 // headerRight: props => <HeaderRight {...props} />,
               }}
             />
@@ -185,6 +186,21 @@ const AppStack = props => {
               options={{
                 headerShown: false,
                 drawerLabel: 'List of Bookings',
+                drawerIcon: ({color}) => (
+                  <Ionicons name="home-outline" size={22} color={color} />
+                ),
+                // title: 'List Of Bookings',
+                // headerTitle: props => <Headercenter {...props} />,
+                // headerLeft: props => <HeaderLeft {...props} />,
+                // headerRight: props => <HeaderRight {...props} />,
+              }}
+            />
+            <Drawer.Screen
+              name="OnGoingBookingNavigator"
+              component={OnGoingBookingNavigator}
+              options={{
+                headerShown: false,
+                drawerLabel: 'List of Rentals',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),

@@ -42,13 +42,14 @@ import {set} from 'immer/dist/internal';
 import ModalPoup from '../../Components/CustomModal/ModalPopup';
 import {SIZES} from '../../Theme/Fonts';
 import axios from 'axios';
+import {getHeaders} from '../../Constant/requestHeaders';
+import { Config } from '../../Config/Config';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
-
 const maskRowHeight = Math.round((height - 300) / 20);
-    const maskColWidth = (width - 300) / 2;
+const maskColWidth = (width - 300) / 2;
 
 const Profile = () => {
   const username = useRef();
@@ -57,8 +58,13 @@ const Profile = () => {
   const [cnicFront, setCnicFront] = useState('');
 
   const [cnicFrontImage, setCnicFrontImage] = useState('');
-  
-  const [openCamera,setOpenCamera] = useState(false);
+  const [cnicBackImage, setCnicBackImage] = useState('');
+  const [licenseFrontImage, setLicenseFrontImage] = useState('');
+  const [licenseBackImage, setLicenseBackImage] = useState('');
+  const [utilityBillImage, setUtilityBillImage] = useState('');
+  const [cnicVerificationImage, setCnicVerificationImage] = useState('');
+
+  const [openCamera, setOpenCamera] = useState(false);
   const [documentValue, setDocumentValue] = useState('');
 
   const [cnicBack, setCnicBack] = useState('');
@@ -91,13 +97,12 @@ const Profile = () => {
       qualityPrioritization: 'speed',
     });
 
-    let photoUrl ='file://'+photo.path
-    console.log("PHOTO->>",photoUrl)
-    setCnicFront(photoUrl)
+    let photoUrl = 'file://' + photo.path;
+    console.log('PHOTO->>', photoUrl);
+    setCnicFront(photoUrl);
     setOpenCamera(false);
-    
   };
-  
+
   const onSelectSwitch = value => {
     setTab(value);
   };
@@ -134,25 +139,98 @@ const Profile = () => {
     }
   };
 
-  const updateDocument = () => {
-        const formData = new FormData();
-        cnicFrontImage
-        formData.append('image', {
-          name: cnicFrontImage.path.split('/').pop(),
-          type: cnicFrontImage.mime,
-          uri: Platform.OS === 'android' ? cnicFrontImage.path : files.path.replace('file://', ''),
+  const updateDocument = async () => {
+    const header = await getHeaders('multipart').then(data => {
+      return data;
+    });
+    console.log('HEADERS ->>', header);
+    setLoader(true);
+    const formData = new FormData();
+
+    formData.append('cnicFront', {
+      name: cnicFrontImage.path.split('/').pop(),
+      type: cnicFrontImage.mime,
+      uri:
+        Platform.OS === 'android'
+          ? cnicFrontImage.path
+          : files.path.replace('file://', ''),
+    });
+    formData.append('cnicBack', {
+      name: cnicBackImage.path.split('/').pop(),
+      type: cnicBackImage.mime,
+      uri:
+        Platform.OS === 'android'
+          ? cnicBackImage.path
+          : files.path.replace('file://', ''),
+    });
+    formData.append('licenseFront', {
+      name: licenseFrontImage.path.split('/').pop(),
+      type: licenseFrontImage.mime,
+      uri:
+        Platform.OS === 'android'
+          ? licenseFrontImage.path
+          : files.path.replace('file://', ''),
+    });
+    formData.append('licenseBack', {
+      name: licenseBackImage.path.split('/').pop(),
+      type: licenseBackImage.mime,
+      uri:
+        Platform.OS === 'android'
+          ? licenseBackImage.path
+          : files.path.replace('file://', ''),
+    });
+    formData.append('utilityBill', {
+      name: utilityBillImage.path.split('/').pop(),
+      type: utilityBillImage.mime,
+      uri:
+        Platform.OS === 'android'
+          ? utilityBillImage.path
+          : files.path.replace('file://', ''),
+    });
+    formData.append('image', {
+      name: cnicVerificationImage.path.split('/').pop(),
+      type: cnicVerificationImage.mime,
+      uri:
+        Platform.OS === 'android'
+          ? cnicVerificationImage.path
+          : files.path.replace('file://', ''),
+    });
+    const baseUrl = Config.baseUrl.main;
+    const endpoint = Config.endpoint;
+    console.log('Config ==>', Config);
+    const URL = `${baseUrl}${endpoint.user.verifyUser}`;
+    console.log('baseURL1 ==>', URL);
+    axios
+      .post(
+        URL,
+        formData,
+        header,
+      )
+      .then(response => {
+        setLoader(false);
+        Toast.show({
+          topOffset: 60,
+          type: 'success',
+          text1: 'Success',
+          text2: response.data.Message,
+          visibilityTime: 5000,
+          autoHide: true,
         });
-        axios.post('http://192.168.0.105:8000/api/v1/users/verification', formData, {
-          headers: { "Content-type": "multipart/form-data" }
-        }).then((response) => {
-          console.log("RES ->> ",response);
-          // this.cleanupImages();
-          Alert.alert('Upload Post Successfully ' + '');
-        }).catch((error) => {
-          console.log(error);
-          Alert.alert('image Upload Post Failed  , Try again !');
+        
+      })
+      .catch(error => {
+        setLoader(false);
+        Toast.show({
+          topOffset: 60,
+          type: 'error',
+          text1: error.response.data.Message,
+          text2: `${error.response.status}`,
+          visibilityTime: 5000,
+          autoHide: true,
         });
-      }
+        console.log('EEEE', error);
+      });
+  };
 
   useEffect(() => {
     requestExternalWritePermission();
@@ -903,18 +981,23 @@ const Profile = () => {
             setCnicFront(img.path);
             break;
           case 'cnicBack':
+            setCnicBackImage(img);
             setCnicBack(img.path);
             break;
           case 'licenseFront':
+            setLicenseFrontImage(img);
             setLicenseFront(img.path);
             break;
-          case licenseBack:
+          case 'licenseBack':
+            setLicenseBackImage(img);
             setlicenseBack(img.path);
             break;
           case 'utilityBills':
+            setUtilityBillImage(img);
             setUtilityBills(img.path);
             break;
           case 'cnicVerification':
+            setCnicVerificationImage(img);
             setCnicVerification(img.path);
         }
 
@@ -930,11 +1013,11 @@ const Profile = () => {
     setShowFilterModal(false);
     // setSwitchValue('2');
     ImagePicker.openCamera({
-      compressImageMaxHeight:300,
-      compressImageMaxWidth:300,
+      compressImageMaxHeight: 300,
+      compressImageMaxWidth: 300,
       // width: 300,
       // height: 400,
-      compressImageQuality:0.7,
+      compressImageQuality: 0.7,
       cropping: true,
     }).then(image => {
       setCnicFrontImage(image);
@@ -949,48 +1032,53 @@ const Profile = () => {
 
   return (
     <View
-      style={{backgroundColor: 'white', flex: 1, paddingHorizontal: wp('2%'),paddingBottom:hp('10%')}}>
-
-        {/* { */}
-           {/* openCamera ? renderCamera() : */}
-            <View>
-            <View
-        style={{
-          // height: General_Styles.generalHeight / 4,
-          marginBottom: hp('1%'),
-          // width: General_Styles.generalWidth,
-          // backgroundColor: Colors,
-          justifyContent: 'center',
-        }}>
-        <CustomSwitch
-          selectionMode={1}
-          option1="Profile"
-          option2="Documents"
-          onSelectSwitch={e => setSwitchValue(e)}
-        />
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-      {switchValue == '1' ? ProfileView() : DocumentView()} 
-      
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+        paddingHorizontal: wp('2%'),
+        paddingBottom: hp('10%'),
+      }}>
+      {/* { */}
+      {/* openCamera ? renderCamera() : */}
       <View>
-        {switchValue == '1' ? (
-          <CustomButton loader={loader} onPress={() => 'Login'} title="Login" />
-        ) : (
-          <CustomButton
-            loader={loader}
-            onPress={updateDocument}
-            title="Update Document"
+        <View
+          style={{
+            // height: General_Styles.generalHeight / 4,
+            marginBottom: hp('1%'),
+            // width: General_Styles.generalWidth,
+            // backgroundColor: Colors,
+            justifyContent: 'center',
+          }}>
+          <CustomSwitch
+            selectionMode={1}
+            option1="Profile"
+            option2="Documents"
+            onSelectSwitch={e => setSwitchValue(e)}
           />
-        )}
-      </View>
-      </ScrollView>
-          </View>
-          
-        {/* } */}
-      
+        </View>
 
-      
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {switchValue == '1' ? ProfileView() : DocumentView()}
+
+          <View>
+            {switchValue == '1' ? (
+              <CustomButton
+                loader={loader}
+                onPress={() => 'Login'}
+                title="Login"
+              />
+            ) : (
+              <CustomButton
+                loader={loader}
+                onPress={updateDocument}
+                title="Update Document"
+              />
+            )}
+          </View>
+        </ScrollView>
+      </View>
+
+      {/* } */}
 
       <ModalPoup
         visible={showfilterModal}

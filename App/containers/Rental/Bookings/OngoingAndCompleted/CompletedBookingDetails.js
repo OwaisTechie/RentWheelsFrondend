@@ -16,7 +16,7 @@ import {
   Alert,
 } from 'react-native';
 // import {COLOURS, Items} from '../database/Database';
-import {Colors, CustomIcons} from '../../../Theme';
+import {Colors, CustomIcons} from '../../../../Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 import {
@@ -27,22 +27,23 @@ import {
 } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getLocalHost} from '../../../Constant/ConvertLocalHost';
+import {getLocalHost} from '../../../../Constant/ConvertLocalHost';
 import {Rating} from 'react-native-ratings';
 import {useDispatch, useSelector} from 'react-redux';
 import Geocoder from 'react-native-geocoding';
-import CustomButton from '../../../Components/Custom_btn/CustomButton';
+import CustomButton from '../../../../Components/Custom_btn/CustomButton';
 import {getVehicleById} from '../../Redux/auth/Reducer/vehicleReducer';
 import {
   setCarAddress,
   setCarLatLong,
 } from '../../../Redux/auth/Reducer/AddressReducer';
 import moment from 'moment';
-import {approveRejectBooking, startRental} from './apiCalls/apiCall';
-import ModalPoup from '../../../Components/CustomModal/ModalPopup';
+// import {approveRejectBooking, startRental} from './apiCalls/apiCall';
+// import ModalPoup from '../../../Components/CustomModal/ModalPopup';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import * as Animatable from 'react-native-animatable';
-
+import QRCode from 'react-native-qrcode-svg';
+import ModalPoup from '../../../../Components/CustomModal/ModalPopup';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -173,8 +174,8 @@ const CompletedBookingDetails = props => {
     setLoader(!loader);
   };
 
-  const startBooking = () => {
-    console.log('startBooking');
+  const viewQrCode = () => {
+    console.log('viewQrCode');
     setQrScanner(true);
   };
 
@@ -244,79 +245,7 @@ const CompletedBookingDetails = props => {
         backgroundColor={Colors.backgroundLight}
         barStyle="dark-content"
       />
-      {isQrScanner ? (
-        <QRCodeScanner
-          showMarker
-          reactivateTimeout={4}
-          onRead={onQrScan}
-          reactivate={Isactive}
-          // bottomContent={()}
-          cameraStyle={{height: SCREEN_HEIGHT}}
-          customMarker={
-            <View style={styles.rectangleContainer}>
-              <View style={styles.topOverlay}>
-                <View
-                  style={{
-                    alignItems: 'flex-end',
-                    padding: 20,
-                    width: wp('100%'),
-                  }}>
-                  <TouchableOpacity onPress={() => setQrScanner(false)}>
-                    <CustomIcons
-                      type="ionicon"
-                      name="close-circle-sharp"
-                      size={50}
-                      color={Colors.White}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={{fontSize: 30, color: 'white'}}>
-                  Scan Booking Start Code
-                </Text>
-              </View>
-
-              <View style={{flexDirection: 'row'}}>
-                <View style={styles.leftAndRightOverlay} />
-
-                <View style={styles.rectangle}>
-                  <CustomIcons
-                    type="ionicon"
-                    name="ios-scan-sharp"
-                    size={SCREEN_WIDTH * 0.6}
-                    color={iconScanColor}
-                  />
-                  {isQrLoader ? (
-                    <ActivityIndicator
-                      style={styles.activityIndicator}
-                      animating={loading}
-                      size="large"
-                    />
-                  ) : (
-                    <Animatable.View
-                      style={styles.scanBar}
-                      direction="alternate-reverse"
-                      iterationCount="infinite"
-                      duration={1700}
-                      easing="linear"
-                      animation={makeSlideOutTranslation(
-                        'translateY',
-                        SCREEN_WIDTH * -0.5,
-                      )}
-                    />
-                  )}
-                </View>
-
-                <View style={styles.leftAndRightOverlay} />
-              </View>
-              <View style={styles.bottomOverlay} />
-              <View style={{position: 'absolute', bottom: 12}}>
-                <Button title="Reactivate" onPress={startScan} />
-              </View>
-            </View>
-          }
-        />
-      ) : (
+      
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -400,7 +329,7 @@ const CompletedBookingDetails = props => {
                 margin: 2,
               }}>
               <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
+                <View style={{flexDirection: 'row'}}>
                   <Text style={styles.title}>Start Time : </Text>
                   <Text style={styles.titleInfo}>
                     {' '}
@@ -423,20 +352,18 @@ const CompletedBookingDetails = props => {
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Total Amount:</Text>
                   <Text style={styles.titleInfo}>
-                    {' '}
+                    
                     {Bookings.BookingInfo.totalAmount}
                   </Text>
                 </View>
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Booking Status :</Text>
                   <Text style={styles.titleInfo}>
-                    {' '}
-                    {Bookings.BookingInfo.rentalStatus == '0'
-                      ? 'Pending'
-                      : Bookings.BookingInfo.rentalStatus == '1'
-                      ? 'Approve'
-                      : Bookings.BookingInfo.rentalStatus == '2'
-                      ? 'Rejected'
+                    
+                    {Bookings.BookingInfo.rentalStatus == '4'
+                      ? 'Active Bookings'
+                      : Bookings.BookingInfo.rentalStatus == '5'
+                      ? 'Completed Bookings'
                       : null}
                   </Text>
                 </View>
@@ -608,32 +535,12 @@ const CompletedBookingDetails = props => {
                 style={{
                   marginVertical: wp('5%'),
                 }}>
-                {Bookings.BookingInfo.rentalStatus == '0' ? (
-                  <View
-                    style={{
-                      justifyContent: 'space-between',
-                      flexDirection: 'row',
-                    }}>
-                    <View style={{width: wp('42%')}}>
-                      <CustomButton
-                        onPress={approveBooking}
-                        loader={loader}
-                        title={'Approve Booking'}
-                      />
-                    </View>
-                    <View style={{width: wp('42%')}}>
-                      <CustomButton
-                        onPress={rejectBooking}
-                        loader={loader}
-                        title={'Reject Booking'}
-                      />
-                    </View>
-                  </View>
-                ) : Bookings.BookingInfo.rentalStatus == '1' ? (
+                { Bookings.BookingInfo.rentalStatus == '4' ? (
                   <CustomButton
-                    onPress={startBooking}
+                    // onPress={startBooking}
+                    onPress={viewQrCode}
                     loader={loader}
-                    title={'Start Booking'}
+                    title={'End Rental Qr Code'}
                   />
                 ) : null}
                 {/* {Bookings.BookingInfo.rentalStatus == '0'
@@ -661,8 +568,28 @@ const CompletedBookingDetails = props => {
             </View>
           </View>
         </ScrollView>
-      )}
+      
+        <ModalPoup
+        visible={isQrScanner}
+        onClose={() => setQrScanner(false)}>
+        <View
+          style={{
+            // flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems:'center',
+          }}>
+            <View style={{marginBottom:10}}>
+              <Text style={{color:Colors.lightPurple,fontSize:20,fontWeight:'bold',textAlign:'center'}}>Scan Qr Code for Booking End</Text>
+            </View>
+            <View>
 
+            <QRCode
+            size={200}
+      value={Bookings.BookingInfo.endCode}
+    />
+            </View>
+        </View>
+      </ModalPoup>
       {/* <View
         style={{
           position: 'absolute',
@@ -767,12 +694,12 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
     color: Colors.lightPurple,
   },
   titleInfo: {
-    fontSize: 14,
+    fontSize:12,
     fontWeight: '600',
     textAlign: 'justify',
     color: Colors.paleorange,

@@ -119,8 +119,7 @@ export default Login = ({navigation}) => {
       // actions: ['Yes', 'No'],
 
       title: Options.title, // (optional)
-      message:
-      Options.bigText, // (required)
+      message: Options.bigText, // (required)
     });
   };
 
@@ -285,6 +284,9 @@ export default Login = ({navigation}) => {
   const onOtpRequestSuccess = async response => {
     setLoader(false);
     try {
+      // const userToken = ['userToken', response.Token];
+      // const userMode = ['userMode', 'P'];
+      // await AsyncStorage.multiSet([userToken, userMode]);
       await AsyncStorage.setItem('userToken', response.Token);
       await AsyncStorage.setItem('userMode', 'P');
     } catch (error) {
@@ -351,11 +353,11 @@ export default Login = ({navigation}) => {
       validationSchema: LoginSchema,
       initialValues: {username: '', password: ''},
       onSubmit: payload => {
-        setLoader(!loader); 
+        setLoader(!loader);
         var Payload = {
           ...payload,
-          firebaseToken:fcmToken
-        }
+          firebaseToken: fcmToken,
+        };
         // console.log("navigation.navigate --> ",navigation.navigate)
         // navigation.navigate('HomeNavigator');
         loginRequest(Payload, onSuccess, onFailure);
@@ -368,20 +370,26 @@ export default Login = ({navigation}) => {
       user: response.data.Payload,
       isLoading: false,
     };
+    console.log("first =>>" ,payload);
     let Mode = {
       user: 'P',
     };
+    const userToken = ['userToken', response.Token];
+    const userMode = ['userMode', 'P'];
+    const userDetail =['userDetail',JSON.stringify(response.data.Payload)]
+
     try {
-      await AsyncStorage.setItem('userToken', response.Token);
-      await AsyncStorage.setItem('userMode', 'P');
-      await AsyncStorage.setItem('userDetail', response.data.Payload);
+      await AsyncStorage.multiSet([userToken,userMode,userDetail]);
+      // await AsyncStorage.set('userToken',response.Token);
+      // await AsyncStorage.set('userMode',response.Token);
+      // await AsyncStorage.set('userDetail',JSON.stringify(response.data.Payload));
     } catch (error) {
       console.log(error);
     }
     dispatch(modeChange(Mode));
     dispatch(login(payload));
     setLoader(false);
-    
+
     navigation.navigate('AppStack', {screen: 'LeftDrawerScreen'});
     // signIn(payload)
   };

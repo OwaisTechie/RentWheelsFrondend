@@ -1,6 +1,6 @@
 export const Config = {
   baseUrl: {
-    main: 'http://192.168.0.109:8000/api/v1/'
+    main: 'http://192.168.0.105:8000/api/v1/'
   },
   endpoint: {
     user:{
@@ -12,7 +12,8 @@ export const Config = {
       abc:'users/abc',
       isValidRegister: 'users/isvalidcred',
       isValidToken: 'users/verify',
-      notification: 'users/noti'
+      verifyUser: 'users/verification/verifyuser',
+      isVerified:'users/verification/isverified'
     },
     vehicles:{
       getAllVehicles: 'vehicles/',
