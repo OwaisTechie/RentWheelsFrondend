@@ -10,7 +10,6 @@ import TextInputMask from 'react-native-text-input-mask';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors, Images, CustomIcons} from '../../Theme';
 // import MaskInput from 'react-native-mask-input';
-// import TextInputMask from 'react-native-text-input-mask';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -35,14 +34,12 @@ const CustomInput = forwardRef(
       multiline = false,
       maxLength,
       numberOfLines,
+      masked,
       onFocus = () => {},
       ...props
     },
     ref,
   ) => {
-
-    
-    const masked = '+1 ([000]) [000]-[0000]';
     const [isFocused, setIsFocused] = useState(false);
     const [hidePassword, setHidePassword] = useState(password);
     
@@ -63,44 +60,94 @@ const CustomInput = forwardRef(
               style={{fontSize: 22, color: validationColor, marginRight: 10}}
             />
             {/* {description ? } */}
-            <TextInput
-              secureTextEntry={hidePassword}
-              autoCorrect={autoCorrect}
-              ref={ref}
-              editable={editable}
-              maxLength={maxLength}
-              multiline={multiline}
-              numberOfLines={numberOfLines}
-              value={value}
-              onFocus={() => {
-                onFocus();
-                setIsFocused(true);
-              }}
-              keyboardType={props.keyboardType}
-              onChangeText={onChangeText}
-              render={(props) => <TextInputMask {...props} mask={masked} />}
-              // onFocus={() => {
-              //   onFocus();
-              //   setIsFocused(true);
-              // }}
-              // onBlur={() => {
-              //   setIsFocused(true);
-              // }}
-              // render={props => (
-              //   <MaskInput
-              //     value={props}
-              //     onChangeText={(masked, unmasked) => {
-              //       // setPhone(masked); // you can use the unmasked value as well
+            {
+              !masked ?
 
-              //       // assuming you typed "9" all the way:
-              //       console.log(masked); // (99) 99999-999
-              //     }}
-              //     mask={masked}
-              //   />
-              // )}
-              style={{color: Colors.Black,width:widthPercentageToDP('80%')}}
-              {...props}
-            />
+
+              <TextInput
+                secureTextEntry={hidePassword}
+                autoCorrect={autoCorrect}
+                ref={ref}
+                editable={editable}
+                maxLength={maxLength}
+                multiline={multiline}
+                numberOfLines={numberOfLines}
+                
+                value={value}
+                onFocus={() => {
+                  onFocus();
+                  setIsFocused(true);
+                }}
+                keyboardType={props.keyboardType}
+                onChangeText={onChangeText}
+                // render={(props) => <TextInputMask {...props} mask={masked} />}
+                // onFocus={() => {
+                //   onFocus();
+                //   setIsFocused(true);
+                // }}
+                // onBlur={() => {
+                //   setIsFocused(true);
+                // }}
+                // render={props => (
+                //   <MaskInput
+                //     value={props}
+                //     onChangeText={(masked, unmasked) => {
+                //       // setPhone(masked); // you can use the unmasked value as well
+  
+                //       // assuming you typed "9" all the way:
+                //       console.log(masked); // (99) 99999-999
+                //     }}
+                //     mask={masked}
+                //   />
+                // )}
+                style={{color: Colors.Black,width:widthPercentageToDP('80%')}}
+                {...props}
+              /> :
+                null
+              // <TextInputMask
+              // secureTextEntry={hidePassword}
+              //   autoCorrect={autoCorrect}
+              //   ref={ref}
+              //   editable={editable}
+              //   maxLength={maxLength}
+              //   multiline={multiline}
+              //   // numberOfLines={numberOfLines}
+                
+              //   value={value}
+              //   onFocus={() => {
+              //     onFocus();
+              //     setIsFocused(true);
+              //   }}
+              //   keyboardType={props.keyboardType}
+              //   onChangeText={(value ,extracted ) => {
+              //     console.log("first")
+              //   }}
+              //   // render={(props) => <TextInputMask {...props} mask={masked} />}
+              //   // onFocus={() => {
+              //   //   onFocus();
+              //   //   setIsFocused(true);
+              //   // }}
+              //   // onBlur={() => {
+              //   //   setIsFocused(true);
+              //   // }}
+              //   // render={props => (
+              //   //   <MaskInput
+              //   //     value={props}
+              //   //     onChangeText={(masked, unmasked) => {
+              //   //       // setPhone(masked); // you can use the unmasked value as well
+  
+              //   //       // assuming you typed "9" all the way:
+              //   //       console.log(masked); // (99) 99999-999
+              //   //     }}
+              //   //     mask={masked}
+              //   //   />
+              //   // )}
+              //   style={{color: Colors.Black,width:widthPercentageToDP('80%')}}
+              // // style={styles.maskedInput}
+              // mask={masked}
+              // {...props}
+              // />
+            }
             {password && (
               <Icon
                 onPress={() => setHidePassword(!hidePassword)}

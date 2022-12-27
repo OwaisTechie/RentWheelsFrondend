@@ -416,6 +416,10 @@ export default Login = ({navigation}) => {
     // Container Start
     <SafeAreaView style={styles.container}>
       {/*  Header */}
+      <StatusBar
+        backgroundColor={Colors.lightgrey}
+        barStyle="dark-content"
+      />
       <View style={{flex: 1, overflow: 'hidden'}}>
         <View style={styles.brandView}>
           <Icon

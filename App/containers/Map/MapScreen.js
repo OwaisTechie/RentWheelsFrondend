@@ -98,9 +98,9 @@ const MapScreen = props => {
 
   useEffect(() => {
     if (vehicles?.length < 1 && userLatLong) {
-      let pickupLocation = [24.954179757526536, 67.14250599750613];
+      let pickupLocation = [67.0699,24.8604];
       setVehicleLoading(true);
-      getNearByLocation(pickupLocation,10000, onSuccess, onFailure);
+      getNearByLocation(pickupLocation, onSuccess, onFailure);
     }
 
     return () => {
@@ -110,6 +110,7 @@ const MapScreen = props => {
   }, []);
 
   const onSuccess = data => {
+    console.log("DATA ->> ",data);
     setVehicleLoading(false);
     setVehicles(data.vehicles);
     // dispatch(setNearByVehicle(data.vehicles));
@@ -134,12 +135,13 @@ const MapScreen = props => {
   // }
 
   // callbacks
-  const handleRefresh = () => {
-
-    let location = [userLatLong.latitude, userLatLong.longitude];
-    let pickupLocation = [24.954179757526536, 67.14250599750613];
-    getNearByLocation(pickupLocation, onSuccess, onFailure);
-  };
+  // const handleRefresh = () => {
+  //   let location = [userLatLong.latitude, userLatLong.longitude];
+  //   let pickupLocation = [24.954179757526536, 67.14250599750613];
+  //   setVehicles([]);
+  //   setVehicleLoading(true);
+  //   getNearByLocation(pickupLocation, onSuccess, onFailure);
+  // };
 
   const applyFilter = filterData => {
     
@@ -323,15 +325,14 @@ const MapScreen = props => {
                 longitude={marker.pickupLocation.coordinates[0]}></CustomMarker>
             );
           })
-        ) : (
-          <Marker
+        ):null}
+        <Marker
             coordinate={{
               latitude: LocationMarker?.latitude,
               longitude: LocationMarker?.longitude,
               latitudeDelta: 0.003,
               longitudeDelta: 0.003,
             }}></Marker>
-        )}
       </MapView>
 
       <BottomSheets
@@ -386,12 +387,12 @@ const MapScreen = props => {
         {/* ) : null} */}
         {vehicleLoading ? (
           <BottomSheetSkelton />
-        ) : (
+        ) : vehicles.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : 
           <BottomSheetFlatList
             contentContainerStyle={styles.contentContainer}
             data={vehicles}
             refreshing={false}
-            onRefresh={handleRefresh}
+            // onRefresh={handleRefresh}
             style={{height: '95%'}}
             keyExtractor={key => {
               return key._id;
@@ -400,8 +401,7 @@ const MapScreen = props => {
             renderItem={({item}) => (
               <ListItem item={item} onPressElement={handleNavigateToPoint} />
             )}></BottomSheetFlatList>
-          // <ActivityIndicator size="large" color="#00ff00" />
-        )}
+        }
       </BottomSheets>
 
       {showfilterModal ? (

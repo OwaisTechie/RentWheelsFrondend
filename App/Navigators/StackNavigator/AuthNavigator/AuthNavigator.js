@@ -7,6 +7,7 @@ import {
   REGISTER,
   LOGIN,
   APPINTRO,
+  Card,
   SPLASH_SCREEN,
   OTP,
 } from '../../../Constant/routeName';
@@ -14,6 +15,7 @@ import {Colors, Images} from '../../Theme';
 import SplashScreen from '../../../containers/SplashScreen/SplashScreen';
 import OtpScreen from '../../../containers/Otp/OtpScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PaymentCard from '../../../containers/Card/PaymentCard';
 
 const AuthNavigator = () => {
   const [firstLaunch, setFirstLaunch] = React.useState(null);
@@ -34,7 +36,7 @@ const AuthNavigator = () => {
   const AuthStack = createStackNavigator();
   return (
     firstLaunch != null && (
-      <AuthStack.Navigator initialRouteName={APPINTRO}>
+      <AuthStack.Navigator initialRouteName={LOGIN}>
         {firstLaunch && (
           <AuthStack.Screen
             name={APPINTRO}
@@ -55,6 +57,12 @@ const AuthNavigator = () => {
           component={Login}
           options={{headerShown: false}}
         />
+        <AuthStack.Screen
+          name={Card}
+          component={PaymentCard}
+          options={{headerShown: false}}
+        />
+        
         <AuthStack.Screen
           name={REGISTER}
           component={Registration}

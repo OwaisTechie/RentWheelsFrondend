@@ -2,18 +2,22 @@ import moment from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, StatusBar, StyleSheet, Button} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
-import {Colors} from '../../Theme';
+import {Colors, CustomIcons} from '../../Theme';
 import {addBooking, getBookings} from './apiCalls/apiCalls';
 import {mapStyle} from '../../Theme/mapStyle';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {useSelector} from 'react-redux';
 import {extendMoment} from 'moment-range';
 import DatePicker from 'react-native-date-picker';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import CustomInput from '../../Components/CustomTextField/CustomInput';
+
+import MapViewDirections from 'react-native-maps-directions';
+const GoogleApikey = 'AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g';
 const DateAndLocation = props => {
   const {navigation, route} = props;
+  const vehicleId=route?.params.vehicleId
   const [vehicle, setVehicle] = useState({});
   const [startOpen, setStartOpen] = useState(false);
   const [selectedStartTime, setStartTime] = useState(new Date());
@@ -21,16 +25,18 @@ const DateAndLocation = props => {
   const [selectedEndTime, setEndTime] = useState(new Date());
   var startCalenderDate = null;
   let mapRef = useRef();
-  // const userLatLong = useSelector(state => state?.address?.userLatLong);
   const carLatLong = useSelector(state => state?.address?.carLatLong);
-  console.log('carLatLong ->> ', carLatLong);
+  const userLatLong = useSelector(state => state?.address?.userLatLong);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectEndDate] = useState(null);
+  const [isValid, setIsValid] = useState(false);
+  const [error, setErrors] = useState(false);
   const [count, setCount] = useState(0);
   const [initialDisabledDates, setInitialDisabledDates] = useState([]);
   const [disableDates, setDisableDates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [active, setActive] = useState(false);
+  const [total, setTotal] = useState('');
   const date = useRef();
   const timeRef = useRef();
   const startDate = selectedStartDate
@@ -46,16 +52,16 @@ const DateAndLocation = props => {
     ? moment(selectedEndTime).format('HH:mm')
     : '';
 
-  const onChangeText = () => {
-
-  };
+  const onChangeText = () => {};
 
   useEffect(() => {
-    // const vehicleId=route?.params.vehicleId
-    // console.log("vehicleId ->> ",vehicleId)
+    const vehicleId=route?.params.vehicleId
     const payload = {
-      vehicleId: '634e74d0d5a0a75f21179e4c',
+      vehicleId: vehicleId,
     };
+    // const payload = {
+    //   vehicleId: '634e74d0d5a0a75f21179e4c',
+    // };
     getBookings(payload, onSuccess, onFailure);
   }, []);
 
@@ -69,7 +75,6 @@ const DateAndLocation = props => {
     return blockedDays?.some(day => {
       day = removeTime(new Date(day));
       var result = start < day && day < end;
-      console.log('result =>> ', result);
       return result;
     });
   };
@@ -84,13 +89,24 @@ const DateAndLocation = props => {
       ) {
         setSelectedStartDate(selectedEndDate);
         // setSelectEndDate(selectedEndDate);
+      } else {
+        let noOfDays = days(start, end) + 1;  
+        let totalAmount = Number(vehicle.selfDriveDailyCharges) * noOfDays;
+        setTotal(totalAmount);
       }
     }
   }, [selectedEndDate]);
 
+  //calculate days
+  var days = (date_1, date_2) => {
+    let difference = date_2.getTime() - date_1.getTime();
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return TotalDays;
+  };
+
   const onSuccess = data => {
-    setDisableDates(data?.dates);
-    setVehicle(data?.vehicle);
+    setDisableDates(data?.data.dates);
+    setVehicle(data?.data.vehicle);
     setIsLoading(true);
   };
 
@@ -123,35 +139,43 @@ const DateAndLocation = props => {
   const ScrollViewProps = {
     keyboardShouldPersistTaps: 'handled',
     contentContainerStyle: {
-      flex: 1,
-      // backgroundColor:'black'
+      // flex: 1,
+      height:heightPercentageToDP('100%'),
+      // backgroundColor:'black',
       // justifyContent: 'center',
       // alignItems:'center',
     },
   };
 
   const onSubmit = () => {
-
+    var StartTime =
+      selectedStartDate ? moment(selectedStartDate).format('yyyy-MM-DD') +
+      ' ' +
+      moment(selectedStartTime).format('HH:mm:ss') : moment(new Date()).format('yyyy-MM-DD') +
+      ' ' +
+      moment(selectedStartTime).format('HH:mm:ss')
     
-    var StartTime = moment(selectedStartDate).format('yyyy-MM-DD') +" "+ moment(selectedStartTime).format('HH:mm:ss');
-    var endTime = moment(selectedEndDate).format('yyyy-MM-DD') +" "+ moment(selectedEndTime).format('HH:mm:ss');
-    const payload ={
-      startTime:StartTime,
-      endTime:endTime,
-      vehicle:'634e74d0d5a0a75f21179e4c',
-      rentee:'62e165869d8d61530a35d082',
-    }
-    
-    addBooking(payload,onBookingSuccess,onBookingFailure)
+      
+    var endTime = selectedEndDate ?
+      moment(selectedEndDate).format('yyyy-MM-DD') +
+      ' ' +
+      moment(selectedEndTime).format('HH:mm:ss') :  moment(new Date()).format('yyyy-MM-DD') +
+      ' ' +
+      moment(selectedEndTime).format('HH:mm:ss')
 
-  }
 
-  const onBookingSuccess = (data) => {
-    console.log(data)
-  }
-  const onBookingFailure = () => {
-    console.log("BookingFailure")
-  }
+    const payload = {
+      startTime: StartTime,
+      endTime: endTime,
+      vehicle: vehicleId,
+    };
+
+    navigation.navigate('PaymentScreen', {
+      booking: payload,
+    });
+    // addBooking(payload, onBookingSuccess, onBookingFailure);
+  };
+
 
   const ProgressStepStyles = {
     activeStepIconBorderColor: Colors.lightPurple,
@@ -212,22 +236,68 @@ const DateAndLocation = props => {
                 customMapStyle={mapStyle}
                 provider={PROVIDER_GOOGLE}
                 region={{
-                  latitude: 37.78825,
-                  longitude: -122.4324,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
+                  latitude: userLatLong?.latitude,
+                  longitude: userLatLong?.longitude,
+                  latitudeDelta: 0.003,
+                  longitudeDelta: 0.003,
                 }}
-                mapType="standard"
-              />
-              {/* <Marker coordinate={initialRegion} /> */}
-              {/*marker to a nearby location */}
-              {/* <Marker
+                zoomEnabled
+                mapType="standard">
+                {/* <Marker coordinate={initialRegion} /> */}
+                {/*marker to a nearby location */}
+                <Marker
                   coordinate={{
-                    latitude: LocationMarker[1],
-                    longitude: LocationMarker[0],
-                  }}
+                    latitude: userLatLong?.latitude,
+                    longitude: userLatLong?.longitude,
+                    latitudeDelta: 0.003,
+                    longitudeDelta: 0.003,
+                  }}>
+                  <View>
+
+                  <CustomIcons
+                      type="entypo"
+                      name="user"
+                      size={38}
+                      color={Colors.paleorange}
+                    />
+
+                  </View>
+                </Marker>
+                <Marker
+                  coordinate={{
+                    latitude: carLatLong?.latitude,
+                    longitude: carLatLong?.longitude,
+                    latitudeDelta: 0.003,
+                    longitudeDelta: 0.003,
+                  }}>
+                  <View>
+                    <CustomIcons
+                      type="materialCommunity"
+                      name="car-connected"
+                      size={38}
+                      color={Colors.lightPurple}
+                    />
+                  </View>
+                  {/* <CustomIcons
+                  name='car-connected'
+                  type='ionicon'
+                  // color={Colors.lightPurple}
+                  style={{fontSize: 22, color: '#05375a'}}
                 /> */}
-              {/* </MapView> */}
+                  {/* <Ionicons
+                    name="car-connected"
+                    size={30}
+                    color={Colors.lightPurple}
+                  /> */}
+                </Marker>
+                <MapViewDirections
+                  origin={carLatLong}
+                  destination={userLatLong}
+                  apikey={GoogleApikey}
+                  strokeWidth={5}
+                  strokeColor={Colors.lightPurple}
+                />
+              </MapView>
             </View>
           </ProgressStep>
           <ProgressStep
@@ -244,13 +314,32 @@ const DateAndLocation = props => {
                 customMapStyle={mapStyle}
                 provider={PROVIDER_GOOGLE}
                 region={{
-                  latitude: 37.78825,
-                  longitude: -122.4324,
+                  latitude: carLatLong?.latitude,
+                  longitude: carLatLong?.longitude,
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}
+                zoomEnabled
                 mapType="standard"
-              />
+              >
+              <Marker
+                  coordinate={{
+                    latitude: carLatLong?.latitude,
+                    longitude: carLatLong?.longitude,
+                    latitudeDelta: 0.003,
+                    longitudeDelta: 0.003,
+                  }}>
+                  <View>
+
+                  <CustomIcons
+                      type="entypo"
+                      name="user"
+                      size={38}
+                      color={Colors.paleorange}
+                    />
+
+                  </View>
+                </Marker>
               {/* <Marker coordinate={initialRegion} /> */}
               {/*marker to a nearby location */}
               {/* <Marker
@@ -259,7 +348,7 @@ const DateAndLocation = props => {
                     longitude: LocationMarker[0],
                   }}
                 /> */}
-              {/* </MapView> */}
+              </MapView>
             </View>
           </ProgressStep>
           <ProgressStep
@@ -269,6 +358,7 @@ const DateAndLocation = props => {
             nextBtnText=">"
             previousBtnText="<"
             onPrevious={onPrevious}
+            errors={error}
             finishBtnText="Confirm "
             onSubmit={onSubmit}
             label="Date & Time">
@@ -431,6 +521,13 @@ const DateAndLocation = props => {
                   />
                 </View>
               </View>
+              {total? (
+              <View style={{flexDirection:'row',justifyContent:'center',marginVertical:10}}>
+                <Text style={{fontWeight:'bold',color:Colors.lightPurple}}>Total Amount : </Text>
+                <Text style={{fontWeight:'bold',fontSize:15}} >{total}</Text>
+              </View>
+              ):
+              null}
             </View>
 
             <DatePicker
@@ -453,13 +550,36 @@ const DateAndLocation = props => {
               date={selectedEndTime}
               onConfirm={date => {
                 setEndOpen(false);
-                
+
                 setEndTime(date);
               }}
               onCancel={() => {
                 setEndOpen(false);
               }}
             />
+            {/* <View style={{width: '40%'}}>
+                  <CustomInput
+                    placeholder={`${moment(new Date())
+                      .format('HH:mm')
+                      .toString()}`}
+                    iconName="ios-timer-sharp"
+                    type="ionicon"
+                    label="Drop-off Time"
+                    ref={timeRef}
+                    value={endTime}
+                    onPress={() => setEndOpen(!endOpen)}
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    // onSubmitEditing={() => {
+                    //   username.current?.focus();
+                    // }}
+                    editable={false}
+                    selectTextOnFocus={false}
+                    autoCompleteType="off"
+                    autoCapitalize="none"
+                    keyboardAppearance="dark"
+                  />
+                </View> */}
           </ProgressStep>
         </ProgressSteps>
       </View>
@@ -481,7 +601,7 @@ const styles = StyleSheet.create({
     marginVertical: 3,
     backgroundColor: '#ffffff',
     width: '100%',
-    padding: 10,
+    // padding: 10,
     // height: 90,
     elevation: 7,
   },

@@ -26,6 +26,7 @@ export default {
   textFieldCOlor: '#E8EAEC',
   lightgrey: '#EBECF0',
   darkgrey: 'lightgrey',
+  skyBlue: '#49B5F5',
   // grey: 'grey',
   red:'#FF0000',
   //Dashboard

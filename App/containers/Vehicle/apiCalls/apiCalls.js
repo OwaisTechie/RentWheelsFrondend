@@ -218,15 +218,6 @@ export async function isVerified(onSuccess, onFailure) {
   axios
     .get(URL, header)
     .then(res => {
-      console.log("RRRR ->> ",res.data)
-      Toast.show({
-        topOffset: 60,
-        type: 'success',
-        text1: res.data.Message,
-        text2: res.data.Success,
-        visibilityTime: 5000,
-        autoHide: true,
-      });
       onSuccess(res.data);
     })
     .catch(error => {

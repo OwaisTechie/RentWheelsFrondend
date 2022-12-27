@@ -31,7 +31,6 @@ const width = Dimensions.get('screen').width;
 const OnGoingBookingNavigator = (props) => {
     const {navigation}= props;
   function HeaderLeft(properties) {
-    console.log('sds ->> ', properties);
     return (
       <TouchableOpacity
         style={{alignSelf: 'center', marginLeft: 8}}
@@ -54,7 +53,6 @@ const OnGoingBookingNavigator = (props) => {
     );
   }
   function Headercenter(props) {
-    console.log('PROPS ', props);
     return (
       // <View style={{alignItems: 'center',justifyContent:'center'}}>
       <View style={props.style}>

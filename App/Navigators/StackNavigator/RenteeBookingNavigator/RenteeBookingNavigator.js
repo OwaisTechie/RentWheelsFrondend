@@ -22,9 +22,14 @@ import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import VisionCamera from '../../../containers/VisionCamera/VisionCamera';
 import PaymentCard from '../../../containers/Card/PaymentCard';
+import Bookings from '../../../containers/Rental/Bookings/Bookings';
+import BookingDetails from '../../../containers/Rental/Bookings/BookingDetails';
+import RenteeBookingDetails from '../../../containers/RenteeBooking/MyBookings/RenteeBookingDetails';
+import RenteeBooking from '../../../containers/RenteeBooking/MyBookings/RenteeBooking';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-const HomeNavigator = () => {
+const RenteeBookingNavigator = (props) => {
+    const {navigation}= props;
   function HeaderLeft(properties) {
     return (
       <TouchableOpacity
@@ -33,6 +38,17 @@ const HomeNavigator = () => {
           properties.onPress();
         }}>
         <Icon size={width / 12} color={'grey'} name={'ios-arrow-back-circle'} />
+      </TouchableOpacity>
+    );
+  }
+  function BookingHeaderLeft(props) {
+    return (
+      <TouchableOpacity
+        style={{alignSelf: 'center', marginLeft: 8}}
+        onPress={() => {
+            navigation.openDrawer();
+        }}>
+        <Icon size={35} color={Colors.lightPurple} name={'ios-menu-sharp'} />
       </TouchableOpacity>
     );
   }
@@ -72,82 +88,39 @@ const HomeNavigator = () => {
     headerTintColor: Colors.primary_green,
   };
 
-  const HomeStack = createStackNavigator();
+  const BookingStack = createStackNavigator();
   return (
-    <HomeStack.Navigator
+    <BookingStack.Navigator
       screenOptions={header}
-      initialRouteName={'Home'}>
-      <HomeStack.Screen
-        name="Home"
-        component={Home}
+      initialRouteName={'RenteeBookings'}>
+      <BookingStack.Screen
+        name="RenteeBookings"
+        component={RenteeBooking}
         options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="home-outline" size={22} color={color} />
-          ),
-          headerShown: false,
-          // headerTitle: props => <Headercenter {...props} />,
-          // headerLeft: props => <HeaderLeft {...props} />,
-          // headerRight: props => <HeaderRight {...props} />,
+            // drawerLabel:'List of Bookings',
+            drawerIcon: ({color}) => (
+              <Ionicons name="home-outline" size={22} color={color} />
+            ),
+            title: 'My Bookings',
+            headerTitle: props => <Headercenter {...props} />,
+            headerLeft: props => <BookingHeaderLeft {...props} />
         }}
       />
-      <HomeStack.Screen
-        name="PaymentScreen"
-        component={PaymentCard}
-        options={{
-          // drawerIcon: ({color}) => (
-          //   <Ionicons name="home-outline" size={22} color={color} />
-          // ),
-          title: 'Payment Card',
-          headerShown: true,
-          headerTitle: props => <Headercenter {...props} />,
-          headerLeft: props => <HeaderLeft {...props} />,
-          // headerRight: props => <HeaderRight {...props} />,
-        }}
-      />
-      <HomeStack.Screen
-        name="DateAndLocation"
-        component={DateAndLocation}
-        options={{
-          // drawerIcon: ({color}) => (
-          //   <Ionicons name="home-outline" size={22} color={color} />
-          // ),
-          title: 'Date And Location',
-          headerShown: true,
-          headerTitle: props => <Headercenter {...props} />,
-          headerLeft: props => <HeaderLeft {...props} />,
-          // headerRight: props => <HeaderRight {...props} />,
-        }}
-      />
-      
-      <HomeStack.Screen
-        name={'VehicleInfo'}
-        component={VehicleInfo}
+
+      <BookingStack.Screen
+        name={'RenteeBookingDetails'}
+        component={RenteeBookingDetails}
         options={{headerShown: false}}
       />
-      <HomeStack.Screen
-        name="VehicleMap"
-        component={VehicleMap}
-        options={{
-          headerShown: false,
-        }}
-      />
-       <HomeStack.Screen
-               name="Card"
-               component={PaymentCard}
-               options={{
-                 headerShown: false,
-               }}
-              
-            />
-      <HomeStack.Screen
-        name="VisionCamera"
-        component={VisionCamera}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </HomeStack.Navigator>
+       <BookingStack.Screen
+          name="RenteeBookingDetailseMap"
+          component={VehicleMap}
+          options={{
+            headerShown: false,
+          }}
+        />
+    </BookingStack.Navigator>
   );
 };
 
-export default HomeNavigator;
+export default RenteeBookingNavigator;

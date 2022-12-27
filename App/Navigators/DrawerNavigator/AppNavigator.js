@@ -25,6 +25,8 @@ import Card from '../../containers/Card/PaymentCard';
 import Bookings from '../../containers/Rental/Bookings/Bookings';
 import BookingNavigator from '../StackNavigator/BookingNavigator/BookingNavigator';
 import OnGoingBookingNavigator from '../StackNavigator/BookingNavigator/OnGoingBookingNavigator';
+import RenteeBookingNavigator from '../StackNavigator/RenteeBookingNavigator/RenteeBookingNavigator';
+import RenteeOnGoingBookingNavigator from '../StackNavigator/RenteeBookingNavigator/RenteeOnGoingBookingNavigator';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const AppStack = props => {
@@ -35,7 +37,6 @@ const AppStack = props => {
   const RightDrawer = createDrawerNavigator();
 
   function HeaderLeft(properties) {
-    console.log('sds', properties);
     return (
       <TouchableOpacity
         style={{alignSelf: 'center', marginLeft: 8}}
@@ -51,7 +52,6 @@ const AppStack = props => {
     );
   }
   function Headercenter(props) {
-    console.log('PROPS ', props);
     return (
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <Text
@@ -110,7 +110,7 @@ const AppStack = props => {
           },
         }}
         drawerContent={props => <CustomDrawer {...props} />}>
-        {userMode === 'R' ? (
+        {userMode === 'P' ? (
           <>
             <Drawer.Screen
               name="HomeNavigator"
@@ -138,6 +138,36 @@ const AppStack = props => {
                 headerTitle: props => <Headercenter {...props} />,
               }}
             /> */}
+          <Drawer.Screen
+              name="RenteeBookingNavigator"
+              component={RenteeBookingNavigator}
+              options={{
+                headerShown: false,
+                drawerLabel: 'My Bookings',
+                drawerIcon: ({color}) => (
+                  <Ionicons name="home-outline" size={22} color={color} />
+                ),
+                // title: 'List Of Bookings',
+                // headerTitle: props => <Headercenter {...props} />,
+                // headerLeft: props => <HeaderLeft {...props} />,
+                // headerRight: props => <HeaderRight {...props} />,
+              }}
+            />
+          <Drawer.Screen
+              name="OnGoingBookingNavigator"
+              component={RenteeOnGoingBookingNavigator}
+              options={{
+                headerShown: false,
+                drawerLabel: 'Current or Complete Bookings',
+                drawerIcon: ({color}) => (
+                  <Ionicons name="home-outline" size={22} color={color} />
+                ),
+                // title: 'List Of Bookings',
+                // headerTitle: props => <Headercenter {...props} />,
+                // headerLeft: props => <HeaderLeft {...props} />,
+                // headerRight: props => <HeaderRight {...props} />,
+              }}
+            />
             <Drawer.Screen
               name="AllVehicle"
               component={Vehicle}
@@ -200,7 +230,7 @@ const AppStack = props => {
               component={OnGoingBookingNavigator}
               options={{
                 headerShown: false,
-                drawerLabel: 'List of Rentals',
+                drawerLabel: 'Current or Complete Bookings',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),

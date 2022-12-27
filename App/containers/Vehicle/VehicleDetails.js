@@ -54,12 +54,12 @@ const VehicleDetails = props => {
   useLayoutEffect(() => {
     dispatch(
       setCarLatLong({
-        latitude: location[1],
-        longitude: location[0],
+        latitude: location[0],
+        longitude: location[1],
       }),
     );
     // Geocoder.init('AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g'); // use a valid API key
-    Geocoder.from(location[1], location[0])
+    Geocoder.from(location[0], location[1])
       .then(json => {
         var addressComponent = json.results[0].formatted_address;
         console.log('ADDRESS ->> ', addressComponent);
@@ -90,11 +90,7 @@ const VehicleDetails = props => {
   const handleSubmit = () => {
     setLoader(true);
     isVerified(onSuccess,onFailure);
-    
-    // navigation.navigate('DateAndLocation', {
-    //   vehicleId: Vehicle._id,
-    // });
-  };
+};
 
   const onSuccess = data => {
     const {
@@ -306,7 +302,7 @@ const VehicleDetails = props => {
                     fontWeight: '600',
                     color: Colors.paleorange,
                   }}>
-                  Rs. {Vehicle?.withDriverCharges?.withDriverDailyCharges}
+                  Rs. {Vehicle?.selfDriveDailyCharges}
                 </Text>
                 <Text style={styles.title}> /day</Text>
               </View>
@@ -314,8 +310,8 @@ const VehicleDetails = props => {
                 <Rating
                   type="custom"
                   ratingColor={Colors.paleorange}
-                  // ratingBackgroundColor="#c8c7c8"
-                  startingValue={3.5}
+                  // ratingBackgroundColor="#c8c7c8"]
+                  startingValue={Vehicle?.averageRating}
                   readonly
                   ratingCount={5}
                   imageSize={15}

@@ -4,3 +4,4 @@ export const REGISTER = 'Registration';
 export const OTP = 'OTP';
 export const SPLASH_SCREEN = 'SplashScreen';
 export const APPINTRO = 'AppSliderIntro';
+export const Card = 'Add to Card';

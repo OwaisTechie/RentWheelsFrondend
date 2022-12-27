@@ -4,13 +4,15 @@ import { useState, useRef, useCallback } from 'react';
 const DEVIATION = 0.0002;
 
 export function useMap(props) {
+
   const {LocationMarker} = props;
   const mapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
 
   const handleNavigateToPoint = useCallback(
     (id, lat, long) => {
-
+      console.log("id ->>");
+      console.log("id ->> ",id);
       if (mapRef) {
         mapRef.current.animateCamera(
           {
@@ -23,7 +25,7 @@ export function useMap(props) {
           500
         );
       }
-      setSelectedMarker(id);
+      setSelectedMarker(id ? id : null);
     },
     [mapRef, setSelectedMarker]
   );

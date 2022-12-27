@@ -1,32 +1,20 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Login from '../../../containers/Login/Login';
-import Registration from '../../../containers/Registeration/Registration';
-import AppSliderIntro from '../../../containers/AppSliderIntro/AppSliderIntro';
-import {
-  REGISTER,
-  LOGIN,
-  APPINTRO,
-  SPLASH_SCREEN,
-  OTP,
-} from '../../../Constant/routeName';
-import {Colors, Images} from '../../../Theme';
-import SplashScreen from '../../../containers/SplashScreen/SplashScreen';
-import OtpScreen from '../../../containers/Otp/OtpScreen';
-import Home from '../../../containers/Home/Home';
-import VehicleInfo from '../../../containers/Vehicle/VehicleDetails';
-import Profile from '../../../containers/Profile/Profile';
+
+import {Colors} from '../../../Theme';
+
 import VehicleMap from '../../../containers/Vehicle/VehicleMap';
-import DateAndLocation from '../../../containers/Booking.js/DateAndLocation';
+
 import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import VisionCamera from '../../../containers/VisionCamera/VisionCamera';
-import PaymentCard from '../../../containers/Card/PaymentCard';
-import Bookings from '../../../containers/Rental/Bookings/Bookings';
-import BookingDetails from '../../../containers/Rental/Bookings/BookingDetails';
+import RenteeCompletedAndOngoing from '../../../containers/RenteeBooking/OngoingAndCompleted/RenteeCompletedAndOngoing';
+import RenteeCompletedBookingDetails from '../../../containers/RenteeBooking/OngoingAndCompleted/RenteeCompletedBookingDetails';
+import Review from '../../../containers/RenteeBooking/Review/Review';
+
+
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-const BookingNavigator = (props) => {
+const RenteeOnGoingBookingNavigator = (props) => {
     const {navigation}= props;
   function HeaderLeft(properties) {
     return (
@@ -92,26 +80,31 @@ const BookingNavigator = (props) => {
       screenOptions={header}
       initialRouteName={'Booking'}>
       <BookingStack.Screen
-        name="Booking"
-        component={Bookings}
+        name="RenteeCompletedAndOngoing"
+        component={RenteeCompletedAndOngoing}
         options={{
             // drawerLabel:'List of Bookings',
             drawerIcon: ({color}) => (
               <Ionicons name="home-outline" size={22} color={color} />
             ),
-            title: 'List Of Bookings',
+            title: 'List of Rentals',
             headerTitle: props => <Headercenter {...props} />,
             headerLeft: props => <BookingHeaderLeft {...props} />
         }}
       />
 
       <BookingStack.Screen
-        name={'BookingDetails'}
-        component={BookingDetails}
+        name={'RenteeCompletedBookingDetails'}
+        component={RenteeCompletedBookingDetails}
+        options={{headerShown: false}}
+      />
+      <BookingStack.Screen
+        name={'Review'}
+        component={Review}
         options={{headerShown: false}}
       />
        <BookingStack.Screen
-          name="BookingDetailseMap"
+          name="RenteeonGoingBookingDetailsMap"
           component={VehicleMap}
           options={{
             headerShown: false,
@@ -121,4 +114,4 @@ const BookingNavigator = (props) => {
   );
 };
 
-export default BookingNavigator;
+export default RenteeOnGoingBookingNavigator;

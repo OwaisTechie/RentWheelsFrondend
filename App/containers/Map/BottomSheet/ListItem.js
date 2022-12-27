@@ -24,7 +24,7 @@ export function ListItem(props) {
   const navigation = useNavigation();
   const vehicleCategory = item?.vehicleCategory;
   const pickupLocation = item?.pickupLocation?.coordinates;
-  const Charges = item?.withDriverCharges?.withDriverDailyCharges;
+  const Charges = item?.selfDriveDailyCharges;
   // const userAddress = useSelector(state => state.address.userAddress);
   // console.log("userAddress ->> ",userAddress)
   let image = item?.images[0];

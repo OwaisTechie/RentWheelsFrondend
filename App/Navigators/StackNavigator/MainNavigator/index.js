@@ -49,7 +49,6 @@ import { logout,login,retrieveToken,modeChange } from '../../../Redux/auth/Reduc
 // import RentalNavigator from '../../DrawerNavigator/RentalNavigator';
 import CustomModal from '../../../Components/CustomModal/CustomModal';
 // function HeaderLeft(properties) {
-//   console.log('sds', properties);
 //   return (
 //     <TouchableOpacity
 //       style={{alignSelf: 'center', marginLeft: 8}}

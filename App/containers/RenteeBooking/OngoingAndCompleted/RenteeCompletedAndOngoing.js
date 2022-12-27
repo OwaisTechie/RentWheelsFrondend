@@ -8,21 +8,18 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-
-import CustomSwitch from '../../../../Components/Custom_Switch/CustomSwitch';
-import {Colors} from '../../../../Theme'
+import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
+import {Colors} from '../../../Theme'
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import CardView from 'react-native-cardview';
-import BottomSheetSkelton from '../../../Map/BottomSheet/BottomSheetSkelton';
+import BottomSheetSkelton from '../../Map/BottomSheet/BottomSheetSkelton';
 import { useFocusEffect } from '@react-navigation/native';
-import { activeRentals } from '../apiCalls/apiCall';
+import { getOnGoing } from '../apiCalls/apiCall'
+import { RenteeCompletedBookingsItem } from './RenteeCompletedBookingsItem';
 
-import { CompletedBookingsItem } from './CompletedBookingsItem';
-
-const CompletedAndOngoing = () => {
+const RenteeCompletedAndOngoing = () => {
   const [switchValue, setSwitchValue] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [index, setIndex] = useState(0);
@@ -35,10 +32,11 @@ const CompletedAndOngoing = () => {
   const [completed, setCompleted] = useState([]);
 
 
+  
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
-      activeRentals(onSuccess, onFailure);
+      getOnGoing(onSuccess, onFailure);
       // Do something when the screen is focused
       return (() => {
         setOnGoing([]);
@@ -68,7 +66,7 @@ const CompletedAndOngoing = () => {
                   }}
                   showsVerticalScrollIndicator={false}
                   renderItem={({item}) => (
-                    <CompletedBookingsItem
+                    <RenteeCompletedBookingsItem
                       item={item}
                       onPressElement={() => console.log('first')}
                     />
@@ -113,7 +111,7 @@ const CompletedAndOngoing = () => {
                   renderItem={({item}) => {
                     console.log("ITEM ->> ",item)
                     return (
-                      <CompletedBookingsItem
+                      <RenteeCompletedBookingsItem
                       item={item}
                       onPressElement={() => console.log('first')}
                     />
@@ -133,7 +131,6 @@ const CompletedAndOngoing = () => {
     const {
       Payload: {onGoing,completed},
     } = data;
-    
     setOnGoing(onGoing);
     setCompleted(completed);
     setIsLoading(false);
@@ -161,8 +158,8 @@ const CompletedAndOngoing = () => {
           }}>
           <CustomSwitch
             selectionMode={1}
-            option1="Active Rentals"
-            option2="Completed Rentals"
+            option1="Active Bookings"
+            option2="Completed Bookings"
             onSelectSwitch={e => setSwitchValue(e)}
           />
 
@@ -170,19 +167,6 @@ const CompletedAndOngoing = () => {
         </View>
       </View>
     </View>
-
-    // <TabView
-    //   lazy
-    //   navigationState={{ index, routes }}
-    //   renderScene={SceneMap({
-    //     first: FirstRoute,
-    //     second: SecondRoute,
-    //   })}
-    //   renderLazyPlaceholder={LazyPlaceholder}
-    //   onIndexChange={setIndex}
-    //   initialLayout={{width: Dimensions.get('window').width}}
-    //   style={styles.container}
-    // />
   );
 };
 
@@ -249,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompletedAndOngoing;
+export default RenteeCompletedAndOngoing;
