@@ -1,0 +1,1670 @@
+(this["webpackJsonpNBP"] = this["webpackJsonpNBP"] || []).push([[5],{
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./node_modules/postcss-loader/src/index.js?!./src/assets/css/common/datepicker.override.css":
+/*!**********************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--6-oneOf-3-1!./node_modules/postcss-loader/src??postcss!./src/assets/css/common/datepicker.override.css ***!
+  \**********************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, ".react-datepicker-wrapper .react-datepicker__input-container input{\r\n  padding: 6px !important;\r\n}", ""]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./src/assets/css/common/datepicker.override.css":
+/*!*******************************************************!*\
+  !*** ./src/assets/css/common/datepicker.override.css ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js??ref--6-oneOf-3-1!../../../../node_modules/postcss-loader/src??postcss!./datepicker.override.css */ "./node_modules/css-loader/dist/cjs.js?!./node_modules/postcss-loader/src/index.js?!./src/assets/css/common/datepicker.override.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(true) {
+	module.hot.accept(/*! !../../../../node_modules/css-loader/dist/cjs.js??ref--6-oneOf-3-1!../../../../node_modules/postcss-loader/src??postcss!./datepicker.override.css */ "./node_modules/css-loader/dist/cjs.js?!./node_modules/postcss-loader/src/index.js?!./src/assets/css/common/datepicker.override.css", function() {
+		var newContent = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js??ref--6-oneOf-3-1!../../../../node_modules/postcss-loader/src??postcss!./datepicker.override.css */ "./node_modules/css-loader/dist/cjs.js?!./node_modules/postcss-loader/src/index.js?!./src/assets/css/common/datepicker.override.css");
+
+		if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./src/containers/forms/FormikCustomComponents.js":
+/*!********************************************************!*\
+  !*** ./src/containers/forms/FormikCustomComponents.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/inherits */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createSuper */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createSuper.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! yup */ "./node_modules/yup/lib/index.js");
+/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(yup__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _FormikFields__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./FormikFields */ "./src/containers/forms/FormikFields.js");
+/* harmony import */ var react_checkbox_tree__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-checkbox-tree */ "./node_modules/react-checkbox-tree/lib/index.browser.js");
+/* harmony import */ var react_checkbox_tree__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_checkbox_tree__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var react_text_mask__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-text-mask */ "./node_modules/react-text-mask/dist/reactTextMask.js");
+/* harmony import */ var react_text_mask__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_text_mask__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _helpers_Utils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../helpers/Utils */ "./src/helpers/Utils.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
+/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/dist/react-datepicker.min.js");
+/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(react_datepicker__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../helpers/IntlMessages */ "./src/helpers/IntlMessages.js");
+/* harmony import */ var _components_common_CustomBootstrap__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../components/common/CustomBootstrap */ "./src/components/common/CustomBootstrap.js");
+/* harmony import */ var assets_css_common_datepicker_override_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! assets/css/common/datepicker.override.css */ "./src/assets/css/common/datepicker.override.css");
+/* harmony import */ var assets_css_common_datepicker_override_css__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(assets_css_common_datepicker_override_css__WEBPACK_IMPORTED_MODULE_16__);
+
+
+
+
+var _jsxFileName = "E:\\OwaisReactDev\\NBPbackoffice\\backoffice-ui\\src\\containers\\forms\\FormikCustomComponents.js";
+
+
+
+
+
+
+
+
+
+
+
+
+
+var FormikCustomComponents = /*#__PURE__*/function (_Component) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(FormikCustomComponents, _Component);
+  var _super = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikCustomComponents);
+  function FormikCustomComponents() {
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, FormikCustomComponents);
+    return _super.apply(this, arguments);
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(FormikCustomComponents, [{
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+      var _this$props = this.props,
+        handleSubmit = _this$props.handleSubmit,
+        toggleModal = _this$props.toggleModal,
+        formFields = _this$props.formFields,
+        initialValues = _this$props.initialValues,
+        validationSchema = _this$props.validationSchema,
+        formName = _this$props.formName,
+        cancelButton = _this$props.cancelButton,
+        generic = _this$props.generic,
+        buttonFields = _this$props.buttonFields;
+      function getButtons(setFieldValue, handleSubmit) {
+        var _this = this;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement("div", {
+          className: "text-right",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 43,
+            columnNumber: 9
+          }
+        }, buttonFields.map(function (button) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["Button"], {
+            key: button.label,
+            className: button.className,
+            color: button.color,
+            outline: button.outline,
+            onClick: function onClick() {
+              var _button$field, _button$field2;
+              setFieldValue((_button$field = button.field) === null || _button$field === void 0 ? void 0 : _button$field.fieldName, (_button$field2 = button.field) === null || _button$field2 === void 0 ? void 0 : _button$field2.value, false);
+              handleSubmit();
+            },
+            __self: _this,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 46,
+              columnNumber: 15
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: button.label,
+            __self: _this,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 60,
+              columnNumber: 17
+            }
+          }));
+        }), "  ");
+      }
+      function getFormField(values, setFieldValue, setFieldTouched, errors, touched, handleChange) {
+        var _this2 = this;
+        var renderedFields = [];
+        var CnicNumberMask = [/^[0-9+]/, /\d/, /\d/, /\d/, /\d/, "-", /[0-9+]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, "-", /[0-9]$/];
+        Object.values(formFields).forEach(function (field) {
+          renderedFields.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_components_common_CustomBootstrap__WEBPACK_IMPORTED_MODULE_15__["Colxx"], {
+            key: field.name,
+            sm: field.colxx || "12",
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 97,
+              columnNumber: 11
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["FormGroup"], {
+            className: Object(_helpers_Utils__WEBPACK_IMPORTED_MODULE_11__["isFieldRequired"])(validationSchema, field.name) ? "error-l-100 required" : "error-l-100",
+            key: field.name,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 100,
+              columnNumber: 13
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["Label"], {
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 108,
+              columnNumber: 15
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: field.label,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 109,
+              columnNumber: 17
+            }
+          }), field.sublabel && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement("small", {
+            className: "m-1",
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 111,
+              columnNumber: 19
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: field.sublabel,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 112,
+              columnNumber: 21
+            }
+          }))), field.type === "textbox" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Field"], {
+            className: "form-control",
+            name: field.name,
+            id: field.name,
+            disabled: field.disabled,
+            maxLength: field.maxLength,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 117,
+              columnNumber: 17
+            }
+          }), field.type === "textarea" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Field"], {
+            style: {
+              overflow: "hidden",
+              height: "120px"
+            },
+            component: "textarea",
+            className: "form-control",
+            name: field.name,
+            id: field.name,
+            disabled: field.disabled,
+            maxLength: field.maxLength,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 158,
+              columnNumber: 17
+            }
+          }), field.type === "textareaHeigthLess" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Field"], {
+            style: {
+              overflow: "hidden",
+              height: "70px"
+            },
+            component: "textarea",
+            className: "form-control",
+            name: field.name,
+            id: field.name,
+            disabled: field.disabled,
+            maxLength: field.maxLength,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 172,
+              columnNumber: 17
+            }
+          }), field.type === "password" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Field"], {
+            className: "form-control",
+            type: "password",
+            name: field.name,
+            id: field.name,
+            disabled: field.disabled,
+            maxLength: field.maxLength,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 186,
+              columnNumber: 17
+            }
+          }), field.type === "checkbox" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_FormikFields__WEBPACK_IMPORTED_MODULE_8__["FormikCheckbox"]
+          // className="form-control"
+          // type=""
+          , {
+            name: field.name,
+            id: field.name,
+            value: values[field.name],
+            disabled: field.disabled,
+            label: field.label,
+            onBlur: setFieldTouched,
+            onChange: function onChange(name, value) {
+              setFieldValue(name, value);
+              if (field.onChange) field.onChange(name, value);
+            }
+            // maxLength={field.maxLength}
+            ,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 196,
+              columnNumber: 17
+            }
+          }), field.type === "number" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Field"], {
+            className: "form-control",
+            type: "number",
+            name: field.name,
+            id: field.name,
+            disabled: field.disabled,
+            maxLength: field.maxLength,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 213,
+              columnNumber: 17
+            }
+          }), field.type === "select" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_FormikFields__WEBPACK_IMPORTED_MODULE_8__["FormikReactSelect"], {
+            name: field.name,
+            id: field.name,
+            value: values[field.name],
+            options: field.options,
+            onChange: function onChange(name, value) {
+              setFieldValue(name, value);
+              if (field.onChange) field.onChange(name, value);
+            },
+            onBlur: setFieldTouched,
+            disabled: field.disabled,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 237,
+              columnNumber: 17
+            }
+          }), field.type === "nodes" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(react_checkbox_tree__WEBPACK_IMPORTED_MODULE_9___default.a, {
+            name: field.name,
+            id: field.name,
+            nodes: field.options,
+            checked: field.checked,
+            expanded: field.expanded,
+            onCheck: field.onCheck,
+            onExpand: field.onExpand,
+            noCascade: true,
+            showExpandAll: true,
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 251,
+              columnNumber: 17
+            }
+          }), errors[field.name] ?
+          /*#__PURE__*/
+          // && touched[field.name]
+          react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement("div", {
+            className: "invalid-feedback d-block",
+            __self: _this2,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 266,
+              columnNumber: 17
+            }
+          }, errors[field.name]) : null)));
+        });
+        return renderedFields;
+      }
+      // debugger
+      return (
+        // if model is generic then default buttons should be 'cancle' and 'submit'
+        generic || initialValues && initialValues.isaccepted === undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Formik"], {
+          enableReinitialize: true,
+          initialValues: initialValues,
+          validationSchema: validationSchema,
+          onSubmit: handleSubmit,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 281,
+            columnNumber: 9
+          }
+        }, function (_ref) {
+          var handleSubmit = _ref.handleSubmit,
+            setFieldValue = _ref.setFieldValue,
+            setFieldTouched = _ref.setFieldTouched,
+            handleChange = _ref.handleChange,
+            handleBlur = _ref.handleBlur,
+            values = _ref.values,
+            errors = _ref.errors,
+            touched = _ref.touched,
+            isSubmitting = _ref.isSubmitting;
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Form"], {
+            className: "av-tooltip tooltip-label-right mb-2 mt-2",
+            key: formName,
+            id: formName,
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 298,
+              columnNumber: 13
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["FormGroup"], {
+            row: true,
+            className: "mx-auto",
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 303,
+              columnNumber: 15
+            }
+          }, getFormField(values, setFieldValue, setFieldTouched, errors, touched, handleChange)), cancelButton && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["Button"], {
+            color: "secondary",
+            outline: true,
+            onClick: toggleModal,
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 314,
+              columnNumber: 17
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: cancelButton,
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 315,
+              columnNumber: 19
+            }
+          })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["Button"], {
+            color: "primary",
+            type: "submit",
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 319,
+              columnNumber: 15
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: "submit-button",
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 320,
+              columnNumber: 17
+            }
+          })));
+        }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Formik"], {
+          initialValues: initialValues,
+          validationSchema: validationSchema,
+          onSubmit: handleSubmit,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 326,
+            columnNumber: 9
+          }
+        }, function (_ref2) {
+          var setFieldValue = _ref2.setFieldValue,
+            setFieldTouched = _ref2.setFieldTouched,
+            handleChange = _ref2.handleChange,
+            handleBlur = _ref2.handleBlur,
+            values = _ref2.values,
+            errors = _ref2.errors,
+            touched = _ref2.touched,
+            isSubmitting = _ref2.isSubmitting,
+            submitForm = _ref2.submitForm;
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Form"], {
+            className: "av-tooltip tooltip-label-right",
+            key: formName,
+            id: formName,
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 342,
+              columnNumber: 13
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["FormGroup"], {
+            row: true,
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 347,
+              columnNumber: 15
+            }
+          }, getFormField(values, setFieldValue, setFieldTouched, errors, touched, handleChange)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["Button"], {
+            className: "m-1",
+            color: "secondary",
+            outline: true,
+            onClick: function onClick() {
+              setFieldValue("isaccepted", false, false);
+              submitForm();
+            },
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 357,
+              columnNumber: 15
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: "reject-button",
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 366,
+              columnNumber: 17
+            }
+          })), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_12__["Button"], {
+            color: "primary",
+            onClick: function onClick() {
+              setFieldValue("isaccepted", true, false);
+              submitForm();
+            },
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 369,
+              columnNumber: 15
+            }
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_4___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            id: "approve-button",
+            __self: _this3,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 376,
+              columnNumber: 17
+            }
+          })));
+        })
+      );
+    }
+  }]);
+  return FormikCustomComponents;
+}(react__WEBPACK_IMPORTED_MODULE_4__["Component"]);
+/* harmony default export */ __webpack_exports__["default"] = (FormikCustomComponents);
+
+/***/ }),
+
+/***/ "./src/containers/forms/FormikFields.js":
+/*!**********************************************!*\
+  !*** ./src/containers/forms/FormikFields.js ***!
+  \**********************************************/
+/*! exports provided: FormikReactSelect, FormikCheckboxGroup, FormikCustomCheckboxGroup, FormikCheckbox, FormikCustomCheckbox, FormikRadioButtonGroup, FormikCustomRadioGroup, FormikTagsInput, FormikSwitch, FormikDatePicker, DateRangeFormikDatePicker, FormikDropZone */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikReactSelect", function() { return FormikReactSelect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikCheckboxGroup", function() { return FormikCheckboxGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikCustomCheckboxGroup", function() { return FormikCustomCheckboxGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikCheckbox", function() { return FormikCheckbox; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikCustomCheckbox", function() { return FormikCustomCheckbox; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikRadioButtonGroup", function() { return FormikRadioButtonGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikCustomRadioGroup", function() { return FormikCustomRadioGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikTagsInput", function() { return FormikTagsInput; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikSwitch", function() { return FormikSwitch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikDatePicker", function() { return FormikDatePicker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DateRangeFormikDatePicker", function() { return DateRangeFormikDatePicker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormikDropZone", function() { return FormikDropZone; });
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/toConsumableArray */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/inherits */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createSuper */ "./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createSuper.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
+/* harmony import */ var react_tagsinput__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-tagsinput */ "./node_modules/react-tagsinput/react-tagsinput.js");
+/* harmony import */ var react_tagsinput__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_tagsinput__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var react_tagsinput_react_tagsinput_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-tagsinput/react-tagsinput.css */ "./node_modules/react-tagsinput/react-tagsinput.css");
+/* harmony import */ var react_tagsinput_react_tagsinput_css__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_tagsinput_react_tagsinput_css__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var rc_switch__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rc-switch */ "./node_modules/rc-switch/es/index.js");
+/* harmony import */ var rc_switch__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(rc_switch__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var rc_switch_assets_index_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rc-switch/assets/index.css */ "./node_modules/rc-switch/assets/index.css");
+/* harmony import */ var rc_switch_assets_index_css__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(rc_switch_assets_index_css__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var react_dropzone_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-dropzone-component */ "./node_modules/react-dropzone-component/dist/react-dropzone.js");
+/* harmony import */ var react_dropzone_component__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(react_dropzone_component__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var react_bootstrap_daterangepicker__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-bootstrap-daterangepicker */ "./node_modules/react-bootstrap-daterangepicker/dist/index.es.js");
+/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/dist/react-datepicker.min.js");
+/* harmony import */ var react_datepicker__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_datepicker__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var react_datepicker_dist_react_datepicker_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
+/* harmony import */ var react_datepicker_dist_react_datepicker_css__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(react_datepicker_dist_react_datepicker_css__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../helpers/IntlMessages */ "./src/helpers/IntlMessages.js");
+
+
+
+
+
+
+var _jsxFileName = "E:\\OwaisReactDev\\NBPbackoffice\\backoffice-ui\\src\\containers\\forms\\FormikFields.js",
+  _this6 = undefined;
+
+
+
+
+
+
+
+
+
+
+
+
+var FormikReactSelect = /*#__PURE__*/function (_React$Component) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikReactSelect, _React$Component);
+  var _super = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikReactSelect);
+  function FormikReactSelect() {
+    var _this;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikReactSelect);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    _this = _super.call.apply(_super, [this].concat(args));
+    _this.handleChange = function (value) {
+      _this.props.onChange(_this.props.name, value);
+    };
+    _this.handleBlur = function () {
+      _this.props.onBlur(_this.props.name, true);
+    };
+    return _this;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikReactSelect, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_select__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        className: "react-select ".concat(this.props.className),
+        classNamePrefix: "react-select",
+        options: this.props.options,
+        isMulti: this.props.isMulti,
+        onChange: this.handleChange,
+        onBlur: this.handleBlur,
+        value: this.props.value,
+        isDisabled: this.props.disabled,
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 25,
+          columnNumber: 7
+        }
+      });
+    }
+  }]);
+  return FormikReactSelect;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikCheckboxGroup = /*#__PURE__*/function (_React$Component2) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikCheckboxGroup, _React$Component2);
+  var _super2 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikCheckboxGroup);
+  function FormikCheckboxGroup() {
+    var _this2;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikCheckboxGroup);
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    _this2 = _super2.call.apply(_super2, [this].concat(args));
+    _this2.handleChange = function (val) {
+      var valueArray = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__["default"])(_this2.props.value) || [];
+      if (!valueArray.includes(val)) {
+        valueArray.push(val);
+      } else {
+        valueArray.splice(valueArray.indexOf(val), 1);
+      }
+      _this2.props.onChange(_this2.props.name, valueArray);
+    };
+    _this2.handleBlur = function () {
+      _this2.props.onBlur(_this2.props.name, true);
+    };
+    return _this2;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikCheckboxGroup, [{
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+      var _this$props = this.props,
+        name = _this$props.name,
+        value = _this$props.value,
+        options = _this$props.options,
+        _this$props$inline = _this$props.inline,
+        inline = _this$props$inline === void 0 ? false : _this$props$inline;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_6___default.a.Fragment, {
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 57,
+          columnNumber: 7
+        }
+      }, options.map(function (child, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          key: "".concat(name, "_").concat(child.value, "_").concat(index),
+          className: "position-relative form-check ".concat(inline ? "form-check-inline" : ""),
+          __self: _this3,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 60,
+            columnNumber: 13
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+          id: child.value,
+          name: name,
+          type: "checkbox",
+          className: "form-check-input",
+          onChange: function onChange() {
+            return _this3.handleChange(child.value);
+          },
+          onBlur: _this3.handleBlur,
+          defaultChecked: value.includes(child.value),
+          disabled: child.disabled,
+          __self: _this3,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 66,
+            columnNumber: 15
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", {
+          className: "form-check-label",
+          __self: _this3,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 76,
+            columnNumber: 15
+          }
+        }, child.label));
+      }));
+    }
+  }]);
+  return FormikCheckboxGroup;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikCustomCheckboxGroup = /*#__PURE__*/function (_React$Component3) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikCustomCheckboxGroup, _React$Component3);
+  var _super3 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikCustomCheckboxGroup);
+  function FormikCustomCheckboxGroup() {
+    var _this4;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikCustomCheckboxGroup);
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+    _this4 = _super3.call.apply(_super3, [this].concat(args));
+    _this4.handleChange = function (val) {
+      var valueArray = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__["default"])(_this4.props.value) || [];
+      if (!valueArray.includes(val)) {
+        valueArray.push(val);
+      } else {
+        valueArray.splice(valueArray.indexOf(val), 1);
+      }
+      _this4.props.onChange(_this4.props.name, valueArray);
+    };
+    _this4.handleBlur = function () {
+      _this4.props.onBlur(_this4.props.name, true);
+    };
+    return _this4;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikCustomCheckboxGroup, [{
+    key: "render",
+    value: function render() {
+      var _this5 = this;
+      var _this$props2 = this.props,
+        name = _this$props2.name,
+        value = _this$props2.value,
+        options = _this$props2.options,
+        _this$props2$inline = _this$props2.inline,
+        inline = _this$props2$inline === void 0 ? false : _this$props2$inline;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_6___default.a.Fragment, {
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 102,
+          columnNumber: 7
+        }
+      }, options.map(function (child, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__["CustomInput"], {
+          key: "".concat(name, "_").concat(child.value, "_").concat(index),
+          type: "checkbox",
+          id: "".concat(name, "_").concat(child.value, "_").concat(index),
+          name: child.name,
+          label: child.label,
+          onChange: function onChange() {
+            return _this5.handleChange(child.value);
+          },
+          onBlur: _this5.handleBlur,
+          checked: value.includes(child.value),
+          disabled: child.disabled,
+          inline: inline,
+          __self: _this5,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 105,
+            columnNumber: 13
+          }
+        });
+      }));
+    }
+  }]);
+  return FormikCustomCheckboxGroup;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikCheckbox = function FormikCheckbox(props) {
+  // console.log("props.label",props);
+  var handleChange = function handleChange(event) {
+    props.onChange(props.name, !props.value);
+  };
+  var handleBlur = function handleBlur() {
+    props.onBlur(props.name, true);
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+    className: "position-relative form-check form-check-inline",
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      flexDirection: "row"
+    },
+    __self: _this6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 132,
+      columnNumber: 5
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+    name: props.name,
+    type: "checkbox",
+    className: "form-check-input",
+    onChange: handleChange,
+    onBlur: handleBlur,
+    checked: props.value,
+    disabled: props.disabled,
+    __self: _this6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 141,
+      columnNumber: 7
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", {
+    className: "form-check-label",
+    style: {
+      flex: 1
+    },
+    __self: _this6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 150,
+      columnNumber: 7
+    }
+  }, props.label == "label.password" ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    id: "user.forgot-password-question",
+    __self: _this6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 158,
+      columnNumber: 11
+    }
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    id: props.label,
+    __self: _this6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 160,
+      columnNumber: 11
+    }
+  })));
+};
+var FormikCustomCheckbox = function FormikCustomCheckbox(props) {
+  var handleChange = function handleChange(event) {
+    props.onChange(props.name, !props.value);
+  };
+  var handleBlur = function handleBlur() {
+    props.onBlur(props.name, true);
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__["CustomInput"], {
+    type: "checkbox",
+    id: props.name,
+    name: props.name,
+    label: props.label,
+    onChange: handleChange,
+    onBlur: handleBlur,
+    checked: props.value,
+    disabled: props.disabled,
+    inline: true,
+    __self: _this6,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 175,
+      columnNumber: 5
+    }
+  });
+};
+var FormikRadioButtonGroup = /*#__PURE__*/function (_React$Component4) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikRadioButtonGroup, _React$Component4);
+  var _super4 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikRadioButtonGroup);
+  function FormikRadioButtonGroup() {
+    var _this7;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikRadioButtonGroup);
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
+    }
+    _this7 = _super4.call.apply(_super4, [this].concat(args));
+    _this7.handleChange = function (val) {
+      _this7.props.onChange(_this7.props.name, val);
+    };
+    _this7.handleBlur = function () {
+      _this7.props.onBlur(_this7.props.name, true);
+    };
+    return _this7;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikRadioButtonGroup, [{
+    key: "render",
+    value: function render() {
+      var _this8 = this;
+      var _this$props3 = this.props,
+        name = _this$props3.name,
+        value = _this$props3.value,
+        options = _this$props3.options,
+        _this$props3$inline = _this$props3.inline,
+        inline = _this$props3$inline === void 0 ? false : _this$props3$inline;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_6___default.a.Fragment, {
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 201,
+          columnNumber: 7
+        }
+      }, options.map(function (child, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          key: "".concat(name, "_").concat(child.value, "_").concat(index),
+          className: "position-relative form-check ".concat(inline ? "form-check-inline" : ""),
+          __self: _this8,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 204,
+            columnNumber: 13
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+          id: child.value,
+          name: name,
+          type: "radio",
+          className: "form-check-input",
+          onChange: function onChange() {
+            return _this8.handleChange(child.value);
+          },
+          onBlur: _this8.handleBlur,
+          defaultChecked: value === child.value,
+          disabled: child.disabled,
+          __self: _this8,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 210,
+            columnNumber: 15
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("label", {
+          className: "form-check-label",
+          __self: _this8,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 220,
+            columnNumber: 15
+          }
+        }, child.label));
+      }));
+    }
+  }]);
+  return FormikRadioButtonGroup;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikCustomRadioGroup = /*#__PURE__*/function (_React$Component5) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikCustomRadioGroup, _React$Component5);
+  var _super5 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikCustomRadioGroup);
+  function FormikCustomRadioGroup() {
+    var _this9;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikCustomRadioGroup);
+    for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+      args[_key5] = arguments[_key5];
+    }
+    _this9 = _super5.call.apply(_super5, [this].concat(args));
+    _this9.handleChange = function (val) {
+      _this9.props.onChange(_this9.props.name, val);
+    };
+    _this9.handleBlur = function () {
+      _this9.props.onBlur(_this9.props.name, true);
+    };
+    return _this9;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikCustomRadioGroup, [{
+    key: "render",
+    value: function render() {
+      var _this10 = this;
+      var _this$props4 = this.props,
+        name = _this$props4.name,
+        value = _this$props4.value,
+        options = _this$props4.options,
+        _this$props4$inline = _this$props4.inline,
+        inline = _this$props4$inline === void 0 ? false : _this$props4$inline;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_6___default.a.Fragment, {
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 241,
+          columnNumber: 7
+        }
+      }, options.map(function (child, index) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_8__["CustomInput"], {
+          key: "".concat(name, "_").concat(child.value, "_").concat(index),
+          type: "radio",
+          id: "".concat(name, "_").concat(child.value, "_").concat(index),
+          name: child.name,
+          label: child.label,
+          onChange: function onChange() {
+            return _this10.handleChange(child.value);
+          },
+          onBlur: _this10.handleBlur,
+          checked: value === child.value,
+          disabled: child.disabled,
+          inline: inline,
+          __self: _this10,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 244,
+            columnNumber: 13
+          }
+        });
+      }));
+    }
+  }]);
+  return FormikCustomRadioGroup;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikTagsInput = /*#__PURE__*/function (_React$Component6) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikTagsInput, _React$Component6);
+  var _super6 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikTagsInput);
+  function FormikTagsInput() {
+    var _this11;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikTagsInput);
+    for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+      args[_key6] = arguments[_key6];
+    }
+    _this11 = _super6.call.apply(_super6, [this].concat(args));
+    _this11.handleChange = function (val) {
+      _this11.props.onBlur(_this11.props.name, true);
+      _this11.props.onChange(_this11.props.name, val);
+    };
+    return _this11;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikTagsInput, [{
+    key: "render",
+    value: function render() {
+      var _this$props5 = this.props,
+        name = _this$props5.name,
+        value = _this$props5.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_tagsinput__WEBPACK_IMPORTED_MODULE_9___default.a, {
+        id: name,
+        name: name,
+        value: value,
+        onChange: this.handleChange,
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 271,
+          columnNumber: 7
+        }
+      });
+    }
+  }]);
+  return FormikTagsInput;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikSwitch = /*#__PURE__*/function (_React$Component7) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikSwitch, _React$Component7);
+  var _super7 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikSwitch);
+  function FormikSwitch() {
+    var _this12;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikSwitch);
+    for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+      args[_key7] = arguments[_key7];
+    }
+    _this12 = _super7.call.apply(_super7, [this].concat(args));
+    _this12.handleChange = function (val) {
+      _this12.props.onBlur(_this12.props.name, true);
+      _this12.props.onChange(_this12.props.name, val);
+    };
+    return _this12;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikSwitch, [{
+    key: "render",
+    value: function render() {
+      var _this$props6 = this.props,
+        name = _this$props6.name,
+        value = _this$props6.value,
+        className = _this$props6.className;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(rc_switch__WEBPACK_IMPORTED_MODULE_11___default.a, {
+        id: name,
+        name: name,
+        className: className,
+        checked: value,
+        onChange: this.handleChange,
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 290,
+          columnNumber: 7
+        }
+      });
+    }
+  }]);
+  return FormikSwitch;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikDatePicker = /*#__PURE__*/function (_React$Component8) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikDatePicker, _React$Component8);
+  var _super8 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikDatePicker);
+  function FormikDatePicker() {
+    var _this13;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikDatePicker);
+    for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+      args[_key8] = arguments[_key8];
+    }
+    _this13 = _super8.call.apply(_super8, [this].concat(args));
+    _this13.handleChange = function (val) {
+      _this13.props.onChange(_this13.props.name, val);
+    };
+    _this13.handleBlur = function (val) {
+      _this13.props.onBlur(_this13.props.name, true);
+    };
+    return _this13;
+  }
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikDatePicker, [{
+    key: "render",
+    value: function render() {
+      var _this$props7 = this.props,
+        name = _this$props7.name,
+        value = _this$props7.value,
+        className = _this$props7.className;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_datepicker__WEBPACK_IMPORTED_MODULE_15___default.a, {
+        id: name,
+        name: name,
+        className: className,
+        selected: value,
+        onChange: this.handleChange,
+        onBlur: this.handleBlur,
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 312,
+          columnNumber: 7
+        }
+      });
+    }
+  }]);
+  return FormikDatePicker;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var DateRangeFormikDatePicker = /*#__PURE__*/function (_React$Component9) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(DateRangeFormikDatePicker, _React$Component9);
+  var _super9 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(DateRangeFormikDatePicker);
+  function DateRangeFormikDatePicker(props) {
+    var _this14;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, DateRangeFormikDatePicker);
+    _this14 = _super9.call(this, props);
+    _this14.handleEvent = function (event, picker) {
+      console.log("this.props: ", _this14.props);
+      var val = event.target.value;
+      var startDate = event.target.value.slice(0, 10);
+      var endDate = event.target.value.slice(13);
+      _this14.props.onChange(val);
+      // this.handleChange(val);
+      _this14.setState({
+        dateRange: [startDate, endDate]
+      });
+    };
+    console.log("PROPS =>>", props);
+    // console.log(props.selected[1],"DateRangeProps1")
+    // console.log(props.selected[0],"DateRangeProps0")
+    _this14.state = {
+      dateRange: [new Date(), new Date()]
+    };
+    return _this14;
+  }
+  // handleChange = (val) => {
+  //   this.props.onChange(val);
+  //   // this.setState({ dateRange: [val[0], val[1]] });
+  // };
+
+  // componentDidMount(prevProps,prevState) {
+  //   const {startDate,endDate} = this.props.selected;
+  //   // const abc = moment("01/02/2022","dd/MM/yyyy");
+  //   console.log(prevState,"<== prevState")
+  //   console.log("PROPS =>>",this.props)
+  //   console.log("prevProps =>>",prevProps)
+  //   // console.log(startDate,"DateRangeProps1")
+  //   console.log(endDate,"DateRangeProps0")
+  //   // this.setState({ dateRange: this.props.selected})
+  // }
+
+  // componentDidUpdate(prevProps,prevState) {
+  //   // Typical usage (don't forget to compare props):
+  //   var [startDate, endDate] = this.state.dateRange;
+  //   console.log(prevProps, "PrevProps")
+  //   console.log(prevState, "PrevState")
+  //   console.log(startDate,"StartDateinDid")
+  //   console.log(endDate,"endDateinDid")
+  //   if(this.propsflag === true){
+  //       // this.handleChange(prevState);
+  //       this.setState({ dateRange: [this.props.selected[1],this.props.selected[0]]})
+  //   }
+  //   // if (this.props.userID !== prevProps.userID) {
+  //   //   this.fetchData(this.props.userID);
+  //   // }
+  // }
+
+  //   this.props.onChange(this.props.name, this.state.dateRange);
+  // };
+  // handleBlur = (val) => {
+  //   this.props.onBlur(this.props.name, true);
+  // };
+
+  // handleChangeStart = (update) => {
+  // console.log("date: ", update);
+
+  // let short = {{update  | date:'short'}}
+  // console.log(short)
+  // this.setState({ dateRange: update });
+
+  // let newState = { dateRange: update };
+  // console.log("newState: ", newState);
+
+  // this.setState(newState, () => {
+  //   console.log("date: ", this.state.dateRange);
+  // });
+  // };
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(DateRangeFormikDatePicker, [{
+    key: "render",
+    value: function render() {
+      var _this$state$dateRange = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_slicedToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.state.dateRange, 2),
+        startDate = _this$state$dateRange[0],
+        endDate = _this$state$dateRange[1];
+
+      // console.log("startDate: ", startDate, " endDate: ", endDate);
+
+      // const { name, value, className, selected:[startDateprops,endDateprops] } = this.props;
+      var _this$props8 = this.props,
+        name = _this$props8.name,
+        value = _this$props8.value,
+        className = _this$props8.className,
+        selected = _this$props8.selected;
+
+      // const [startDateprops,] = this.props.selected;
+      // console.log(startDateprops,"startDateprops..")
+      // console.log(endDateprops,"endDateprops..")
+      // console.log(className + "    ClassNameProps")
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_6___default.a.Fragment, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 408,
+          columnNumber: 7
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_bootstrap_daterangepicker__WEBPACK_IMPORTED_MODULE_14__["default"], {
+        onEvent: this.handleEvent,
+        initialSettings: {
+          startDate: {
+            startDate: startDate
+          },
+          endDate: {
+            endDate: endDate
+          },
+          showDropdowns: true
+        },
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 410,
+          columnNumber: 9
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 418,
+          columnNumber: 11
+        }
+      })));
+    }
+  }]);
+  return DateRangeFormikDatePicker;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+var FormikDropZone = /*#__PURE__*/function (_React$Component10) {
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_4__["default"])(FormikDropZone, _React$Component10);
+  var _super10 = Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createSuper__WEBPACK_IMPORTED_MODULE_5__["default"])(FormikDropZone);
+  function FormikDropZone(props) {
+    var _this15;
+    Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, FormikDropZone);
+    _this15 = _super10.call(this, props);
+    _this15.ReactDOMServer = __webpack_require__(/*! react-dom/server */ "./node_modules/react-dom/server.browser.js");
+    _this15.state = {
+      djsConfig: {
+        acceptedFiles: "image/jpeg,image/png,image/gif",
+        addRemoveLinks: true,
+        uploadMultiple: true
+        // maxFilesize: 11,
+        // params: {
+        //   id: this.props.id,
+        //   name: this.props.name,
+        // }
+      },
+
+      eventHandlers: {
+        addedfile: function addedfile(file) {
+          return console.log(file);
+        }
+      },
+      componentConfig: {
+        postUrl: "no-url"
+      }
+    };
+    return _this15;
+  }
+  // handleChange = (val) => {
+  //   console.log("date: ", val);
+  //   this.setState({ dateRange: val });
+  // };
+  Object(E_OwaisReactDev_NBPbackoffice_backoffice_ui_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(FormikDropZone, [{
+    key: "render",
+    value: function render() {
+      console.log(this.props, "<<=Classname");
+      var eventHandlers = {
+        addedfile: function addedfile(file) {
+          return console.log("FileofDropzone", file);
+        }
+      };
+      var dropzoneComponentConfig = {
+        postUrl: "https://httpbin.org/post"
+      };
+      var dropzoneConfig = {
+        thumbnailHeight: 160,
+        maxFilesize: 10,
+        previewTemplate: this.ReactDOMServer.renderToStaticMarkup( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "dz-preview dz-file-preview mb-3",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 481,
+            columnNumber: 9
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "d-flex flex-row ",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 482,
+            columnNumber: 11
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "p-0 w-30 position-relative",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 483,
+            columnNumber: 13
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "dz-error-mark",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 484,
+            columnNumber: 15
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("span", {
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 485,
+            columnNumber: 17
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("i", {
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 486,
+            columnNumber: 19
+          }
+        }), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "dz-success-mark",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 489,
+            columnNumber: 15
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("span", {
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 490,
+            columnNumber: 17
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("i", {
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 491,
+            columnNumber: 19
+          }
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "preview-container",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 494,
+            columnNumber: 15
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("img", {
+          "data-dz-thumbnail": true,
+          className: "img-thumbnail border-0",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 496,
+            columnNumber: 17
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("i", {
+          className: "simple-icon-doc preview-icon",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 497,
+            columnNumber: 17
+          }
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "pl-3 pt-2 pr-2 pb-1 w-70 dz-details position-relative",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 500,
+            columnNumber: 13
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 501,
+            columnNumber: 15
+          }
+        }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("span", {
+          "data-dz-name": true,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 503,
+            columnNumber: 17
+          }
+        }), " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "text-primary text-extra-small",
+          "data-dz-size": true,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 505,
+            columnNumber: 15
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "dz-progress",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 506,
+            columnNumber: 15
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("span", {
+          className: "dz-upload",
+          "data-dz-uploadprogress": true,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 507,
+            columnNumber: 17
+          }
+        })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("div", {
+          className: "dz-error-message",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 509,
+            columnNumber: 15
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("span", {
+          "data-dz-errormessage": true,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 510,
+            columnNumber: 17
+          }
+        })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("a", {
+          href: "#/",
+          className: "remove",
+          "data-dz-remove": true,
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 514,
+            columnNumber: 11
+          }
+        }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement("i", {
+          className: "glyph-icon simple-icon-trash",
+          __self: this,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 516,
+            columnNumber: 13
+          }
+        }), " "))),
+        headers: {
+          "My-Awesome-Header": "header value"
+        }
+      };
+      var _this$props9 = this.props,
+        name = _this$props9.name,
+        value = _this$props9.value,
+        className = _this$props9.className;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement(react_dropzone_component__WEBPACK_IMPORTED_MODULE_13___default.a
+      // className={className}
+      // djsConfig={this.state.djsConfig}
+      // config={this.state.componentConfig}
+      , {
+        eventHandlers: eventHandlers,
+        config: dropzoneComponentConfig,
+        djsConfig: dropzoneConfig
+        // className={'p-10 m-100'}
+        ,
+        __self: this,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 525,
+          columnNumber: 7
+        }
+      });
+    }
+  }]);
+  return FormikDropZone;
+}(react__WEBPACK_IMPORTED_MODULE_6___default.a.Component);
+
+/***/ }),
+
+/***/ "./src/containers/navs/Breadcrumb.js":
+/*!*******************************************!*\
+  !*** ./src/containers/navs/Breadcrumb.js ***!
+  \*******************************************/
+/*! exports provided: BreadcrumbItems, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BreadcrumbItems", function() { return BreadcrumbItems; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../helpers/IntlMessages */ "./src/helpers/IntlMessages.js");
+var _this = undefined,
+  _jsxFileName = "E:\\OwaisReactDev\\NBPbackoffice\\backoffice-ui\\src\\containers\\navs\\Breadcrumb.js";
+
+
+
+
+var getMenuTitle = function getMenuTitle(sub) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    id: "menu.".concat(sub),
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 7,
+      columnNumber: 10
+    }
+  });
+};
+var getUrl = function getUrl(path, sub, index) {
+  if (index === 0) {
+    return "";
+  } else {
+    return path.split(sub)[0] + sub;
+  }
+};
+var BreadcrumbContainer = function BreadcrumbContainer(_ref) {
+  var heading = _ref.heading,
+    match = _ref.match;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], {
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 21,
+      columnNumber: 5
+    }
+  }, heading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 22,
+      columnNumber: 19
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_helpers_IntlMessages__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    id: heading,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 22,
+      columnNumber: 23
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BreadcrumbItems, {
+    match: match,
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 23,
+      columnNumber: 7
+    }
+  }));
+};
+var BreadcrumbItems = function BreadcrumbItems(_ref2) {
+  var match = _ref2.match;
+  var path = match.path.substr(1);
+  var paths = path.split("/");
+  if (paths[paths.length - 1].indexOf(":") > -1) {
+    paths = paths.filter(function (x) {
+      return x.indexOf(":") === -1;
+    });
+  }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], {
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 35,
+      columnNumber: 5
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Breadcrumb"], {
+    className: "pt-0 breadcrumb-container d-none d-sm-block d-lg-inline-block",
+    __self: _this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 36,
+      columnNumber: 7
+    }
+  }, paths.map(function (sub, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["BreadcrumbItem"], {
+      key: index,
+      active: paths.length === index + 1,
+      __self: _this,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 39,
+        columnNumber: 13
+      }
+    }, paths.length !== index + 1 ?
+    // <NavLink to={"/" + getUrl(path, sub, index)}>
+    getMenuTitle(sub)
+    // </NavLink>
+    : getMenuTitle(sub));
+  })));
+};
+/* harmony default export */ __webpack_exports__["default"] = (BreadcrumbContainer);
+
+/***/ })
+
+}]);
+//# sourceMappingURL=5.chunk.js.map

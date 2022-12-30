@@ -1,26 +1,8 @@
 import axios from 'axios';
-// import config from "../../../../config";
 import {Config} from '../../../Config/Config';
 import Toast from 'react-native-toast-message';
 import {getHeaders} from '../../../Constant/requestHeaders';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// const defaultPageSize = 10;
-// const defaultPageNumber = 1;
-// // const defaultStartingDate = new Date();
-// // const defaultEndingDate = new Date();
-// const defaultOrderBy = 'stampDate';
-// const defaultisAsc = 'true';
-
-// const defaultSearchCriteria = {
-//   username: '',
-//   status: '',
-//   fromAccount: '',
-//   stan: '',
-//   mobileNo: '',
-//   toBank: '',
-//   rrn: '',
-//   companyName: '',
-// };
 
 export function loginRequest(payload, onSuccess, onFailure){
   const baseUrl = Config.baseUrl.main;

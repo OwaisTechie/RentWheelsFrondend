@@ -1,0 +1,153 @@
+const development = {
+  url: {
+    // backoffice: "http://localhost:9001/backoffice/",
+    // nodebackoffice: "http://13.73.143.92:9010/node-backoffice/",
+    // backoffice: "http://13.73.143.92:9010/backoffice/",
+    // rda: "http://13.73.143.92:9010/",
+    ib_backoffice: "http://localhost:8083/ib-backoffice/",
+
+    //production IP
+    nodebackoffice: "http://40.68.251.49:9001/node-backoffice/",
+    backoffice: "http://40.68.251.49:9001/backoffice/",
+    rda: "http://40.68.251.49:9001/",
+    // ib_backoffice: "http://40.68.251.49:9001/ib-backoffice/",
+  },
+  endpoint: {
+    backoffice: {
+      institution: "institution/",
+      batch: "batch/",
+      list: "list/",
+      permission: "get/permission/",
+      role: "role/",
+      addrole: "add/role",
+      updaterole: "update/role",
+      getroles: "get/roles/",
+      getrole: "get/role/",
+      rolebatch: "role/batch",
+      user: "user/",
+      getuser: "get/user/",
+      getusers: "get/users/",
+      adduser: "add/user",
+      updateuser: "update/user/",
+      deleteuser: "delete/user/",
+      deleterole: "delete/role/",
+      login: "login/",
+      logout: "logout/",
+      processChecker: "process/getmergelist/",
+      processMaker: "process/getreturnedmergelist/",
+      addUserReviewChecker: "user/reviewtasks",
+      editUserReviewChecker: "user/updatereviewtasks",
+      addUserReviewMaker: "user/reviewReturnedTasks",
+      editUserReviewMaker: "user/updatereviewreturnedtasks",
+      addRoleReviewChecker: "role/reviewtasks",
+      editRoleReviewChecker: "role/updatereviewtasks",
+      addRoleReviewMaker: "role/reviewReturnedTasks",
+      editRoleReviewMaker: "role/updatereviewreturnedtasks",
+      changeUserPassword: "user/changeUserPassword",
+      refreshToken: "user/refresh-token",
+    },
+    nbpdigital: {
+      analytics: "DashboardStats/getDashboardData",
+    },
+    rda: {
+      repatriation: "get/repatriation",
+      updateRepatriation: "repatriation/status",
+      ips: "get/ips",
+      updateRequest: "ips/status",
+      tBills: "get/t-bills",
+      updatetBills: "t-bills/status",
+      pibs: "get/pibs",
+      updatepibs: "pibs/status",
+      accountMaintenance: "get/account-maintenance",
+      updateAccountMaintenance: "account-maintenance/status",
+    },
+  },
+  nodeendpoint: {
+    backoffice: {
+      savedAccounts: "account/all-saved-accounts",
+      processedAccounts: "account/all-processed-accounts",
+      savedDocuments: "document/all-saved-documents/",
+      processedDocuments: "document/all-processed-documents/",
+    },
+  },
+  values: {
+    sessionTimeOutValue: 300000,
+    dashboardTime: 300000,
+  },
+};
+const production = {
+  // url: {
+  //   backoffice: "http://13.73.143.92:4000/backoffice/",
+  //   rda: 'http://13.73.143.92:9001/',
+  url: {
+    // backoffice: "http://localhost:9001/backoffice/",
+    nodebackoffice: "http://13.73.143.92:9010/node-backoffice/",
+    backoffice: "http://13.73.143.92:9010/backoffice/",
+    rda: "http://13.73.143.92:9010/",
+  },
+  endpoint: {
+    backoffice: {
+      institution: "institution/",
+      batch: "batch/",
+      list: "list/",
+      permission: "get/permission/",
+      role: "role/",
+      addrole: "add/role",
+      updaterole: "update/role",
+      getroles: "get/roles/",
+      getrole: "get/role/",
+      rolebatch: "role/batch",
+      user: "user/",
+      getuser: "get/user/",
+      getusers: "get/users/",
+      adduser: "add/user",
+      updateuser: "update/user/",
+      deleteuser: "delete/user/",
+      deleterole: "delete/role/",
+      login: "login/",
+      logout: "logout/",
+      processChecker: "process/getmergelist/",
+      processMaker: "process/getreturnedmergelist/",
+      addUserReviewChecker: "user/reviewtasks",
+      editUserReviewChecker: "user/updatereviewtasks",
+      addUserReviewMaker: "user/reviewReturnedTasks",
+      editUserReviewMaker: "user/updatereviewreturnedtasks",
+      addRoleReviewChecker: "role/reviewtasks",
+      editRoleReviewChecker: "role/updatereviewtasks",
+      addRoleReviewMaker: "role/reviewReturnedTasks",
+      editRoleReviewMaker: "role/updatereviewreturnedtasks",
+      changeUserPassword: "user/changeUserPassword",
+      refreshToken: "user/refresh-token",
+    },
+    rda: {
+      repatriation: "get/repatriation",
+      updateRepatriation: "repatriation/status",
+      ips: "get/ips",
+      updateRequest: "ips/status",
+      tBills: "get/t-bills",
+      updatetBills: "t-bills/status",
+      pibs: "get/pibs",
+      updatepibs: "pibs/status",
+      accountMaintenance: "get/account-maintenance",
+      updateAccountMaintenance: "account-maintenance/status",
+    },
+  },
+  nodeendpoint: {
+    backoffice: {
+      savedAccounts: "account/all-saved-accounts",
+      processedAccounts: "account/all-processed-accounts",
+      savedDocuments: "document/all-saved-documents/",
+      processedDocuments: "document/all-processed-documents/",
+    },
+  },
+  values: {
+    sessionTimeOutValue: 30000000,
+  },
+};
+
+const environment = "development";
+const config = environment === "production" ? production : development;
+
+// Attach Config to window object
+window.config = config;
+Window.prototype.getConfig = () => config;

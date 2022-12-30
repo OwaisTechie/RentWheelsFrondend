@@ -38,16 +38,16 @@ export function RenteeCompletedBookingsItem(props) {
         },
         styles.item,
       ]}
-      onPress={() =>
-        navigation.navigate('Review', {
-          BookingInfo: item,
-        })
-      }
       // onPress={() =>
-      //   navigation.navigate('RenteeCompletedBookingDetails', {
+      //   navigation.navigate('Review', {
       //     BookingInfo: item,
       //   })
       // }
+      onPress={() =>
+        navigation.navigate('RenteeCompletedBookingDetails', {
+          BookingInfo: item,
+        })
+      }
     >
       <View style={styles.logo}>
         <Image
@@ -95,7 +95,7 @@ export function RenteeCompletedBookingsItem(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Status :</Text>
           <Text style={styles.userDetail}>
-           {item.rentalStatus == "4" ? "Active Bookings " : item.rentalStatus == "5" ? "Completed Bookings" : null}
+           {item.rentalStatus == "4" ? "Active Bookings " : item.rentalStatus == "3" ? "Completed Bookings" : null}
           </Text>
         </View>
         <View

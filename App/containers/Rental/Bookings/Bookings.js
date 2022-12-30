@@ -219,6 +219,7 @@ const Bookings = () => {
             // backgroundColor: Colors,
             justifyContent: 'center',
           }}>
+            
           <CustomSwitch
             selectionMode={1}
             option1="Request"
@@ -229,6 +230,121 @@ const Bookings = () => {
             // Fourthbtn={true}
             onSelectSwitch={e => setSwitchValue(e)}
           />
+
+          {/* {
+          switchValue  == 1 ?
+        (  <View style={{height: '100%'}}>
+          {isLoading ? (
+            <BottomSheetSkelton />
+          ) : (
+            <View>
+              <FlatList
+                data={pending}
+                contentContainerStyle={styles.contentContainer}
+                refreshing={true}
+                style={{height: '95%'}}
+                keyExtractor={key => {
+                  return key._id;
+                }}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => (
+                  <BookingItems
+                    item={item}
+                    onPressElement={() => console.log('first')}
+                  />
+                )}
+              />
+            </View>
+          )}
+        </View>
+        )
+        : switchValue == 2 ? 
+        (
+          <View style={{height: '100%'}}>
+          {isLoading ? (
+            <BottomSheetSkelton />
+          ) : (
+            <View>
+              <FlatList
+                data={approve}
+                // renderItem={({item}) => (
+                //   <TouchableOpacity
+                //     onPress={() => {
+                //       console.log(item.vehicle.registrationNumber);
+                //     }}>
+                //     <Text style={{margin: 3, fontSize: 15}}>
+                //       {item.vehicle.registrationNumber}
+                //     </Text>
+                //     <Text style={{margin: 3, fontSize: 15}}>
+                //       {item.renter.username}
+                //     </Text>
+                //     <Text style={{margin: 3, fontSize: 15}}>
+                //       {item.renter.email}
+                //     </Text>
+                //   </TouchableOpacity>
+                // )}
+                contentContainerStyle={styles.contentContainer}
+                refreshing={true}
+                style={{height: '95%'}}
+                keyExtractor={key => {
+                  return key._id;
+                }}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => (
+                  <BookingItems
+                    item={item}
+                    onPressElement={() => console.log('first')}
+                  />
+                )}
+              />
+            </View>
+          )}
+        </View>
+        )
+        : switchValue == 3 ? 
+        (
+          <View style={{height: '100%'}}>
+          {isLoading ? (
+            <BottomSheetSkelton />
+          ) : (
+            <View>
+              <FlatList
+                data={rejected}
+                // renderItem={({item}) => (
+                //   <TouchableOpacity
+                //     onPress={() => {
+                //       console.log(item.vehicle.registrationNumber);
+                //     }}>
+                //     <Text style={{margin: 3, fontSize: 15}}>
+                //       {item.vehicle.registrationNumber}
+                //     </Text>
+                //     <Text style={{margin: 3, fontSize: 15}}>
+                //       {item.renter.username}
+                //     </Text>
+                //     <Text style={{margin: 3, fontSize: 15}}>
+                //       {item.renter.email}
+                //     </Text>
+                //   </TouchableOpacity>
+                // )}
+                contentContainerStyle={styles.contentContainer}
+                refreshing={true}
+                style={{height: '95%'}}
+                keyExtractor={key => {
+                  return key._id;
+                }}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => (
+                  <BookingItems
+                    item={item}
+                    onPressElement={() => console.log('first')}
+                  />
+                )}
+              />
+            </View>
+          )}
+        </View>
+        ) : null
+          } */}
 
           {bookingView()}
         </View>

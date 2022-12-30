@@ -27,6 +27,7 @@ import BookingNavigator from '../StackNavigator/BookingNavigator/BookingNavigato
 import OnGoingBookingNavigator from '../StackNavigator/BookingNavigator/OnGoingBookingNavigator';
 import RenteeBookingNavigator from '../StackNavigator/RenteeBookingNavigator/RenteeBookingNavigator';
 import RenteeOnGoingBookingNavigator from '../StackNavigator/RenteeBookingNavigator/RenteeOnGoingBookingNavigator';
+import Wallet from '../../containers/Wallet/Wallet';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const AppStack = props => {
@@ -178,6 +179,23 @@ const AppStack = props => {
                   <CustomIcons
                     type="material"
                     name="car-rental"
+                    size={25}
+                    color={color}
+                  />
+                ),
+                headerTitle: props => <Headercenter {...props} />,
+              }}
+            />
+            <Drawer.Screen
+              name="Wallet"
+              component={Wallet}
+              options={{
+                // headerShown: false,
+                drawerLabel: 'Wallet',
+                drawerIcon: ({color}) => (
+                  <CustomIcons
+                    type="fontisto"
+                    name="wallet"
                     size={25}
                     color={color}
                   />

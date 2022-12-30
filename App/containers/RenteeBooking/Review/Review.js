@@ -5,45 +5,171 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  Image,
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
-import React from 'react';
-import {Colors} from '../../../Theme';
+import React, {useState} from 'react';
+import {Colors, General_Styles, Images} from '../../../Theme';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {Rating} from 'react-native-ratings';
+import CustomInput from '../../../Components/CustomTextField/CustomInput';
+import CustomButton from '../../../Components/Custom_btn/CustomButton';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Review = props => {
   const {navigation, route} = props;
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+  const [loader, setLoader] = useState(false);
+
+  const info = {
+    name: 'Owais',
+    phone: '+923472913440',
+    email: 'raffaykahn65@gmail.com',
+    address: 'R-20 Bagh-e-Malir',
+    gender: 'male',
+  };
+  const ratingCompleted = rating => {
+    console.log('Rating is: ' + rating);
+    setRating(rating);
+  };
+  const onSkip = () => {
+    navigation.navigate('HomeNavigator');
+  };
+
+  const handleSubmit = () => {
+    const Payload = {
+      text: review,
+      rating: rating,
+    };
+    console.log('PAYLOAD ->> ', Payload);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Rating and reviews</Text>
-        {/* <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Entypo
-              name="chevron-left"
+      </View>
+
+      <View>
+        <View
+          style={{
+            height: General_Styles.generalHeight / 5,
+            width: General_Styles.generalWidth,
+            marginVertical:hp('2%'),
+            // marginBottom:General_Styles.generalWidth-,
+            // backgroundColor: Colors,
+            justifyContent: 'center',
+          }}>
+          <ImageBackground
+            source={Images.profileGif}
+            style={{
+              height: General_Styles.generalHeight / 6,
+              width: General_Styles.generalHeight / 6,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+              justifyContent: 'center',
+            }}>
+            <Image
+              source={
+                info.gender != 'men' ? Images.menProfile : Images.womenProfile
+              }
               style={{
-                fontSize: 30,
-                color: Colors.lightPurple,
-                padding: 12,
-                // backgroundColor: Colors.Black,
-                // borderRadius: 10,
+                height: General_Styles.generalHeight / 10,
+                width: General_Styles.generalHeight / 10,
+                resizeMode: 'contain',
+                alignSelf: 'center',
               }}
             />
-          </TouchableOpacity>
-
+          </ImageBackground>
           <Text
             style={{
-              fontSize: 20,
-              color: Colors.lightPurple,
+              alignSelf: 'center',
+              fontWeight: 'bold',
+              marginTop: 10,
+              color:Colors.lightPurple,
+              fontSize: General_Styles.generalWidth / 15,
             }}>
-            Review
+            {info.name}
           </Text>
-        </View> */}
+        </View>
       </View>
+      <ScrollView>
+        <View style={styles.item}>
+          <View>
+            <Text style={styles.ratingText}>How was the Journey?</Text>
+          </View>
+          <View>
+            <Rating
+              type="custom"
+              ratingColor={Colors.paleorange}
+              startingValue={rating}
+              fractions
+              ratingCount={5}
+              imageSize={30}
+              onSwipeRating={ratingCompleted}
+              style={{paddingVertical: 10}}
+            />
+          </View>
+          <View>
+            <Text style={{textAlign: 'center', fontSize: wp('4%')}}>
+              Please Share Your Opinion
+            </Text>
+            <Text style={{textAlign: 'center', fontSize: wp('4%')}}>
+              about the Vehicle
+            </Text>
+          </View>
+          
+        </View>
+        <View style={styles.Description}>
+            <CustomInput
+              placeholder="Leave a Comment"
+              // iconName="account-key-outline"
+              // type="materialCommunity"
+              label="Leave a Comment"
+              returnKeyType="next"
+              returnKeyLabel="next"
+              // ref={description}
+              editable={true}
+              multiline={true}
+              numberOfLines={4}
+              maxLength={200}
+              value={review}
+              // onFocus={() => {
+              //   handleError(null, 'description');
+              // }}
+              // onBlur={handleBlur('description')}
+              // error={errors.description}
+              // touched={touched.description}
+              onChangeText={text => setReview(text)}
+              keyboardAppearance="dark"
+              // returnKeyType='next'
+              // returnKeyLabel='next'
+            />
+          </View>
+        <View style={styles.Skip}>
+          <TouchableOpacity onPress={onSkip}>
+
+          
+          <View style={styles.SkipMiddle}> 
+
+          <Text style={styles.SkipText}>Skip</Text>
+          </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.button}>
+          <CustomButton
+            loader={loader}
+            onPress={handleSubmit}
+            title="Leave a review"
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -62,138 +188,73 @@ const iconScanColor = Colors.lightPurple;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    flex: 1,
     // height: '100%',
     backgroundColor: Colors.backgroundLight,
     position: 'relative',
   },
-  title: {
-    fontSize: 12,
+  Skip:{
+    alignItems:'flex-end',
+    
+    // borderRadius:
+    paddingHorizontal:wp('10%'),
+    paddingVertical:wp('2%')
+  },
+  SkipMiddle:{
+    backgroundColor:Colors.White,
+    padding:5,
+    paddingHorizontal:8,
+    borderRadius:8,
+  },
+  SkipText:{
+    color:Colors.paleorange,
+    fontSize:hp('2%')
+
+  },
+  button: {width: wp('100%'),
+  justifyContent:'center', 
+  alignItems:'center',
+  paddingHorizontal:wp('10%'),
+  // marginVertical: hp('25%'),
+},
+  item: {
+    // flexDirection: 'row',
+    // margin: 5,
+    // marginBottom:20,
+    // paddingBottom: 5,
+    height: hp('20%'),
+    // width:wp('10%'),
+    // marginVertical: hp('2%'),
+    alignItems: 'center',
+    // justifyContent: 'flex-start',
+    borderRadius: 7,
+    padding: 10,
+    backgroundColor: Colors.White,
+    elevation: 8,
+  },
+  ratingText: {
     fontWeight: 'bold',
+    textAlign: 'center',
     color: Colors.lightPurple,
+    fontSize: hp('3%'),
   },
-  titleInfo: {
-    fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'justify',
-    color: Colors.paleorange,
-  },
-  direction: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#989CA5',
+  Description: {
+    marginTop: hp('2%'),
+    padding: 10,
   },
   header: {
     width: '100%',
-    height:hp('10%'),
+    height: hp('10%'),
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:Colors.lightPurple,
-    justifyContent:'center',
+    backgroundColor: Colors.lightPurple,
+    justifyContent: 'center',
     // paddingTop: 16,
   },
-  headerText:{
-    color:Colors.White,
-    fontSize:hp('3%'),
-    fontWeight:'bold'
-  },
-  dot: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-    marginTop: 32,
-  },
-  activityIndicator: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-  },
-  renderImage: {
-    width: '100%',
-    height: '90%',
-    resizeMode: 'contain',
-  },
-  renderProduct: {
-    width: wp('100%'),
-    height: hp('25%'),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  vehicleBrandText: {
-    margin: 6,
-  },
-  Specification: {
-    flexDirection: 'column',
-    backgroundColor: Colors.White,
-
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    marginHorizontal: 6,
-    marginVertical: 6,
-    width: 110,
-    height: 90,
-    elevation: 3,
-  },
-  SpecificationText: {color: Colors.lightPurple, fontSize: 15},
-  addressContainer: {
-    borderRadius: 20,
-    borderColor: Colors.backgroundMedium,
-    borderWidth: 2,
-    width: '100%',
-    height: '10%',
-    paddingHorizontal: 4,
-    justifyContent: 'center',
-  },
-
-  rectangleContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-
-  rectangle: {
-    height: rectDimensions,
-    width: rectDimensions,
-    borderWidth: rectBorderWidth,
-    borderColor: rectBorderColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-
-  topOverlay: {
-    flex: 1,
-    height: SCREEN_WIDTH,
-    width: SCREEN_WIDTH,
-    backgroundColor: overlayColor,
-    // justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  bottomOverlay: {
-    flex: 1,
-    height: SCREEN_WIDTH,
-    width: SCREEN_WIDTH,
-
-    backgroundColor: overlayColor,
-    paddingBottom: SCREEN_WIDTH * 0.25,
-  },
-
-  leftAndRightOverlay: {
-    height: SCREEN_WIDTH * 0.65,
-    width: SCREEN_WIDTH,
-    backgroundColor: overlayColor,
-  },
-
-  scanBar: {
-    width: scanBarWidth,
-    height: scanBarHeight,
-    backgroundColor: scanBarColor,
+  headerText: {
+    color: Colors.White,
+    fontSize: hp('3%'),
+    fontWeight: 'bold',
   },
 });
 

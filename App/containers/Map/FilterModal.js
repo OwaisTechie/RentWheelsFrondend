@@ -19,7 +19,10 @@ import TwoPointSlider from '../../Components/Two_Points_Slider/TwoPointSlider';
 // import Animated from 'react-native-reanimated';
 import {Colors, CustomIcons, Fonts, Images} from '../../Theme';
 import FilterList from './BottomSheet/FilterList';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const Section = ({containerStyle, title, children}) => {
   return (
@@ -50,7 +53,7 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
       vehicleType: 'SUV',
       url: Images.SUV,
     },
-    
+
     {
       id: 3,
       vehicleType: 'SPORTSCAR',
@@ -123,12 +126,12 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
     {
       id: 1,
       label: 'Manual',
-      isAutomatic:false,
+      isAutomatic: false,
     },
     {
       id: 2,
       label: 'Automatic',
-      isAutomatic:true,
+      isAutomatic: true,
     },
   ];
 
@@ -143,13 +146,13 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
 
   const [filters, setFilters] = useState({
     vehicleType: '',
-    ratings:'',
+    ratings: '',
     fuelType: '',
     isAutomatic: false,
     // isAudio: false,
     noOfAirbags: '',
     isAircondition: false,
-    priceRange: ['',''],
+    priceRange: ['', ''],
   });
 
   const bodyTypeChange = item => {
@@ -208,194 +211,39 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
       ratings: null,
       fuels: null,
       transmission: null,
-    })
+    });
     // setShowFilterModal(!showFilterModal);
   };
   const FilterSubmit = () => {
-    applyFilter(filters)
-    setShowFilterModal(!showFilterModal)
+    applyFilter(filters);
+    setShowFilterModal(!showFilterModal);
   };
 
-  function renderBodyType() {
-    return (
-      <Section title="Body Type">
-        <FlatList
-          data={BodyType}
-          keyExtractor={key => {
-            return key.id;
-          }}
-          extraData={filterView.selectedId}
-          horizontal
-          renderItem={({item}) => {
-            const backgroundColor = Colors.White;
-            const color =
-              item.id === filterView.selectedId ? Colors.lightPurple : 'white';
-            return (
-              <FilterList
-                item={item}
-                onPress={() => bodyTypeChange(item)}
-                // backgroundColor={{backgroundColor}}
-                borderColor={{color}}
-              />
-            );
-          }}
-          showsHorizontalScrollIndicator={false}
-        />
-      </Section>
-    );
-  }
-  function renderFuelType() {
-    return (
-      <Section title="Fuel Type">
-        <View style={{flexDirection: 'row'}}>
-          {fuelType.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={`FuelType-${index}`}
-                style={ [
-                  {
-                    backgroundColor:'white',
-                    borderColor:
-                      item.id == filterView.fuels ? Colors.lightPurple : 'white',
-                    borderWidth: 3,
-                  },
-                  styles.renderProduct,
-                ]}
-                onPress={() => fuelTypeChange(item)}>
-                <View style={{alignItems: 'center'}}>
-                  <CustomIcons
-                    color={Colors.paleorange}
-                    type="fa5"
-                    name="gas-pump"
-                    size={25}
-                  />
-                  <Text
-                    style={{
-                      color: Colors.darkgrey,
-                      fontWeight: 'bold',
-                      fontSize: 15,
-                    }}>
-                    {item.label}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </Section>
-    );
-  }
-  function renderTransmissionType() {
-    return (
-      <Section title="Transmission Type">
-        <View style={{flexDirection: 'row'}}>
-          {transmissionType.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={`TransmissionType-${index}`}
-                style={ [
-                  {
-                    backgroundColor: 'white',
-                    borderColor:
-                      item.id == filterView.transmission ? Colors.lightPurple : 'white',
-                    borderWidth: 3,
-                  },
-                  styles.containerTransmissionType,
-                ]}
-                onPress={() => transmissionTypeChange(item)}>
-                <View style={styles.transmissionType}>
-                  {item.id == filterView.transmission ? (
-                    <CustomIcons
-                      color={Colors.paleorange}
-                      type="ionicon"
-                      name="ios-checkmark-done-circle-sharp"
-                      size={25}
-                    />
-                  ) : <CustomIcons
-                  color={Colors.paleorange}
-                  type="materialCommunity"
-                  name="refresh-auto"
-                  size={25}
-                />}
+  // function renderBodyType() {
+  //   return (
 
-                  <Text
-                    style={{
-                      color: Colors.darkgrey,
-                      fontWeight: 'bold',
-                      fontSize: 15,
-                      margin: 5,
-                    }}>
-                    {item.label}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </Section>
-    );
-  }
-  function renderPricingRange() {
-    return (
-      <Section title="Price Range">
-        <View style={{alignItems: 'center'}}>
-          <TwoPointSlider
-            values={[2500, 5000]}
-            min={1}
-            max={10000}
-            prefix="Rs."
-            postfix=""
-            onValueChange={values => setFilters({...filters,priceRange:values})}
-          />
-        </View>
-      </Section>
-    );
-  }
-  function renderRatings() {
-    return (
-      <Section title="Ratings" containerStyle={{marginTop: 40}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          {Ratings.map((item, index) => {
-            return (
-              <TextIconButton
-                key={`Ratings-${index}`}
-                containerStyle={{
-                  flex: 1,
-                  height: 50,
-                  margin: 10,
-                  alignItems: 'center',
-                  borderRadius: Fonts.SIZES.base,
-                  borderWidth: 3,
-                  borderColor:
-                    item.id == filterView.ratings
-                      ? Colors.lightPurple
-                      : Colors.White,
-                  backgroundColor: Colors.White,
-                  elevation: 5,
-                }}
-                label={item.label}
-                labelStyle={{
-                  color:
-                    item.id == filterView.ratings
-                      ? Colors.paleorange
-                      : Colors.paleorange,
-                }}
-                icon={'ios-star-sharp'}
-                iconStyle={{
-                  color:
-                    item.id == filterView.ratings
-                      ? Colors.paleorange
-                      : Colors.paleorange,
-                }}
-                type={'ionicon'}
-                onPress={() => ratingChange(item)}
-              />
-            );
-          })}
-        </View>
-      </Section>
-    );
-  }
+  //   );
+  // }
+  // function renderFuelType() {
+  //   return (
+
+  //   );
+  // }
+  // function renderTransmissionType() {
+  //   return (
+
+  //   );
+  // }
+  // function renderPricingRange() {
+  //   return (
+
+  //   );
+  // }
+  // function renderRatings() {
+  //   return (
+
+  //   );
+  // }
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
@@ -457,20 +305,192 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
             contentContainerStyle={{paddingBottom: hp('20%')}}>
             {/* BodyType */}
 
-            {renderBodyType()}
+            <Section title="Body Type">
+              <FlatList
+                data={BodyType}
+                keyExtractor={key => {
+                  return key.id;
+                }}
+                extraData={filterView.selectedId}
+                horizontal
+                renderItem={({item}) => {
+                  const backgroundColor = Colors.White;
+                  const color =
+                    item.id === filterView.selectedId
+                      ? Colors.lightPurple
+                      : 'white';
+                  return (
+                    <FilterList
+                      item={item}
+                      onPress={() => bodyTypeChange(item)}
+                      // backgroundColor={{backgroundColor}}
+                      borderColor={{color}}
+                    />
+                  );
+                }}
+                showsHorizontalScrollIndicator={false}
+              />
+            </Section>
 
             {/* Fuel Type */}
-            {renderFuelType()}
+
+            <Section title="Fuel Type">
+              <View style={{flexDirection: 'row'}}>
+                {fuelType.map((item, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={`FuelType-${index}`}
+                      style={[
+                        {
+                          backgroundColor: 'white',
+                          borderColor:
+                            item.id == filterView.fuels
+                              ? Colors.lightPurple
+                              : 'white',
+                          borderWidth: 3,
+                        },
+                        styles.renderProduct,
+                      ]}
+                      onPress={() => fuelTypeChange(item)}>
+                      <View style={{alignItems: 'center'}}>
+                        <CustomIcons
+                          color={Colors.paleorange}
+                          type="fa5"
+                          name="gas-pump"
+                          size={25}
+                        />
+                        <Text
+                          style={{
+                            color: Colors.darkgrey,
+                            fontWeight: 'bold',
+                            fontSize: 15,
+                          }}>
+                          {item.label}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </Section>
+
+            {/* Price Range */}
+
+            <Section title="Price Range">
+              <View style={{alignItems: 'center'}}>
+                <TwoPointSlider
+                  values={[2500, 5000]}
+                  min={1}
+                  max={10000}
+                  prefix="Rs."
+                  postfix=""
+                  onValueChange={values =>
+                    setFilters({...filters, priceRange: values})
+                  }
+                />
+              </View>
+            </Section>
 
             {/* Transmission Type */}
 
-            {/* Price Range */}
-            {renderPricingRange()}
-            {renderTransmissionType()}
+            <Section title="Transmission Type">
+              <View style={{flexDirection: 'row'}}>
+                {transmissionType.map((item, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={`TransmissionType-${index}`}
+                      style={[
+                        {
+                          backgroundColor: 'white',
+                          borderColor:
+                            item.id == filterView.transmission
+                              ? Colors.lightPurple
+                              : 'white',
+                          borderWidth: 3,
+                        },
+                        styles.containerTransmissionType,
+                      ]}
+                      onPress={() => transmissionTypeChange(item)}>
+                      <View style={styles.transmissionType}>
+                        {item.id == filterView.transmission ? (
+                          <CustomIcons
+                            color={Colors.paleorange}
+                            type="ionicon"
+                            name="ios-checkmark-done-circle-sharp"
+                            size={25}
+                          />
+                        ) : (
+                          <CustomIcons
+                            color={Colors.paleorange}
+                            type="materialCommunity"
+                            name="refresh-auto"
+                            size={25}
+                          />
+                        )}
+
+                        <Text
+                          style={{
+                            color: Colors.darkgrey,
+                            fontWeight: 'bold',
+                            fontSize: 15,
+                            margin: 5,
+                          }}>
+                          {item.label}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </Section>
 
             {/* Ratings */}
-            {renderRatings()}
+
+            <Section title="Ratings" containerStyle={{marginTop: 40}}>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                {Ratings.map((item, index) => {
+                  return (
+                    <TextIconButton
+                      key={`Ratings-${index}`}
+                      containerStyle={{
+                        flex: 1,
+                        height: 50,
+                        margin: 10,
+                        alignItems: 'center',
+                        borderRadius: Fonts.SIZES.base,
+                        borderWidth: 3,
+                        borderColor:
+                          item.id == filterView.ratings
+                            ? Colors.lightPurple
+                            : Colors.White,
+                        backgroundColor: Colors.White,
+                        elevation: 5,
+                      }}
+                      label={item.label}
+                      labelStyle={{
+                        color:
+                          item.id == filterView.ratings
+                            ? Colors.paleorange
+                            : Colors.paleorange,
+                      }}
+                      icon={'ios-star-sharp'}
+                      iconStyle={{
+                        color:
+                          item.id == filterView.ratings
+                            ? Colors.paleorange
+                            : Colors.paleorange,
+                      }}
+                      type={'ionicon'}
+                      onPress={() => ratingChange(item)}
+                    />
+                  );
+                })}
+              </View>
+            </Section>
+            
           </ScrollView>
+
           {/* applyFilterButton */}
 
           <View

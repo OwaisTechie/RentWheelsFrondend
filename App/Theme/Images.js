@@ -20,6 +20,11 @@ export default {
   STATIONWAGON: require('../Assets/VehicleType/STATIONWAGON.png'),
 
 
+  gradientBackgound : require('../Assets/backgroundGradient.jpg'),
+
+
+
+
 
   //Dashboard Assets
 

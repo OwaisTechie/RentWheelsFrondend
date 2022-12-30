@@ -43,7 +43,7 @@ import ModalPoup from '../../Components/CustomModal/ModalPopup';
 import {SIZES} from '../../Theme/Fonts';
 import axios from 'axios';
 import {getHeaders} from '../../Constant/requestHeaders';
-import { Config } from '../../Config/Config';
+import {Config} from '../../Config/Config';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -201,11 +201,7 @@ const Profile = () => {
     const URL = `${baseUrl}${endpoint.user.verifyUser}`;
     console.log('baseURL1 ==>', URL);
     axios
-      .post(
-        URL,
-        formData,
-        header,
-      )
+      .post(URL, formData, header)
       .then(response => {
         setLoader(false);
         Toast.show({
@@ -216,7 +212,6 @@ const Profile = () => {
           visibilityTime: 5000,
           autoHide: true,
         });
-        
       })
       .catch(error => {
         setLoader(false);
@@ -236,720 +231,720 @@ const Profile = () => {
     requestExternalWritePermission();
   }, []);
 
-  function ProfileView() {
-    return (
-      <View>
-        <View
-          style={{
-            height: General_Styles.generalHeight / 5,
-            width: General_Styles.generalWidth,
-            // marginBottom:General_Styles.generalWidth-,
-            // backgroundColor: Colors,
-            justifyContent: 'center',
-          }}>
-          <ImageBackground
-            source={Images.profileGif}
-            style={{
-              height: General_Styles.generalHeight / 6,
-              width: General_Styles.generalHeight / 6,
-              resizeMode: 'contain',
-              alignSelf: 'center',
-              justifyContent: 'center',
-            }}>
-            <Image
-              source={
-                info.gender != 'men' ? Images.menProfile : Images.womenProfile
-              }
-              style={{
-                height: General_Styles.generalHeight / 10,
-                width: General_Styles.generalHeight / 10,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-              }}
-            />
-          </ImageBackground>
-          <Text
-            style={{
-              alignSelf: 'center',
-              fontWeight: 'bold',
-              marginTop: 10,
-              fontSize: General_Styles.generalWidth / 15,
-            }}>
-            {info.name}
-          </Text>
-        </View>
-        <View style={styles.fieldContainer}>
-          {/* <View style={styles.gap}></View> */}
-          {/* list start */}
-          <View>
-            <CustomInput
-              placeholder="Enter your username"
-              iconName="account-key-outline"
-              type="materialCommunity"
-              label="Username"
-              returnKeyType="next"
-              returnKeyLabel="next"
-              // onSubmitEditing={() => {
-              //   password.current.focus();
-              // }}
-              ref={username}
-              // onBlur={'handleBlur('username')'}
-              // error={errors.username}
-              // touched={touched.username}
-              onChangeText={e => console.log(e)}
-              keyboardAppearance="dark"
-            />
-            <CustomInput
-              placeholder="Enter your Email"
-              iconName="account-key-outline"
-              type="materialCommunity"
-              label="Email"
-              returnKeyType="next"
-              returnKeyLabel="next"
-              // onSubmitEditing={() => {
-              //   password.current.focus();
-              // }}
-              ref={email}
-              // onBlur={'handleBlur('username')'}
-              // error={errors.username}
-              // touched={touched.username}
-              onChangeText={e => console.log(e)}
-              keyboardAppearance="dark"
-            />
+  // function ProfileView() {
+  //   return (
+  //     <View>
+  //       <View
+  //         style={{
+  //           height: General_Styles.generalHeight / 5,
+  //           width: General_Styles.generalWidth,
+  //           // marginBottom:General_Styles.generalWidth-,
+  //           // backgroundColor: Colors,
+  //           justifyContent: 'center',
+  //         }}>
+  //         <ImageBackground
+  //           source={Images.profileGif}
+  //           style={{
+  //             height: General_Styles.generalHeight / 6,
+  //             width: General_Styles.generalHeight / 6,
+  //             resizeMode: 'contain',
+  //             alignSelf: 'center',
+  //             justifyContent: 'center',
+  //           }}>
+  //           <Image
+  //             source={
+  //               info.gender != 'men' ? Images.menProfile : Images.womenProfile
+  //             }
+  //             style={{
+  //               height: General_Styles.generalHeight / 10,
+  //               width: General_Styles.generalHeight / 10,
+  //               resizeMode: 'contain',
+  //               alignSelf: 'center',
+  //             }}
+  //           />
+  //         </ImageBackground>
+  //         <Text
+  //           style={{
+  //             alignSelf: 'center',
+  //             fontWeight: 'bold',
+  //             marginTop: 10,
+  //             fontSize: General_Styles.generalWidth / 15,
+  //           }}>
+  //           {info.name}
+  //         </Text>
+  //       </View>
+  //       <View style={styles.fieldContainer}>
+  //         {/* <View style={styles.gap}></View> */}
+  //         {/* list start */}
+  //         <View>
+  //           <CustomInput
+  //             placeholder="Enter your username"
+  //             iconName="account-key-outline"
+  //             type="materialCommunity"
+  //             label="Username"
+  //             returnKeyType="next"
+  //             returnKeyLabel="next"
+  //             // onSubmitEditing={() => {
+  //             //   password.current.focus();
+  //             // }}
+  //             ref={username}
+  //             // onBlur={'handleBlur('username')'}
+  //             // error={errors.username}
+  //             // touched={touched.username}
+  //             onChangeText={e => console.log(e)}
+  //             keyboardAppearance="dark"
+  //           />
+  //           <CustomInput
+  //             placeholder="Enter your Email"
+  //             iconName="account-key-outline"
+  //             type="materialCommunity"
+  //             label="Email"
+  //             returnKeyType="next"
+  //             returnKeyLabel="next"
+  //             // onSubmitEditing={() => {
+  //             //   password.current.focus();
+  //             // }}
+  //             ref={email}
+  //             // onBlur={'handleBlur('username')'}
+  //             // error={errors.username}
+  //             // touched={touched.username}
+  //             onChangeText={e => console.log(e)}
+  //             keyboardAppearance="dark"
+  //           />
 
-            <View>
-              <Text
-                style={{
-                  marginVertical: hp('1%'),
-                  fontSize: 16,
-                  color: '#05375a',
-                  // color:Colors.grey,
-                }}>
-                Phone
-              </Text>
-            </View>
-            <PhoneInput
-              ref={phoneInput}
-              defaultValue={value}
-              containerStyle={{
-                height: hp('8%'),
-                width: hp('43%'),
-                backgroundColor: Colors.White,
-                borderRadius: 18,
-                borderWidth: 1,
-                marginBottom: hp('1%'),
-                borderColor: Colors.darkgrey,
-              }}
-              textContainerStyle={{
-                backgroundColor: Colors.White,
-                paddingVertical: 6,
-                borderRadius: 18,
-              }}
-              defaultCode="PK"
-              layout="first"
-              onChangeText={text => {
-                setValue(text);
-              }}
-              onChangeFormattedText={text => {
-                setFormattedValue(text);
-              }}
-              withDarkTheme
-              withShadow
-              // autoFocus
-            />
-            <CustomInput
-              placeholder="Enter your Address"
-              iconName="account-key-outline"
-              type="materialCommunity"
-              label="Address"
-              returnKeyType="next"
-              returnKeyLabel="next"
-              // onSubmitEditing={() => {
-              //   password.current.focus();
-              // }}
-              ref={email}
-              // onBlur={'handleBlur('username')'}
-              // error={errors.username}
-              // touched={touched.username}
-              onChangeText={e => console.log(e)}
-              keyboardAppearance="dark"
-            />
-          </View>
-        </View>
-      </View>
-    );
-  }
+  //           <View>
+  //             <Text
+  //               style={{
+  //                 marginVertical: hp('1%'),
+  //                 fontSize: 16,
+  //                 color: '#05375a',
+  //                 // color:Colors.grey,
+  //               }}>
+  //               Phone
+  //             </Text>
+  //           </View>
+  //           <PhoneInput
+  //             ref={phoneInput}
+  //             defaultValue={value}
+  //             containerStyle={{
+  //               height: hp('8%'),
+  //               width: hp('43%'),
+  //               backgroundColor: Colors.White,
+  //               borderRadius: 18,
+  //               borderWidth: 1,
+  //               marginBottom: hp('1%'),
+  //               borderColor: Colors.darkgrey,
+  //             }}
+  //             textContainerStyle={{
+  //               backgroundColor: Colors.White,
+  //               paddingVertical: 6,
+  //               borderRadius: 18,
+  //             }}
+  //             defaultCode="PK"
+  //             layout="first"
+  //             onChangeText={text => {
+  //               setValue(text);
+  //             }}
+  //             onChangeFormattedText={text => {
+  //               setFormattedValue(text);
+  //             }}
+  //             withDarkTheme
+  //             withShadow
+  //             // autoFocus
+  //           />
+  //           <CustomInput
+  //             placeholder="Enter your Address"
+  //             iconName="account-key-outline"
+  //             type="materialCommunity"
+  //             label="Address"
+  //             returnKeyType="next"
+  //             returnKeyLabel="next"
+  //             // onSubmitEditing={() => {
+  //             //   password.current.focus();
+  //             // }}
+  //             ref={email}
+  //             // onBlur={'handleBlur('username')'}
+  //             // error={errors.username}
+  //             // touched={touched.username}
+  //             onChangeText={e => console.log(e)}
+  //             keyboardAppearance="dark"
+  //           />
+  //         </View>
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
-  function DocumentView() {
-    return (
-      <View style={{flex: 1, marginVertical: hp('1%')}}>
-        <View style={{alignItems: 'center'}}>
-          <Text>
-            Click on the document then 1. Attach the document from the gallery
-            or 2. click on the camera icon to take the picture directly
-          </Text>
-        </View>
-        {/* <View > */}
-        <View style={styles.gap} />
+  // function DocumentView() {
+  //   return (
+  //     <View style={{flex: 1, marginVertical: hp('1%')}}>
+  //       <View style={{alignItems: 'center'}}>
+  //         <Text>
+  //           Click on the document then 1. Attach the document from the gallery
+  //           or 2. click on the camera icon to take the picture directly
+  //         </Text>
+  //       </View>
+  //       {/* <View > */}
+  //       <View style={styles.gap} />
 
-        {/* // Cnic front and back */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            width: wp('100%'),
-          }}>
-          {/* Cnic front  */}
-          <View style={{width: wp('40%')}}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Cnic Front Side</Text>
-              <Text style={{fontSize: 12}}>Required</Text>
-            </View>
-            <View>
-              <View style={{marginVertical: 10}}>
-                <View
-                  style={{
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderStyle: 'dotted',
-                    height: 150,
-                    // width: '100%',
-                    borderColor: Colors.backgroundMedium,
-                  }}>
-                  {cnicFront == '' ? (
-                    <TouchableOpacity onPress={() => ModalOpen('cnicFront')}>
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <CustomIcons
-                          type="fa"
-                          name="id-card-o"
-                          size={30}
-                          color={Colors.lightPurple}
-                        />
-                        {/* <Text>Add Photos</Text> */}
-                        {/* </View> */}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={{position: 'relative'}}>
-                      <TouchableOpacity
-                        style={{justifyContent: 'center', alignItems: 'center'}}
-                        activeOpacity={0.9}>
-                        <Image
-                          style={{
-                            width: 120,
-                            height: 100,
-                            // marginRight: 10,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderRadius: 16,
-                            // borderWidth: 4,
-                            // borderColor:
-                            //   index === indexSelected ? Colors.lightPurple : 'white',
-                            // borderColor: Colors.lightPurple,
-                          }}
-                          source={{uri: cnicFront}}
-                          resizeMode="contain"
-                        />
+  //       {/* // Cnic front and back */}
+  //       <View
+  //         style={{
+  //           flexDirection: 'row',
+  //           justifyContent: 'space-around',
+  //           width: wp('100%'),
+  //         }}>
+  //         {/* Cnic front  */}
+  //         <View style={{width: wp('40%')}}>
+  //           <View style={{alignItems: 'center'}}>
+  //             <Text>Cnic Front Side</Text>
+  //             <Text style={{fontSize: 12}}>Required</Text>
+  //           </View>
+  //           <View>
+  //             <View style={{marginVertical: 10}}>
+  //               <View
+  //                 style={{
+  //                   borderRadius: 20,
+  //                   borderWidth: 2,
+  //                   alignItems: 'center',
+  //                   justifyContent: 'center',
+  //                   borderStyle: 'dotted',
+  //                   height: 150,
+  //                   // width: '100%',
+  //                   borderColor: Colors.backgroundMedium,
+  //                 }}>
+  //                 {cnicFront == '' ? (
+  //                   <TouchableOpacity onPress={() => ModalOpen('cnicFront')}>
+  //                     <View
+  //                       style={{
+  //                         flex: 1,
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       }}>
+  //                       <CustomIcons
+  //                         type="fa"
+  //                         name="id-card-o"
+  //                         size={30}
+  //                         color={Colors.lightPurple}
+  //                       />
+  //                       {/* <Text>Add Photos</Text> */}
+  //                       {/* </View> */}
+  //                     </View>
+  //                   </TouchableOpacity>
+  //                 ) : (
+  //                   <View style={{position: 'relative'}}>
+  //                     <TouchableOpacity
+  //                       style={{justifyContent: 'center', alignItems: 'center'}}
+  //                       activeOpacity={0.9}>
+  //                       <Image
+  //                         style={{
+  //                           width: 120,
+  //                           height: 100,
+  //                           // marginRight: 10,
+  //                           flexDirection: 'row',
+  //                           flexWrap: 'wrap',
+  //                           borderRadius: 16,
+  //                           // borderWidth: 4,
+  //                           // borderColor:
+  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
+  //                           // borderColor: Colors.lightPurple,
+  //                         }}
+  //                         source={{uri: cnicFront}}
+  //                         resizeMode="contain"
+  //                       />
 
-                        <TouchableOpacity
-                          style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setCnicFront('')}>
-                          <CustomIcons
-                            name={'ios-close-circle'}
-                            type={'ionicon'}
-                            color={Colors.White}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-          {/* Cnic back */}
-          <View style={{width: wp('40%')}}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Cnic Back Side</Text>
+  //                       <TouchableOpacity
+  //                         style={{position: 'absolute', right: 4, top: 5}}
+  //                         onPress={() => setCnicFront('')}>
+  //                         <CustomIcons
+  //                           name={'ios-close-circle'}
+  //                           type={'ionicon'}
+  //                           color={Colors.White}
+  //                           size={25}
+  //                         />
+  //                       </TouchableOpacity>
+  //                     </TouchableOpacity>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </View>
+  //           </View>
+  //         </View>
+  //         {/* Cnic back */}
+  //         <View style={{width: wp('40%')}}>
+  //           <View style={{alignItems: 'center'}}>
+  //             <Text>Cnic Back Side</Text>
 
-              <Text style={{fontSize: 12}}>Required</Text>
-            </View>
-            <View>
-              <View style={{marginVertical: 10}}>
-                <View
-                  style={{
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderStyle: 'dotted',
-                    height: 150,
-                    // width: '100%',
-                    borderColor: Colors.backgroundMedium,
-                  }}>
-                  {cnicBack == '' ? (
-                    <TouchableOpacity onPress={() => ModalOpen('cnicBack')}>
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <CustomIcons
-                          type="fa"
-                          name="id-card-o"
-                          size={30}
-                          color={Colors.lightPurple}
-                        />
-                        {/* <Text>Add Photos</Text> */}
-                        {/* </View> */}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={{position: 'relative'}}>
-                      <TouchableOpacity
-                        style={{justifyContent: 'center', alignItems: 'center'}}
-                        activeOpacity={0.9}>
-                        <Image
-                          style={{
-                            width: 120,
-                            height: 100,
-                            // marginRight: 10,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderRadius: 16,
-                            borderWidth: 4,
-                            // borderColor:
-                            //   index === indexSelected ? Colors.lightPurple : 'white',
-                            borderColor: Colors.lightPurple,
-                          }}
-                          source={{uri: cnicBack}}
-                          resizeMode="contain"
-                        />
+  //             <Text style={{fontSize: 12}}>Required</Text>
+  //           </View>
+  //           <View>
+  //             <View style={{marginVertical: 10}}>
+  //               <View
+  //                 style={{
+  //                   borderRadius: 20,
+  //                   borderWidth: 2,
+  //                   alignItems: 'center',
+  //                   justifyContent: 'center',
+  //                   borderStyle: 'dotted',
+  //                   height: 150,
+  //                   // width: '100%',
+  //                   borderColor: Colors.backgroundMedium,
+  //                 }}>
+  //                 {cnicBack == '' ? (
+  //                   <TouchableOpacity onPress={() => ModalOpen('cnicBack')}>
+  //                     <View
+  //                       style={{
+  //                         flex: 1,
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       }}>
+  //                       <CustomIcons
+  //                         type="fa"
+  //                         name="id-card-o"
+  //                         size={30}
+  //                         color={Colors.lightPurple}
+  //                       />
+  //                       {/* <Text>Add Photos</Text> */}
+  //                       {/* </View> */}
+  //                     </View>
+  //                   </TouchableOpacity>
+  //                 ) : (
+  //                   <View style={{position: 'relative'}}>
+  //                     <TouchableOpacity
+  //                       style={{justifyContent: 'center', alignItems: 'center'}}
+  //                       activeOpacity={0.9}>
+  //                       <Image
+  //                         style={{
+  //                           width: 120,
+  //                           height: 100,
+  //                           // marginRight: 10,
+  //                           flexDirection: 'row',
+  //                           flexWrap: 'wrap',
+  //                           borderRadius: 16,
+  //                           borderWidth: 4,
+  //                           // borderColor:
+  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
+  //                           borderColor: Colors.lightPurple,
+  //                         }}
+  //                         source={{uri: cnicBack}}
+  //                         resizeMode="contain"
+  //                       />
 
-                        <TouchableOpacity
-                          style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setCnicBack('')}>
-                          <CustomIcons
-                            name={'ios-close-circle'}
-                            type={'ionicon'}
-                            color={Colors.White}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
+  //                       <TouchableOpacity
+  //                         style={{position: 'absolute', right: 4, top: 5}}
+  //                         onPress={() => setCnicBack('')}>
+  //                         <CustomIcons
+  //                           name={'ios-close-circle'}
+  //                           type={'ionicon'}
+  //                           color={Colors.White}
+  //                           size={25}
+  //                         />
+  //                       </TouchableOpacity>
+  //                     </TouchableOpacity>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </View>
+  //           </View>
+  //         </View>
+  //       </View>
 
-        {/* // Lincence front and back */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            width: wp('100%'),
-          }}>
-          {/* front */}
-          <View style={{width: wp('40%')}}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Licence Front Side</Text>
-              <Text style={{fontSize: 12}}>Required</Text>
-            </View>
-            <View>
-              <View style={{marginVertical: 10}}>
-                <View
-                  style={{
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderStyle: 'dotted',
-                    height: 150,
-                    // width: '100%',
-                    borderColor: Colors.backgroundMedium,
-                  }}>
-                  {licenseFront == '' ? (
-                    <TouchableOpacity onPress={() => ModalOpen('licenseFront')}>
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <CustomIcons
-                          type="fa"
-                          name="id-card-o"
-                          size={30}
-                          color={Colors.lightPurple}
-                        />
-                        {/* <Text>Add Photos</Text> */}
-                        {/* </View> */}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={{position: 'relative'}}>
-                      <TouchableOpacity
-                        style={{justifyContent: 'center', alignItems: 'center'}}
-                        activeOpacity={0.9}>
-                        <Image
-                          style={{
-                            width: 120,
-                            height: 100,
-                            // marginRight: 10,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderRadius: 16,
-                            borderWidth: 4,
-                            // borderColor:
-                            //   index === indexSelected ? Colors.lightPurple : 'white',
-                            borderColor: Colors.lightPurple,
-                          }}
-                          source={{uri: licenseFront}}
-                          resizeMode="contain"
-                        />
+  //       {/* // Lincence front and back */}
+  //       <View
+  //         style={{
+  //           flexDirection: 'row',
+  //           justifyContent: 'space-around',
+  //           width: wp('100%'),
+  //         }}>
+  //         {/* front */}
+  //         <View style={{width: wp('40%')}}>
+  //           <View style={{alignItems: 'center'}}>
+  //             <Text>Licence Front Side</Text>
+  //             <Text style={{fontSize: 12}}>Required</Text>
+  //           </View>
+  //           <View>
+  //             <View style={{marginVertical: 10}}>
+  //               <View
+  //                 style={{
+  //                   borderRadius: 20,
+  //                   borderWidth: 2,
+  //                   alignItems: 'center',
+  //                   justifyContent: 'center',
+  //                   borderStyle: 'dotted',
+  //                   height: 150,
+  //                   // width: '100%',
+  //                   borderColor: Colors.backgroundMedium,
+  //                 }}>
+  //                 {licenseFront == '' ? (
+  //                   <TouchableOpacity onPress={() => ModalOpen('licenseFront')}>
+  //                     <View
+  //                       style={{
+  //                         flex: 1,
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       }}>
+  //                       <CustomIcons
+  //                         type="fa"
+  //                         name="id-card-o"
+  //                         size={30}
+  //                         color={Colors.lightPurple}
+  //                       />
+  //                       {/* <Text>Add Photos</Text> */}
+  //                       {/* </View> */}
+  //                     </View>
+  //                   </TouchableOpacity>
+  //                 ) : (
+  //                   <View style={{position: 'relative'}}>
+  //                     <TouchableOpacity
+  //                       style={{justifyContent: 'center', alignItems: 'center'}}
+  //                       activeOpacity={0.9}>
+  //                       <Image
+  //                         style={{
+  //                           width: 120,
+  //                           height: 100,
+  //                           // marginRight: 10,
+  //                           flexDirection: 'row',
+  //                           flexWrap: 'wrap',
+  //                           borderRadius: 16,
+  //                           borderWidth: 4,
+  //                           // borderColor:
+  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
+  //                           borderColor: Colors.lightPurple,
+  //                         }}
+  //                         source={{uri: licenseFront}}
+  //                         resizeMode="contain"
+  //                       />
 
-                        <TouchableOpacity
-                          style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setLicenseFront('')}>
-                          <CustomIcons
-                            name={'ios-close-circle'}
-                            type={'ionicon'}
-                            color={Colors.White}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-          {/* back */}
-          <View style={{width: wp('40%')}}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Licence Back Side</Text>
+  //                       <TouchableOpacity
+  //                         style={{position: 'absolute', right: 4, top: 5}}
+  //                         onPress={() => setLicenseFront('')}>
+  //                         <CustomIcons
+  //                           name={'ios-close-circle'}
+  //                           type={'ionicon'}
+  //                           color={Colors.White}
+  //                           size={25}
+  //                         />
+  //                       </TouchableOpacity>
+  //                     </TouchableOpacity>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </View>
+  //           </View>
+  //         </View>
+  //         {/* back */}
+  //         <View style={{width: wp('40%')}}>
+  //           <View style={{alignItems: 'center'}}>
+  //             <Text>Licence Back Side</Text>
 
-              <Text style={{fontSize: 12}}>Required</Text>
-            </View>
-            <View>
-              <View style={{marginVertical: 10}}>
-                <View
-                  style={{
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderStyle: 'dotted',
-                    height: 150,
-                    // width: '100%',
-                    borderColor: Colors.backgroundMedium,
-                  }}>
-                  {licenseBack == '' ? (
-                    <TouchableOpacity onPress={() => ModalOpen('licenseBack')}>
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <CustomIcons
-                          type="fa"
-                          name="id-card-o"
-                          size={30}
-                          color={Colors.lightPurple}
-                        />
-                        {/* <Text>Add Photos</Text> */}
-                        {/* </View> */}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={{position: 'relative'}}>
-                      <TouchableOpacity
-                        style={{justifyContent: 'center', alignItems: 'center'}}
-                        activeOpacity={0.9}>
-                        <Image
-                          style={{
-                            width: 120,
-                            height: 100,
-                            // marginRight: 10,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderRadius: 16,
-                            borderWidth: 4,
-                            // borderColor:
-                            //   index === indexSelected ? Colors.lightPurple : 'white',
-                            borderColor: Colors.lightPurple,
-                          }}
-                          source={{uri: licenseBack}}
-                          resizeMode="contain"
-                        />
+  //             <Text style={{fontSize: 12}}>Required</Text>
+  //           </View>
+  //           <View>
+  //             <View style={{marginVertical: 10}}>
+  //               <View
+  //                 style={{
+  //                   borderRadius: 20,
+  //                   borderWidth: 2,
+  //                   alignItems: 'center',
+  //                   justifyContent: 'center',
+  //                   borderStyle: 'dotted',
+  //                   height: 150,
+  //                   // width: '100%',
+  //                   borderColor: Colors.backgroundMedium,
+  //                 }}>
+  //                 {licenseBack == '' ? (
+  //                   <TouchableOpacity onPress={() => ModalOpen('licenseBack')}>
+  //                     <View
+  //                       style={{
+  //                         flex: 1,
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       }}>
+  //                       <CustomIcons
+  //                         type="fa"
+  //                         name="id-card-o"
+  //                         size={30}
+  //                         color={Colors.lightPurple}
+  //                       />
+  //                       {/* <Text>Add Photos</Text> */}
+  //                       {/* </View> */}
+  //                     </View>
+  //                   </TouchableOpacity>
+  //                 ) : (
+  //                   <View style={{position: 'relative'}}>
+  //                     <TouchableOpacity
+  //                       style={{justifyContent: 'center', alignItems: 'center'}}
+  //                       activeOpacity={0.9}>
+  //                       <Image
+  //                         style={{
+  //                           width: 120,
+  //                           height: 100,
+  //                           // marginRight: 10,
+  //                           flexDirection: 'row',
+  //                           flexWrap: 'wrap',
+  //                           borderRadius: 16,
+  //                           borderWidth: 4,
+  //                           // borderColor:
+  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
+  //                           borderColor: Colors.lightPurple,
+  //                         }}
+  //                         source={{uri: licenseBack}}
+  //                         resizeMode="contain"
+  //                       />
 
-                        <TouchableOpacity
-                          style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setlicenseBack('')}>
-                          <CustomIcons
-                            name={'ios-close-circle'}
-                            type={'ionicon'}
-                            color={Colors.White}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
+  //                       <TouchableOpacity
+  //                         style={{position: 'absolute', right: 4, top: 5}}
+  //                         onPress={() => setlicenseBack('')}>
+  //                         <CustomIcons
+  //                           name={'ios-close-circle'}
+  //                           type={'ionicon'}
+  //                           color={Colors.White}
+  //                           size={25}
+  //                         />
+  //                       </TouchableOpacity>
+  //                     </TouchableOpacity>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </View>
+  //           </View>
+  //         </View>
+  //       </View>
 
-        {/* // Utility bills and Cnic Verification */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            width: wp('100%'),
-          }}>
-          {/* Utility */}
+  //       {/* // Utility bills and Cnic Verification */}
+  //       <View
+  //         style={{
+  //           flexDirection: 'row',
+  //           justifyContent: 'space-around',
+  //           width: wp('100%'),
+  //         }}>
+  //         {/* Utility */}
 
-          <View style={{width: wp('40%')}}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Utility Bills</Text>
-              <Text style={{fontSize: 12}}>Required</Text>
-            </View>
-            <View>
-              <View style={{marginVertical: 10}}>
-                <View
-                  style={{
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderStyle: 'dotted',
-                    height: 150,
-                    // width: '100%',
-                    borderColor: Colors.backgroundMedium,
-                  }}>
-                  {utilityBills == '' ? (
-                    <TouchableOpacity onPress={() => ModalOpen('utilityBills')}>
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <CustomIcons
-                          type="fa"
-                          name="id-card-o"
-                          size={30}
-                          color={Colors.lightPurple}
-                        />
-                        {/* <Text>Add Photos</Text> */}
-                        {/* </View> */}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={{position: 'relative'}}>
-                      <TouchableOpacity
-                        style={{justifyContent: 'center', alignItems: 'center'}}
-                        activeOpacity={0.9}>
-                        <Image
-                          style={{
-                            width: 120,
-                            height: 100,
-                            // marginRight: 10,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderRadius: 16,
-                            borderWidth: 4,
-                            // borderColor:
-                            //   index === indexSelected ? Colors.lightPurple : 'white',
-                            borderColor: Colors.lightPurple,
-                          }}
-                          source={{uri: utilityBills}}
-                          resizeMode="contain"
-                        />
+  //         <View style={{width: wp('40%')}}>
+  //           <View style={{alignItems: 'center'}}>
+  //             <Text>Utility Bills</Text>
+  //             <Text style={{fontSize: 12}}>Required</Text>
+  //           </View>
+  //           <View>
+  //             <View style={{marginVertical: 10}}>
+  //               <View
+  //                 style={{
+  //                   borderRadius: 20,
+  //                   borderWidth: 2,
+  //                   alignItems: 'center',
+  //                   justifyContent: 'center',
+  //                   borderStyle: 'dotted',
+  //                   height: 150,
+  //                   // width: '100%',
+  //                   borderColor: Colors.backgroundMedium,
+  //                 }}>
+  //                 {utilityBills == '' ? (
+  //                   <TouchableOpacity onPress={() => ModalOpen('utilityBills')}>
+  //                     <View
+  //                       style={{
+  //                         flex: 1,
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       }}>
+  //                       <CustomIcons
+  //                         type="fa"
+  //                         name="id-card-o"
+  //                         size={30}
+  //                         color={Colors.lightPurple}
+  //                       />
+  //                       {/* <Text>Add Photos</Text> */}
+  //                       {/* </View> */}
+  //                     </View>
+  //                   </TouchableOpacity>
+  //                 ) : (
+  //                   <View style={{position: 'relative'}}>
+  //                     <TouchableOpacity
+  //                       style={{justifyContent: 'center', alignItems: 'center'}}
+  //                       activeOpacity={0.9}>
+  //                       <Image
+  //                         style={{
+  //                           width: 120,
+  //                           height: 100,
+  //                           // marginRight: 10,
+  //                           flexDirection: 'row',
+  //                           flexWrap: 'wrap',
+  //                           borderRadius: 16,
+  //                           borderWidth: 4,
+  //                           // borderColor:
+  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
+  //                           borderColor: Colors.lightPurple,
+  //                         }}
+  //                         source={{uri: utilityBills}}
+  //                         resizeMode="contain"
+  //                       />
 
-                        <TouchableOpacity
-                          style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setUtilityBills('')}>
-                          <CustomIcons
-                            name={'ios-close-circle'}
-                            type={'ionicon'}
-                            color={Colors.White}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
+  //                       <TouchableOpacity
+  //                         style={{position: 'absolute', right: 4, top: 5}}
+  //                         onPress={() => setUtilityBills('')}>
+  //                         <CustomIcons
+  //                           name={'ios-close-circle'}
+  //                           type={'ionicon'}
+  //                           color={Colors.White}
+  //                           size={25}
+  //                         />
+  //                       </TouchableOpacity>
+  //                     </TouchableOpacity>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </View>
+  //           </View>
+  //         </View>
 
-          {/* Cnic Verification */}
+  //         {/* Cnic Verification */}
 
-          <View style={{width: wp('40%')}}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Cnic Verification</Text>
+  //         <View style={{width: wp('40%')}}>
+  //           <View style={{alignItems: 'center'}}>
+  //             <Text>Cnic Verification</Text>
 
-              <Text style={{fontSize: 12}}>Required</Text>
-            </View>
-            <View>
-              <View style={{marginVertical: 10}}>
-                <View
-                  style={{
-                    borderRadius: 20,
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderStyle: 'dotted',
-                    height: 150,
-                    // width: '100%',
-                    borderColor: Colors.backgroundMedium,
-                  }}>
-                  {cnicVerification == '' ? (
-                    <TouchableOpacity
-                      onPress={() => ModalOpen('cnicVerification')}>
-                      <View
-                        style={{
-                          flex: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <CustomIcons
-                          type="fa"
-                          name="id-card-o"
-                          size={30}
-                          color={Colors.lightPurple}
-                        />
-                        <Text style={{textAlign: 'center'}}>
-                          Cnic Verification with face Without glasses and mask.
-                        </Text>
-                        {/* </View> */}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={{position: 'relative'}}>
-                      <TouchableOpacity
-                        style={{justifyContent: 'center', alignItems: 'center'}}
-                        activeOpacity={0.9}>
-                        <Image
-                          style={{
-                            width: 120,
-                            height: 100,
-                            // marginRight: 10,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            borderRadius: 16,
-                            borderWidth: 4,
-                            // borderColor:
-                            //   index === indexSelected ? Colors.lightPurple : 'white',
-                            borderColor: Colors.lightPurple,
-                          }}
-                          source={{uri: cnicVerification}}
-                          resizeMode="contain"
-                        />
+  //             <Text style={{fontSize: 12}}>Required</Text>
+  //           </View>
+  //           <View>
+  //             <View style={{marginVertical: 10}}>
+  //               <View
+  //                 style={{
+  //                   borderRadius: 20,
+  //                   borderWidth: 2,
+  //                   alignItems: 'center',
+  //                   justifyContent: 'center',
+  //                   borderStyle: 'dotted',
+  //                   height: 150,
+  //                   // width: '100%',
+  //                   borderColor: Colors.backgroundMedium,
+  //                 }}>
+  //                 {cnicVerification == '' ? (
+  //                   <TouchableOpacity
+  //                     onPress={() => ModalOpen('cnicVerification')}>
+  //                     <View
+  //                       style={{
+  //                         flex: 1,
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       }}>
+  //                       <CustomIcons
+  //                         type="fa"
+  //                         name="id-card-o"
+  //                         size={30}
+  //                         color={Colors.lightPurple}
+  //                       />
+  //                       <Text style={{textAlign: 'center'}}>
+  //                         Cnic Verification with face Without glasses and mask.
+  //                       </Text>
+  //                       {/* </View> */}
+  //                     </View>
+  //                   </TouchableOpacity>
+  //                 ) : (
+  //                   <View style={{position: 'relative'}}>
+  //                     <TouchableOpacity
+  //                       style={{justifyContent: 'center', alignItems: 'center'}}
+  //                       activeOpacity={0.9}>
+  //                       <Image
+  //                         style={{
+  //                           width: 120,
+  //                           height: 100,
+  //                           // marginRight: 10,
+  //                           flexDirection: 'row',
+  //                           flexWrap: 'wrap',
+  //                           borderRadius: 16,
+  //                           borderWidth: 4,
+  //                           // borderColor:
+  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
+  //                           borderColor: Colors.lightPurple,
+  //                         }}
+  //                         source={{uri: cnicVerification}}
+  //                         resizeMode="contain"
+  //                       />
 
-                        <TouchableOpacity
-                          style={{position: 'absolute', right: 4, top: 5}}
-                          onPress={() => setCnicVerification('')}>
-                          <CustomIcons
-                            name={'ios-close-circle'}
-                            type={'ionicon'}
-                            color={Colors.White}
-                            size={25}
-                          />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-        {/* </View> */}
-      </View>
-    );
-  }
+  //                       <TouchableOpacity
+  //                         style={{position: 'absolute', right: 4, top: 5}}
+  //                         onPress={() => setCnicVerification('')}>
+  //                         <CustomIcons
+  //                           name={'ios-close-circle'}
+  //                           type={'ionicon'}
+  //                           color={Colors.White}
+  //                           size={25}
+  //                         />
+  //                       </TouchableOpacity>
+  //                     </TouchableOpacity>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </View>
+  //           </View>
+  //         </View>
+  //       </View>
+  //       {/* </View> */}
+  //     </View>
+  //   );
+  // }
 
-  function renderCamera() {
-    if (device == null) {
-      console.log('first');
-      return <View style={{flex: 1}} />;
-    } else {
-      console.log('HEWL');
-      return (
-        <View style={{flex: 1}}>
-          <Camera
-            ref={camera}
-            style={StyleSheet.absoluteFill}
-            device={device}
-            isActive={true}
-            enableZoomGesture
-            photo={true}
-          />
+  // function renderCamera() {
+  //   if (device == null) {
+  //     console.log('first');
+  //     return <View style={{flex: 1}} />;
+  //   } else {
+  //     console.log('HEWL');
+  //     return (
+  //       <View style={{flex: 1}}>
+  //         <Camera
+  //           ref={camera}
+  //           style={StyleSheet.absoluteFill}
+  //           device={device}
+  //           isActive={true}
+  //           enableZoomGesture
+  //           photo={true}
+  //         />
 
-          <View style={styles.maskOutter}>
-            <View
-              style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
-            />
-            <View style={[{flex: 30}, styles.maskCenter]}>
-              <View style={[{width: maskColWidth}, styles.maskFrame]} />
-              <View style={styles.maskInner} />
-              <View style={[{width: maskColWidth}, styles.maskFrame]} />
-            </View>
-            <View
-              style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
-            />
-          </View>
+  //         <View style={styles.maskOutter}>
+  //           <View
+  //             style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
+  //           />
+  //           <View style={[{flex: 30}, styles.maskCenter]}>
+  //             <View style={[{width: maskColWidth}, styles.maskFrame]} />
+  //             <View style={styles.maskInner} />
+  //             <View style={[{width: maskColWidth}, styles.maskFrame]} />
+  //           </View>
+  //           <View
+  //             style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
+  //           />
+  //         </View>
 
-          <View
-            style={{
-              position: 'absolute',
-              alignItems: 'center',
-              bottom: SIZES.padding,
-              left: 0,
-              right: 0,
-            }}>
-            <TouchableOpacity
-              style={{
-                height: 60,
-                width: 60,
-                borderRadius: 30,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: Colors.White,
-              }}
-              onPress={onPressButton}>
-              <CustomIcons
-                type="fa"
-                name="camera-retro"
-                size={35}
-                // style={{window}}
-                color={Colors.lightPurple}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
-  }
+  //         <View
+  //           style={{
+  //             position: 'absolute',
+  //             alignItems: 'center',
+  //             bottom: SIZES.padding,
+  //             left: 0,
+  //             right: 0,
+  //           }}>
+  //           <TouchableOpacity
+  //             style={{
+  //               height: 60,
+  //               width: 60,
+  //               borderRadius: 30,
+  //               alignItems: 'center',
+  //               justifyContent: 'center',
+  //               backgroundColor: Colors.White,
+  //             }}
+  //             onPress={onPressButton}>
+  //             <CustomIcons
+  //               type="fa"
+  //               name="camera-retro"
+  //               size={35}
+  //               // style={{window}}
+  //               color={Colors.lightPurple}
+  //             />
+  //           </TouchableOpacity>
+  //         </View>
+  //       </View>
+  //     );
+  //   }
+  // }
 
   const ModalOpen = e => {
     setDocumentValue(e);
@@ -1058,7 +1053,682 @@ const Profile = () => {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          {switchValue == '1' ? ProfileView() : DocumentView()}
+          {switchValue == '1' ? (
+            // ProfileView
+
+            <View>
+              <View
+                style={{
+                  height: General_Styles.generalHeight / 5,
+                  width: General_Styles.generalWidth,
+                  // marginBottom:General_Styles.generalWidth-,
+                  // backgroundColor: Colors,
+                  justifyContent: 'center',
+                }}>
+                <ImageBackground
+                  source={Images.profileGif}
+                  style={{
+                    height: General_Styles.generalHeight / 6,
+                    width: General_Styles.generalHeight / 6,
+                    resizeMode: 'contain',
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={
+                      info.gender != 'men'
+                        ? Images.menProfile
+                        : Images.womenProfile
+                    }
+                    style={{
+                      height: General_Styles.generalHeight / 10,
+                      width: General_Styles.generalHeight / 10,
+                      resizeMode: 'contain',
+                      alignSelf: 'center',
+                    }}
+                  />
+                </ImageBackground>
+                <Text
+                  style={{
+                    alignSelf: 'center',
+                    fontWeight: 'bold',
+                    marginTop: 10,
+                    fontSize: General_Styles.generalWidth / 15,
+                  }}>
+                  {info.name}
+                </Text>
+              </View>
+              <View style={styles.fieldContainer}>
+                {/* <View style={styles.gap}></View> */}
+                {/* list start */}
+                <View>
+                  <CustomInput
+                    placeholder="Enter your username"
+                    iconName="account-key-outline"
+                    type="materialCommunity"
+                    label="Username"
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    // onSubmitEditing={() => {
+                    //   password.current.focus();
+                    // }}
+                    ref={username}
+                    // onBlur={'handleBlur('username')'}
+                    // error={errors.username}
+                    // touched={touched.username}
+                    onChangeText={e => console.log(e)}
+                    keyboardAppearance="dark"
+                  />
+                  <CustomInput
+                    placeholder="Enter your Email"
+                    iconName="account-key-outline"
+                    type="materialCommunity"
+                    label="Email"
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    // onSubmitEditing={() => {
+                    //   password.current.focus();
+                    // }}
+                    ref={email}
+                    // onBlur={'handleBlur('username')'}
+                    // error={errors.username}
+                    // touched={touched.username}
+                    onChangeText={e => console.log(e)}
+                    keyboardAppearance="dark"
+                  />
+
+                  <View>
+                    <Text
+                      style={{
+                        marginVertical: hp('1%'),
+                        fontSize: 16,
+                        color: '#05375a',
+                        // color:Colors.grey,
+                      }}>
+                      Phone
+                    </Text>
+                  </View>
+                  <PhoneInput
+                    ref={phoneInput}
+                    defaultValue={value}
+                    containerStyle={{
+                      height: hp('8%'),
+                      width: hp('43%'),
+                      backgroundColor: Colors.White,
+                      borderRadius: 18,
+                      borderWidth: 1,
+                      marginBottom: hp('1%'),
+                      borderColor: Colors.darkgrey,
+                    }}
+                    textContainerStyle={{
+                      backgroundColor: Colors.White,
+                      paddingVertical: 6,
+                      borderRadius: 18,
+                    }}
+                    defaultCode="PK"
+                    layout="first"
+                    onChangeText={text => {
+                      setValue(text);
+                    }}
+                    onChangeFormattedText={text => {
+                      setFormattedValue(text);
+                    }}
+                    withDarkTheme
+                    withShadow
+                    // autoFocus
+                  />
+                  <CustomInput
+                    placeholder="Enter your Address"
+                    iconName="account-key-outline"
+                    type="materialCommunity"
+                    label="Address"
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    // onSubmitEditing={() => {
+                    //   password.current.focus();
+                    // }}
+                    ref={email}
+                    // onBlur={'handleBlur('username')'}
+                    // error={errors.username}
+                    // touched={touched.username}
+                    onChangeText={e => console.log(e)}
+                    keyboardAppearance="dark"
+                  />
+                </View>
+              </View>
+            </View>
+          ) : (
+            // DocumentView()
+
+            <View style={{flex: 1, marginVertical: hp('1%')}}>
+              <View style={{alignItems: 'center'}}>
+                <Text>
+                  Click on the document then 1. Attach the document from the
+                  gallery or 2. click on the camera icon to take the picture
+                  directly
+                </Text>
+              </View>
+              {/* <View > */}
+              <View style={styles.gap} />
+
+              {/* // Cnic front and back */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: wp('100%'),
+                }}>
+                {/* Cnic front  */}
+                <View style={{width: wp('40%')}}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text>Cnic Front Side</Text>
+                    <Text style={{fontSize: 12}}>Required</Text>
+                  </View>
+                  <View>
+                    <View style={{marginVertical: 10}}>
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderStyle: 'dotted',
+                          height: 150,
+                          // width: '100%',
+                          borderColor: Colors.backgroundMedium,
+                        }}>
+                        {cnicFront == '' ? (
+                          <TouchableOpacity
+                            onPress={() => ModalOpen('cnicFront')}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <CustomIcons
+                                type="fa"
+                                name="id-card-o"
+                                size={30}
+                                color={Colors.lightPurple}
+                              />
+                              {/* <Text>Add Photos</Text> */}
+                              {/* </View> */}
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <View style={{position: 'relative'}}>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              activeOpacity={0.9}>
+                              <Image
+                                style={{
+                                  width: 120,
+                                  height: 100,
+                                  // marginRight: 10,
+                                  flexDirection: 'row',
+                                  flexWrap: 'wrap',
+                                  borderRadius: 16,
+                                  // borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  // borderColor: Colors.lightPurple,
+                                }}
+                                source={{uri: cnicFront}}
+                                resizeMode="contain"
+                              />
+
+                              <TouchableOpacity
+                                style={{position: 'absolute', right: 4, top: 5}}
+                                onPress={() => setCnicFront('')}>
+                                <CustomIcons
+                                  name={'ios-close-circle'}
+                                  type={'ionicon'}
+                                  color={Colors.White}
+                                  size={25}
+                                />
+                              </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                {/* Cnic back */}
+                <View style={{width: wp('40%')}}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text>Cnic Back Side</Text>
+
+                    <Text style={{fontSize: 12}}>Required</Text>
+                  </View>
+                  <View>
+                    <View style={{marginVertical: 10}}>
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderStyle: 'dotted',
+                          height: 150,
+                          // width: '100%',
+                          borderColor: Colors.backgroundMedium,
+                        }}>
+                        {cnicBack == '' ? (
+                          <TouchableOpacity
+                            onPress={() => ModalOpen('cnicBack')}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <CustomIcons
+                                type="fa"
+                                name="id-card-o"
+                                size={30}
+                                color={Colors.lightPurple}
+                              />
+                              {/* <Text>Add Photos</Text> */}
+                              {/* </View> */}
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <View style={{position: 'relative'}}>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              activeOpacity={0.9}>
+                              <Image
+                                style={{
+                                  width: 120,
+                                  height: 100,
+                                  // marginRight: 10,
+                                  flexDirection: 'row',
+                                  flexWrap: 'wrap',
+                                  borderRadius: 16,
+                                  borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  borderColor: Colors.lightPurple,
+                                }}
+                                source={{uri: cnicBack}}
+                                resizeMode="contain"
+                              />
+
+                              <TouchableOpacity
+                                style={{position: 'absolute', right: 4, top: 5}}
+                                onPress={() => setCnicBack('')}>
+                                <CustomIcons
+                                  name={'ios-close-circle'}
+                                  type={'ionicon'}
+                                  color={Colors.White}
+                                  size={25}
+                                />
+                              </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              {/* // Lincence front and back */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: wp('100%'),
+                }}>
+                {/* front */}
+                <View style={{width: wp('40%')}}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text>Licence Front Side</Text>
+                    <Text style={{fontSize: 12}}>Required</Text>
+                  </View>
+                  <View>
+                    <View style={{marginVertical: 10}}>
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderStyle: 'dotted',
+                          height: 150,
+                          // width: '100%',
+                          borderColor: Colors.backgroundMedium,
+                        }}>
+                        {licenseFront == '' ? (
+                          <TouchableOpacity
+                            onPress={() => ModalOpen('licenseFront')}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <CustomIcons
+                                type="fa"
+                                name="id-card-o"
+                                size={30}
+                                color={Colors.lightPurple}
+                              />
+                              {/* <Text>Add Photos</Text> */}
+                              {/* </View> */}
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <View style={{position: 'relative'}}>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              activeOpacity={0.9}>
+                              <Image
+                                style={{
+                                  width: 120,
+                                  height: 100,
+                                  // marginRight: 10,
+                                  flexDirection: 'row',
+                                  flexWrap: 'wrap',
+                                  borderRadius: 16,
+                                  borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  borderColor: Colors.lightPurple,
+                                }}
+                                source={{uri: licenseFront}}
+                                resizeMode="contain"
+                              />
+
+                              <TouchableOpacity
+                                style={{position: 'absolute', right: 4, top: 5}}
+                                onPress={() => setLicenseFront('')}>
+                                <CustomIcons
+                                  name={'ios-close-circle'}
+                                  type={'ionicon'}
+                                  color={Colors.White}
+                                  size={25}
+                                />
+                              </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                {/* back */}
+                <View style={{width: wp('40%')}}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text>Licence Back Side</Text>
+
+                    <Text style={{fontSize: 12}}>Required</Text>
+                  </View>
+                  <View>
+                    <View style={{marginVertical: 10}}>
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderStyle: 'dotted',
+                          height: 150,
+                          // width: '100%',
+                          borderColor: Colors.backgroundMedium,
+                        }}>
+                        {licenseBack == '' ? (
+                          <TouchableOpacity
+                            onPress={() => ModalOpen('licenseBack')}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <CustomIcons
+                                type="fa"
+                                name="id-card-o"
+                                size={30}
+                                color={Colors.lightPurple}
+                              />
+                              {/* <Text>Add Photos</Text> */}
+                              {/* </View> */}
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <View style={{position: 'relative'}}>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              activeOpacity={0.9}>
+                              <Image
+                                style={{
+                                  width: 120,
+                                  height: 100,
+                                  // marginRight: 10,
+                                  flexDirection: 'row',
+                                  flexWrap: 'wrap',
+                                  borderRadius: 16,
+                                  borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  borderColor: Colors.lightPurple,
+                                }}
+                                source={{uri: licenseBack}}
+                                resizeMode="contain"
+                              />
+
+                              <TouchableOpacity
+                                style={{position: 'absolute', right: 4, top: 5}}
+                                onPress={() => setlicenseBack('')}>
+                                <CustomIcons
+                                  name={'ios-close-circle'}
+                                  type={'ionicon'}
+                                  color={Colors.White}
+                                  size={25}
+                                />
+                              </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              {/* // Utility bills and Cnic Verification */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: wp('100%'),
+                }}>
+                {/* Utility */}
+
+                <View style={{width: wp('40%')}}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text>Utility Bills</Text>
+                    <Text style={{fontSize: 12}}>Required</Text>
+                  </View>
+                  <View>
+                    <View style={{marginVertical: 10}}>
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderStyle: 'dotted',
+                          height: 150,
+                          // width: '100%',
+                          borderColor: Colors.backgroundMedium,
+                        }}>
+                        {utilityBills == '' ? (
+                          <TouchableOpacity
+                            onPress={() => ModalOpen('utilityBills')}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <CustomIcons
+                                type="fa"
+                                name="id-card-o"
+                                size={30}
+                                color={Colors.lightPurple}
+                              />
+                              {/* <Text>Add Photos</Text> */}
+                              {/* </View> */}
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <View style={{position: 'relative'}}>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              activeOpacity={0.9}>
+                              <Image
+                                style={{
+                                  width: 120,
+                                  height: 100,
+                                  // marginRight: 10,
+                                  flexDirection: 'row',
+                                  flexWrap: 'wrap',
+                                  borderRadius: 16,
+                                  borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  borderColor: Colors.lightPurple,
+                                }}
+                                source={{uri: utilityBills}}
+                                resizeMode="contain"
+                              />
+
+                              <TouchableOpacity
+                                style={{position: 'absolute', right: 4, top: 5}}
+                                onPress={() => setUtilityBills('')}>
+                                <CustomIcons
+                                  name={'ios-close-circle'}
+                                  type={'ionicon'}
+                                  color={Colors.White}
+                                  size={25}
+                                />
+                              </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Cnic Verification */}
+
+                <View style={{width: wp('40%')}}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text>Cnic Verification</Text>
+
+                    <Text style={{fontSize: 12}}>Required</Text>
+                  </View>
+                  <View>
+                    <View style={{marginVertical: 10}}>
+                      <View
+                        style={{
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderStyle: 'dotted',
+                          height: 150,
+                          // width: '100%',
+                          borderColor: Colors.backgroundMedium,
+                        }}>
+                        {cnicVerification == '' ? (
+                          <TouchableOpacity
+                            onPress={() => ModalOpen('cnicVerification')}>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}>
+                              <CustomIcons
+                                type="fa"
+                                name="id-card-o"
+                                size={30}
+                                color={Colors.lightPurple}
+                              />
+                              <Text style={{textAlign: 'center'}}>
+                                Cnic Verification with face Without glasses and
+                                mask.
+                              </Text>
+                              {/* </View> */}
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <View style={{position: 'relative'}}>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              activeOpacity={0.9}>
+                              <Image
+                                style={{
+                                  width: 120,
+                                  height: 100,
+                                  // marginRight: 10,
+                                  flexDirection: 'row',
+                                  flexWrap: 'wrap',
+                                  borderRadius: 16,
+                                  borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  borderColor: Colors.lightPurple,
+                                }}
+                                source={{uri: cnicVerification}}
+                                resizeMode="contain"
+                              />
+
+                              <TouchableOpacity
+                                style={{position: 'absolute', right: 4, top: 5}}
+                                onPress={() => setCnicVerification('')}>
+                                <CustomIcons
+                                  name={'ios-close-circle'}
+                                  type={'ionicon'}
+                                  color={Colors.White}
+                                  size={25}
+                                />
+                              </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              {/* </View> */}
+            </View>
+          )}
 
           <View>
             {switchValue == '1' ? (
