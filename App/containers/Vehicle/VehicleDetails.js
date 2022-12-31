@@ -30,13 +30,72 @@ import {useDispatch, useSelector} from 'react-redux';
 import Geocoder from 'react-native-geocoding';
 import CustomButton from '../../Components/Custom_btn/CustomButton';
 import {getVehicleById} from '../../Redux/auth/Reducer/vehicleReducer';
-import { setCarAddress, setCarLatLong } from '../../Redux/auth/Reducer/AddressReducer';
-import { isVerified } from './apiCalls/apiCalls';
+import {
+  setCarAddress,
+  setCarLatLong,
+} from '../../Redux/auth/Reducer/AddressReducer';
+import {isVerified} from './apiCalls/apiCalls';
+import CustomSwitch from '../../Components/Custom_Switch/CustomSwitch';
+import ReviewList from './ReviewList/ReviewList';
+import moment from 'moment';
 
 const VehicleDetails = props => {
   const {navigation, route} = props;
+
+  const [transactionDetail, setTransactionDetail] = useState([
+    {
+      bookingId: '1',
+      name: 'Owais',
+      balance: '123412323',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '2',
+      name: 'Nabeegh',
+      balance: '12',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '3',
+      name: 'Muzammil',
+      balance: '12345555',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '3',
+      name: 'Muzammil',
+      balance: '12345555',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '3',
+      name: 'Muzammil',
+      balance: '12345555',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '3',
+      name: 'Muzammil',
+      balance: '12345555',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '3',
+      name: 'Muzammil',
+      balance: '12345555',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+    {
+      bookingId: '3',
+      name: 'Muzammil',
+      balance: '12345555',
+      date: moment(new Date()).format('YYYY-MM-DD'),
+    },
+  ]);
+
   const [Destination, setDestination] = useState('');
-  const [loader,setLoader] = useState(false);
+  const [switchValue, setSwitchValue] = useState('1');
+  const [loader, setLoader] = useState(false);
   const Vehicle = route?.params.vehicle;
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
@@ -89,20 +148,17 @@ const VehicleDetails = props => {
 
   const handleSubmit = () => {
     setLoader(true);
-    isVerified(onSuccess,onFailure);
-};
+    isVerified(onSuccess, onFailure);
+  };
 
   const onSuccess = data => {
-    const {
-      Success,
-    } = data;
-    if(Success === true){
+    const {Success} = data;
+    if (Success === true) {
       setLoader(false);
       navigation.navigate('DateAndLocation', {
-          vehicleId: Vehicle._id,
-        });
-    }
-    else{
+        vehicleId: Vehicle._id,
+      });
+    } else {
       setLoader(false);
       navigation.navigate('Profile');
     }
@@ -205,7 +261,9 @@ const VehicleDetails = props => {
         backgroundColor={Colors.backgroundLight}
         barStyle="dark-content"
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         <View
           style={{
             width: '100%',
@@ -269,10 +327,11 @@ const VehicleDetails = props => {
             })}
           </View>
         </View>
+
         <View
           style={{
             // paddingHorizontal: 16,
-            padding: wp('5%'),
+            // padding: 2,
             // marginTop: 6,
             height: hp('60%'),
             // flex:2,
@@ -280,155 +339,194 @@ const VehicleDetails = props => {
             borderTopRightRadius: 40,
             backgroundColor: Colors.White,
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              // width:wp('100%'),
-              justifyContent: 'space-between',
-              margin: 10,
-            }}>
+          <View>
+            <CustomSwitch
+              selectionMode={1}
+              option1="Vehicle Details"
+              option2="Reviews"
+              onSelectSwitch={e => setSwitchValue(e)}
+            />
+          </View>
+          {switchValue == '1' ? (
             <View>
-              <Text style={styles.title}>{vehiclesCategory?.brand}</Text>
-              <Text style={styles.direction}>
-                {vehiclesCategory?.model} {vehiclesCategory?.year}
-              </Text>
-            </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  // width:wp('100%'),
+                  justifyContent: 'space-between',
+                  margin: 10,
+                }}>
+                <View>
+                  <Text style={styles.title}>{vehiclesCategory?.brand}</Text>
+                  <Text style={styles.direction}>
+                    {vehiclesCategory?.model} {vehiclesCategory?.year}
+                  </Text>
+                </View>
 
-            <View>
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: '600',
-                    color: Colors.paleorange,
-                  }}>
-                  Rs. {Vehicle?.selfDriveDailyCharges}
-                </Text>
-                <Text style={styles.title}> /day</Text>
+                <View>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: '600',
+                        color: Colors.paleorange,
+                      }}>
+                      Rs. {Vehicle?.selfDriveDailyCharges}
+                    </Text>
+                    <Text style={styles.title}> /day</Text>
+                  </View>
+                  <View>
+                    <Rating
+                      type="custom"
+                      ratingColor={Colors.paleorange}
+                      // ratingBackgroundColor="#c8c7c8"]
+                      startingValue={Vehicle?.averageRating}
+                      readonly
+                      ratingCount={5}
+                      imageSize={15}
+                      // onFinishRating={this.ratingCompleted}
+                      style={{paddingVertical: 3}}
+                    />
+                  </View>
+                </View>
               </View>
+              <View style={{margin: 10}}>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginVertical: widthPercentageToDP('2%'),
+                      fontWeight: 'bold',
+                      color: Colors.lightPurple,
+                    }}>
+                    Car Specifications
+                  </Text>
+                </View>
+                <View>
+                  {/* Specification */}
+                  <ScrollView
+                    horizontal
+                    nestedScrollEnabled
+                    showsHorizontalScrollIndicator={false}>
+                    <View style={styles.Specification}>
+                      <CustomIcons
+                        type="materialCommunity"
+                        name="seat-passenger"
+                        size={22}
+                        color={Colors.paleorange}
+                      />
+                      <Text style={styles.SpecificationText}>
+                        {`${Specification.noOfSeats} Seater`}
+                      </Text>
+                    </View>
+                    <View style={styles.Specification}>
+                      <CustomIcons
+                        type="materialCommunity"
+                        name="air-conditioner"
+                        size={22}
+                        color={Colors.paleorange}
+                      />
+                      <Text style={styles.SpecificationText}>
+                        {Specification.isAircondition
+                          ? 'Air Condition'
+                          : 'Not air Condition'}
+                      </Text>
+                    </View>
+                    <View style={styles.Specification}>
+                      <CustomIcons
+                        type="materialCommunity"
+                        name="fuel"
+                        size={22}
+                        color={Colors.paleorange}
+                      />
+
+                      <Text style={styles.SpecificationText}>
+                        {Specification.fuelType}
+                      </Text>
+                    </View>
+                    <View style={styles.Specification}>
+                      <CustomIcons
+                        type="materialCommunity"
+                        name="refresh-auto"
+                        size={22}
+                        color={Colors.paleorange}
+                      />
+                      <Text style={styles.SpecificationText}>
+                        {Specification.isAutomatic ? 'Automatic' : 'Manual'}
+                      </Text>
+                    </View>
+                    <View style={styles.Specification}>
+                      <CustomIcons
+                        type="materialCommunity"
+                        name="car-door-lock"
+                        size={22}
+                        color={Colors.paleorange}
+                      />
+                      <Text style={styles.SpecificationText}>
+                        {`${Specification.noOfDoors} Doors`}
+                      </Text>
+                    </View>
+                  </ScrollView>
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginVertical: widthPercentageToDP('2%'),
+                      fontWeight: 'bold',
+                      color: Colors.lightPurple,
+                    }}>
+                    Car Location
+                  </Text>
+                </View>
+                <View style={styles.addressContainer}>
+                  <TouchableOpacity onPress={onMapView}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        fontSize: 14,
+                        // fontWeight: 'bold',
+                        // margin:5,
+                        color: Colors.paleorange,
+                      }}>
+                      {Destination}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{marginVertical: wp('5%')}}>
+                  <CustomButton
+                    loader={loader}
+                    onPress={handleSubmit}
+                    title="Book Now"
+                  />
+                </View>
+              </View>
+            </View>
+          ) : (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              nestedScrollEnabled={true}>
               <View>
-                <Rating
-                  type="custom"
-                  ratingColor={Colors.paleorange}
-                  // ratingBackgroundColor="#c8c7c8"]
-                  startingValue={Vehicle?.averageRating}
-                  readonly
-                  ratingCount={5}
-                  imageSize={15}
-                  // onFinishRating={this.ratingCompleted}
-                  style={{paddingVertical: 3}}
+                <FlatList
+                  data={transactionDetail}
+                  contentContainerStyle={styles.contentContainer}
+                  //   refreshing={true}
+                  // style={{height: '100%'}}
+                  keyExtractor={key => {
+                    return key._id;
+                  }}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({item}) => (
+                    <ReviewList
+                      item={item}
+                      onPressElement={() => console.log('first')}
+                    />
+                  )}
                 />
               </View>
-            </View>
-          </View>
-          <View style={{margin: 10}}>
-            <View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  marginVertical: widthPercentageToDP('2%'),
-                  fontWeight: 'bold',
-                  color: Colors.lightPurple,
-                }}>
-                Car Specifications
-              </Text>
-            </View>
-            <View>
-              {/* Specification */}
-              <ScrollView
-                horizontal
-                nestedScrollEnabled
-                showsHorizontalScrollIndicator={false}>
-                <View style={styles.Specification}>
-                  <CustomIcons
-                    type="materialCommunity"
-                    name="seat-passenger"
-                    size={22}
-                    color={Colors.paleorange}
-                  />
-                  <Text style={styles.SpecificationText}>
-                    {`${Specification.noOfSeats} Seater`}
-                  </Text>
-                </View>
-                <View style={styles.Specification}>
-                  <CustomIcons
-                    type="materialCommunity"
-                    name="air-conditioner"
-                    size={22}
-                    color={Colors.paleorange}
-                  />
-                  <Text style={styles.SpecificationText}>
-                    {Specification.isAircondition
-                      ? 'Air Condition'
-                      : 'Not air Condition'}
-                  </Text>
-                </View>
-                <View style={styles.Specification}>
-                  <CustomIcons
-                    type="materialCommunity"
-                    name="fuel"
-                    size={22}
-                    color={Colors.paleorange}
-                  />
-
-                  <Text style={styles.SpecificationText}>
-                    {Specification.fuelType}
-                  </Text>
-                </View>
-                <View style={styles.Specification}>
-                  <CustomIcons
-                    type="materialCommunity"
-                    name="refresh-auto"
-                    size={22}
-                    color={Colors.paleorange}
-                  />
-                  <Text style={styles.SpecificationText}>
-                    {Specification.isAutomatic ? 'Automatic' : 'Manual'}
-                  </Text>
-                </View>
-                <View style={styles.Specification}>
-                  <CustomIcons
-                    type="materialCommunity"
-                    name="car-door-lock"
-                    size={22}
-                    color={Colors.paleorange}
-                  />
-                  <Text style={styles.SpecificationText}>
-                    {`${Specification.noOfDoors} Doors`}
-                  </Text>
-                </View>
-              </ScrollView>
-            </View>
-            <View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  marginVertical: widthPercentageToDP('2%'),
-                  fontWeight: 'bold',
-                  color: Colors.lightPurple,
-                }}>
-                Car Location
-              </Text>
-            </View>
-            <View style={styles.addressContainer}>
-              <TouchableOpacity onPress={onMapView}>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={{
-                    fontSize: 14,
-                    // fontWeight: 'bold',
-                    // margin:5,
-                    color: Colors.paleorange,
-                  }}>
-                  {Destination}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{marginVertical: wp('5%')}}>
-              <CustomButton loader={loader} onPress={handleSubmit} title="Book Now" />
-            </View>
-          </View>
+            </ScrollView>
+          )}
         </View>
       </ScrollView>
 

@@ -5,6 +5,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-nati
 import BottomSheetSkelton from '../Map/BottomSheet/BottomSheetSkelton';
 import { BookingItems } from '../Rental/Bookings/BookingItems';
 import WalletItems from './WalletItems';
+import moment from 'moment';
 
 const Wallet = () => {
 
@@ -14,17 +15,58 @@ const Wallet = () => {
         {
             bookingId:'1',
             name:'Owais',
-            balance:'1234'
+            balance:'123412323',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
         },
         {
             bookingId:'2',
             name:'Nabeegh',
-            balance:'12'
+            balance:'12',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
         },
         {
             bookingId:'3',
             name:'Muzammil',
-            balance:'12345555'
+            balance:'12345555',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
+        },
+        {
+            bookingId:'3',
+            name:'Muzammil',
+            balance:'12345555',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
+        },
+        {
+            bookingId:'3',
+            name:'Muzammil',
+            balance:'12345555',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
+        },
+        {
+            bookingId:'3',
+            name:'Muzammil',
+            balance:'12345555',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
+        },
+        {
+            bookingId:'3',
+            name:'Muzammil',
+            balance:'12345555',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
+        },
+        {
+            bookingId:'3',
+            name:'Muzammil',
+            balance:'12345555',
+            date:moment(new Date())
+            .format('YYYY-MM-DD')
         },
 ]);
     
@@ -105,7 +147,7 @@ const styles = StyleSheet.create({
         color:Colors.lightPurple
     },
     contentContainer: {
-        paddingBottom: hp('3%'),
+        paddingBottom: hp('20%'),
         // height:hp('100%'),
         // backgroundColor: Colors.White,
       },

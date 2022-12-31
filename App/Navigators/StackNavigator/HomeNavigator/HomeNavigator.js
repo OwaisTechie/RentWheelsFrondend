@@ -22,6 +22,8 @@ import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import VisionCamera from '../../../containers/VisionCamera/VisionCamera';
 import PaymentCard from '../../../containers/Card/PaymentCard';
+import PaymentDetails from '../../../containers/Payments/PaymentDetails';
+import PaymentSuccess from '../../../containers/Payments/PaymentSuccess';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const HomeNavigator = () => {
@@ -76,7 +78,7 @@ const HomeNavigator = () => {
   return (
     <HomeStack.Navigator
       screenOptions={header}
-      initialRouteName={'Home'}>
+      initialRouteName={'Homex'}>
       <HomeStack.Screen
         name="Home"
         component={Home}
@@ -134,6 +136,22 @@ const HomeNavigator = () => {
        <HomeStack.Screen
                name="Card"
                component={PaymentCard}
+               options={{
+                 headerShown: false,
+               }}
+              
+            />
+       <HomeStack.Screen
+               name="PaymentDetails"
+               component={PaymentDetails}
+               options={{
+                 headerShown: false,
+               }}
+              
+            />
+       <HomeStack.Screen
+               name="PaymentSuccess"
+               component={PaymentSuccess}
                options={{
                  headerShown: false,
                }}

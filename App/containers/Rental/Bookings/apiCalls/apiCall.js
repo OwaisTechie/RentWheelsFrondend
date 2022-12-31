@@ -91,6 +91,16 @@ export async function approveRejectBooking(Payload, onSuccess, onFailure) {
   axios
     .post(URL, Payload, header)
     .then(res => {
+
+      console.log("APPROVE ->> ",res.data);
+      Toast.show({
+        topOffset: 60,
+        type: 'success',
+        text1: res.data.Message,
+        text2: `${res.data.responseCode}`,
+        visibilityTime: 10000,
+        autoHide: true,
+      });
       onSuccess(res.data);
     })
     .catch(error => {

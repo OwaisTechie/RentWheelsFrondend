@@ -90,6 +90,9 @@ const MapScreen = props => {
   // const [vehicles, setVehicles] = useState([]);
   const userLatLong = useSelector(state => state?.address?.userLatLong);
   const userAddress = useSelector(state => state?.address?.userAddress);
+  const userId = useSelector(state => state?.auth.users.user);
+  // const {_id} = JSON.parse(userId);
+  // console.log("USERID ->> ",userId);
   const [isplaces, setIsPlaces] = useState(false);
   const [showfilterModal, setShowFilterModal] = useState(false);
 
@@ -97,22 +100,29 @@ const MapScreen = props => {
   const placesRef = useRef();
 
   useEffect(() => {
-    if (vehicles?.length < 1 && userLatLong) {
-      let pickupLocation = [67.0699,24.8604];
-      setVehicleLoading(true);
-      getNearByLocation(pickupLocation, onSuccess, onFailure);
+    if (vehicles?.length < 1 && LocationMarker.latitude != 0 && LocationMarker.longitude != 0 && userId ) {
+      console.log("userLatLong ->> ",LocationMarker)
+      console.log("userId ->> ",userId)
+        let payload= {
+          ownerId:userId._id,
+          pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
+        }
+        console.log("PAYLOAD ->> ",payload)
+        // let pickupLocation = [67.0699,24.8604]
+        setVehicleLoading(true);
+        getNearByLocation(payload, onSuccess, onFailure);
     }
 
     return () => {
       setVehicles([]);
       setVehicleLoading(false);
     };
-  }, []);
+  }, [LocationMarker,userId]);
 
   const onSuccess = data => {
     console.log("DATA ->> ",data);
     setVehicleLoading(false);
-    setVehicles(data.vehicles);
+    setVehicles(data.data);
     // dispatch(setNearByVehicle(data.vehicles));
     // setLoading(false);
   };
@@ -125,7 +135,7 @@ const MapScreen = props => {
   };
 
   const onFailure = err => {
-    setVehicleLoading(true);
+    setVehicleLoading(false);
   };
 
   const fall = new Animated.Value(1);
@@ -135,13 +145,18 @@ const MapScreen = props => {
   // }
 
   // callbacks
-  // const handleRefresh = () => {
-  //   let location = [userLatLong.latitude, userLatLong.longitude];
-  //   let pickupLocation = [24.954179757526536, 67.14250599750613];
-  //   setVehicles([]);
-  //   setVehicleLoading(true);
-  //   getNearByLocation(pickupLocation, onSuccess, onFailure);
-  // };
+  const handleRefresh = () => {
+    let payload= {
+      ownerId:userId._id,
+      pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
+    }
+    console.log("PAYLOAD ->> ",payload)
+    // let location = [LocationMarker.latitude, LocationMarker.longitude];
+    // let pickupLocation = [24.954179757526536, 67.14250599750613];
+    setVehicles([]);
+    setVehicleLoading(true);
+    getNearByLocation(payload, onSuccess, onFailure);
+  };
 
   const applyFilter = filterData => {
     
@@ -222,11 +237,15 @@ const MapScreen = props => {
             }}
             onPress={(data, details = null) => {
               setIsPlaces(false);
-
-              // 'details' is provided when fetchDetails = true
               console.log('DETAILS ->> ', details.geometry.location);
-              let pickupLocation = [24.954179757526536, 67.14250599750613];
-              getNearByLocation(pickupLocation, onSuccess, onFailure);
+              let payload= {
+                ownerId:_id,
+                pickupLoc : [67.0699,24.8604],
+              }
+              console.log("PAYLOAD ->> ",payload)
+              // let pickupLocation = [67.0699,24.8604]
+              setVehicleLoading(true)
+              getNearByLocation(payload, onSuccess, onFailure);
               // setRegion({
               // 	latitude: details.geometry.location.lat,
               // 	longitude: details.geometry.location.lng,
@@ -387,12 +406,12 @@ const MapScreen = props => {
         {/* ) : null} */}
         {vehicleLoading ? (
           <BottomSheetSkelton />
-        ) : vehicles.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : 
+        ) : vehicles?.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : 
           <BottomSheetFlatList
             contentContainerStyle={styles.contentContainer}
             data={vehicles}
             refreshing={false}
-            // onRefresh={handleRefresh}
+            onRefresh={handleRefresh}
             style={{height: '95%'}}
             keyExtractor={key => {
               return key._id;
@@ -679,4 +698,4 @@ const styles = StyleSheet.create({
     borderRadius: 17,
   },
 });
-export default MapScreen;
+export default memo(MapScreen);

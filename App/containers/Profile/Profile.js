@@ -1,5 +1,4 @@
 import React, {
-  useSelector,
   useContext,
   useState,
   useRef,
@@ -38,12 +37,12 @@ import CustomButton from '../../Components/Custom_btn/CustomButton';
 import ImagePicker from 'react-native-image-crop-picker';
 // import ImagePicker from 'reac';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {set} from 'immer/dist/internal';
 import ModalPoup from '../../Components/CustomModal/ModalPopup';
 import {SIZES} from '../../Theme/Fonts';
 import axios from 'axios';
 import {getHeaders} from '../../Constant/requestHeaders';
 import {Config} from '../../Config/Config';
+import { useSelector } from 'react-redux';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -52,11 +51,12 @@ const maskRowHeight = Math.round((height - 300) / 20);
 const maskColWidth = (width - 300) / 2;
 
 const Profile = () => {
-  const username = useRef();
-  const phoneInput = useRef();
-  const email = useRef();
+  const userId = useSelector(state => state?.auth.users.user);
+  const [username,setUsername] = useState('');
+  const [phoneInput,setPhoneInput] = useState('');
+  const [email,setEmail] = useState('');
   const [cnicFront, setCnicFront] = useState('');
-
+ 
   const [cnicFrontImage, setCnicFrontImage] = useState('');
   const [cnicBackImage, setCnicBackImage] = useState('');
   const [licenseFrontImage, setLicenseFrontImage] = useState('');
@@ -230,6 +230,13 @@ const Profile = () => {
   useEffect(() => {
     requestExternalWritePermission();
   }, []);
+  useEffect(() => {
+    console.log("USERID ->> ",JSON.parse(userId).phone);
+    var {username,email,phone} = JSON.parse(userId);
+    setPhoneInput(phone);
+    setUsername(username);
+    setEmail(email);
+  }, [userId]);
 
   // function ProfileView() {
   //   return (
@@ -1109,14 +1116,14 @@ const Profile = () => {
                     label="Username"
                     returnKeyType="next"
                     returnKeyLabel="next"
+                    value={username}
                     // onSubmitEditing={() => {
                     //   password.current.focus();
                     // }}
-                    ref={username}
                     // onBlur={'handleBlur('username')'}
                     // error={errors.username}
                     // touched={touched.username}
-                    onChangeText={e => console.log(e)}
+                    onChangeText={e => setUsername(e)}
                     keyboardAppearance="dark"
                   />
                   <CustomInput
@@ -1126,10 +1133,10 @@ const Profile = () => {
                     label="Email"
                     returnKeyType="next"
                     returnKeyLabel="next"
+                    value={email}
                     // onSubmitEditing={() => {
                     //   password.current.focus();
                     // }}
-                    ref={email}
                     // onBlur={'handleBlur('username')'}
                     // error={errors.username}
                     // touched={touched.username}
@@ -1149,8 +1156,9 @@ const Profile = () => {
                     </Text>
                   </View>
                   <PhoneInput
-                    ref={phoneInput}
-                    defaultValue={value}
+                    // ref={phoneInput}
+                    // value={phoneInput}
+                    defaultValue={phoneInput}
                     containerStyle={{
                       height: hp('8%'),
                       width: hp('43%'),
@@ -1168,7 +1176,7 @@ const Profile = () => {
                     defaultCode="PK"
                     layout="first"
                     onChangeText={text => {
-                      setValue(text);
+                      setPhoneInput(text);
                     }}
                     onChangeFormattedText={text => {
                       setFormattedValue(text);
@@ -1177,7 +1185,7 @@ const Profile = () => {
                     withShadow
                     // autoFocus
                   />
-                  <CustomInput
+                  {/* <CustomInput
                     placeholder="Enter your Address"
                     iconName="account-key-outline"
                     type="materialCommunity"
@@ -1187,13 +1195,13 @@ const Profile = () => {
                     // onSubmitEditing={() => {
                     //   password.current.focus();
                     // }}
-                    ref={email}
+                    value={email}
                     // onBlur={'handleBlur('username')'}
                     // error={errors.username}
                     // touched={touched.username}
                     onChangeText={e => console.log(e)}
                     keyboardAppearance="dark"
-                  />
+                  /> */}
                 </View>
               </View>
             </View>
@@ -1734,8 +1742,8 @@ const Profile = () => {
             {switchValue == '1' ? (
               <CustomButton
                 loader={loader}
-                onPress={() => 'Login'}
-                title="Login"
+                onPress={() => 'Update User'}
+                title="Update User"
               />
             ) : (
               <CustomButton

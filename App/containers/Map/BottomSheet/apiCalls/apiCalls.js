@@ -2,9 +2,12 @@ import { Config } from '../../../../Config/Config';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 export function getNearByLocation(payload,onSuccess, onFailure) {
+  const {ownerId,pickupLoc} = payload;
   const baseUrl = Config.baseUrl.main;
-  const endpoint = Config.endpoint.vehicles.nearByVehicle;
-  const URL = `${baseUrl}${endpoint}`;
+  const endpoint = Config.endpoint.vehicles.getAllVehicles;
+  // const URL = `${baseUrl}${endpoint}?pickupLocation=${pickupLoc[0]},${pickupLoc[1]}&excludeOwner=${ownerId}`;
+  const URL = `${baseUrl}${endpoint}?pickupLocation=${pickupLoc[0]},${pickupLoc[1]}`;
+  console.log("URL ->> ",URL);
   // const CancelToken = axios.CancelToken;
   // const source = CancelToken.source();
   // console.log("timeout ->> ",timeout)
@@ -17,7 +20,7 @@ export function getNearByLocation(payload,onSuccess, onFailure) {
   axios
     .get(URL, {
       // cancelToken: source?.token,
-      params: {pickupLocation: payload[0] + ',' + payload[1]},
+      // params: {`pickupLocation: ${payload[0]} + ',' + ${payload[1]},`},
     },{timeout: 1000 * 5}
     )
     // .get(URL,{ params: `selfDriveCharges.selfDriveDailyCharges[gte]=${payload.noOfSeats}||noOfSeats=${payload.noOfSeats}||noOfDoors${payload}`})

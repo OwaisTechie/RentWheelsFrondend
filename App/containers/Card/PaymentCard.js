@@ -25,13 +25,13 @@ import {
 } from 'react-native-responsive-screen';
 import { addBookings } from './apiCalls/apiCalls';
 const PaymentCard = props => {
-  const {navigation, route} = props;
-  const {booking} = props.route.params;
+  // const {navigation, route} = props;
+  // const {booking} = props.route.params;
   const [isFlipped, setIsFlipped] = useState(false);
   const [cardHolderName, setCardHolderName] = useState('CARD HOLDER NAME');
   const [cvv, setCvv] = useState(123);
   const [expiry, setExpiry] = useState('12/12');
-  const [cardNo, setCardNo] = useState('0000 000 00000 0000');
+  const [cardNo, setCardNo] = useState('6565000-00000-0000');
   const [loader, setLoader] = useState(false);
 
   const HolderName = useRef();
@@ -142,10 +142,10 @@ const PaymentCard = props => {
         backgroundColor={Colors.lightPurple}
         barStyle="light-content"
       />
-      <View style={styles.container} />
+      {/* <View style={{flex:}} /> */}
 
-        <ScrollView style={{width: '90%'}} showsVerticalScrollIndicator={false}>
-      <View style={{alignSelf:'center', marginBottom:5}} >
+        <ScrollView style={{width: '90%',marginVertical:heightPercentageToDP('2%')}} showsVerticalScrollIndicator={false}>
+      <View style={{alignSelf:'center'}} >
         <CreditCardDisplay
           number={cardNo}
           cvc={cvv}
@@ -156,8 +156,8 @@ const PaymentCard = props => {
         />
       </View>
 
-        <View>
-          <View style={{justifyContent: 'space-around'}}>
+        <View style={{marginVertical:heightPercentageToDP('2%')}}>
+          <View >
             <CustomInput
               placeholder="Enter your Card Holder Name"
               iconName="account-key-outline"
@@ -178,10 +178,10 @@ const PaymentCard = props => {
               // returnKeyLabel='next'
             />
           </View>
-          <View style={{justifyContent: 'space-around'}}>
+          <View >
             <CustomInput
               placeholder="Enter your Card Number"
-              iconName="account-key-outline"
+              iconName="card-account-details-outline"
               maxLength={16}
               keyboardType="numeric"
               type="materialCommunity"
@@ -204,8 +204,8 @@ const PaymentCard = props => {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginBottom: 10,
+              justifyContent: 'space-between',
+              // marginBottom: 10,
             }}>
             <View style={{width: '45%'}}>
               <Text style={styles.label}>{'Cvv'}</Text>
@@ -337,7 +337,16 @@ const PaymentCard = props => {
             </View>
           </View>
         </View>
-        <View style={{width: '100%'}}>
+        <View style={styles.item}>
+          <View style={{width:'100%'}}>
+
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.title}>Total Amount:</Text>
+            <Text style={styles.direction}>Rs. 123sdsdsd2</Text>
+          </View>
+        </View>
+        </View>
+        <View style={{width: '100%',marginVertical:heightPercentageToDP('2%')}}>
           <CustomButton
             loader={loader}
             onPress={() => handleSubmit()}
@@ -362,26 +371,36 @@ const styles = StyleSheet.create({
     color: '#05375a',
     // color:Colors.grey,
   },
+  item: {
+    flexDirection: 'row',
+    margin: 10,
+    // width:'100%',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 20,
+    backgroundColor:'white',
+    elevation: 5,
+  },
   inputContainer: {
-    // height: 60,
-    // padding:2,
+
     backgroundColor: Colors.White,
     borderRadius: 18,
     flexDirection: 'row',
-    // justifyContent:'flex',
     width: '100%',
     paddingHorizontal: 15,
-    // shadowColor: Colors.Black,
-    // shadowOpacity: 1,
-    // shadowRadius: 2,
-    // shadowOffset: {
-    //   height: 0,
-    //   width: 0,
-    // },
-    // elevation: ,
     borderWidth: 1,
     borderColor: Colors.darkgrey,
-    // alignItems:'center'
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.lightPurple,
+  },
+  direction: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#989CA5',
+    // color: Colors.paleorange,
   },
 });
 

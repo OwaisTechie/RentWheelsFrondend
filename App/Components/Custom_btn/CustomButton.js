@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import {Colors, Images} from '../../Theme';
 import LottieView from 'lottie-react-native';
-const CustomButton = ({title, width, height,loader,props, onPress = () => {}}) => {
+const CustomButton = ({title, width, height,loader=false,props, onPress = () => {}}) => {
   return (
     <TouchableOpacity
       disabled={loader}

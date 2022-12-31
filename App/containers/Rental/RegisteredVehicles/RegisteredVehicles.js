@@ -334,6 +334,7 @@ const RegisteredVehicles = () => {
     valid =await validate();
     console.log("ERRORS ->> ",isValid)
     if (isValid) {
+      console.log( 'gg');
       setFormikErrors(true);
     } else {
       setFormikErrors(false);
@@ -852,7 +853,7 @@ const RegisteredVehicles = () => {
                 marginBottom: 15,
                 paddingHorizontal: wp('4%'),
               }}>
-              {/* <View style={{marginBottom: 2}}>
+              <View style={{marginBottom: 2}}>
                 <View>
                   <Text
                     style={{
@@ -930,7 +931,7 @@ const RegisteredVehicles = () => {
                     </View>
                   )}
                 />
-                {/* {errors.yearItem && (
+                 {errors.yearItem && (
                   <Text
                     style={{
                       color: '#FF5A5F',
@@ -940,8 +941,8 @@ const RegisteredVehicles = () => {
                     }}>
                     {errors.yearItem}
                   </Text>
-                )} */}
-              {/* </View> */}
+                )} 
+               </View>
 
               <View>
                 <View>
@@ -1045,7 +1046,7 @@ const RegisteredVehicles = () => {
                   </View>
                 )}
               </View>
-              {/* <View>
+              <View>
                 <View>
                   <Text
                     style={{
@@ -1056,10 +1057,10 @@ const RegisteredVehicles = () => {
                     }}>
                     Upload Vehicle Insurance
                   </Text>
-                  {/* <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> */}
-              {/* </View> */}
+                  <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text>
+               </View>
 
-              {/* {images.length > 0 ? (
+               {images.length > 0 ? (
                   <FlatList
                     horizontal={true}
                     data={images}
@@ -1127,8 +1128,8 @@ const RegisteredVehicles = () => {
                         width: '100%',
                         borderColor: Colors.backgroundMedium,
                       }}>
-                      {/* <View > */}
-              {/* <View
+                      <View >
+              <View
                         style={{
                           flex: 1,
                           alignItems: 'center',
@@ -1141,7 +1142,7 @@ const RegisteredVehicles = () => {
                           color={Colors.lightPurple}
                         />
                         <Text>Add Photos</Text>
-                        {/* </View> 
+                         </View> 
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -1159,7 +1160,7 @@ const RegisteredVehicles = () => {
                     }}>
                     Characteristics:
                   </Text>
-                  {/* <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> 
+                   <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> 
                 </View>
                 <View>
                   <View>
@@ -1189,16 +1190,16 @@ const RegisteredVehicles = () => {
                     </View>
                   </View>
                 </View>
-              </View> */}
+              </View> 
 
-              {/* <View style={{alignItems: 'center'}}>
+               <View style={{alignItems: 'center'}}>
                 <CustomSwitch 
                 selectionMode={1}
                 option1='Hello'
                 option='Hello2'
                 onSelectSwitch={(e) => console.log("SWITVH",e)}
                 />
-              </View> */}
+              </View>
             </View>
           </ProgressStep>
         </ProgressSteps>

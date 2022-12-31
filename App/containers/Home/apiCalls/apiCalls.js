@@ -1,10 +1,20 @@
 import {Config} from '../../../Config/Config';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-const getNearByLocation = (payload, onSuccess, onFailure) => {
+const getNearByLocation = async (payload, onSuccess, onFailure) => {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.nearByVehicle;
   const URL = `${baseUrl}${endpoint}`;
+  
+  try {
+    const value = await AsyncStorage.getItem('userDetail');
+    if (value !== null) {
+      // We have data!!
+      console.log("WE HAVE DATA ->>",value);
+    }
+  } catch (error) {
+    // Error retrieving data
+  }
   
   axios
     .get(URL, {

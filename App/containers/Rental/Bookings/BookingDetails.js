@@ -112,6 +112,7 @@ const BookingDetails = props => {
   );
 
   const [loading, setLoading] = useState(false);
+  const [rejectLoader, setRejectLoader] = useState(false);
   const [product, setProduct] = useState({});
 
   const width = Dimensions.get('window').width;
@@ -141,8 +142,8 @@ const BookingDetails = props => {
   };
 
   const onApproveSuccess = data => {
-    const {Payload} = data;
-    console.log('Approve PAyload ->> ', Payload);
+    // const {Payload} = data;
+    console.log('Approve PAyload ->> ', data);
     setLoader(!loader);
     navigation.goBack();
   };
@@ -157,14 +158,13 @@ const BookingDetails = props => {
       bookingID: Bookings.BookingInfo._id,
       approve: 'false',
     };
-    setLoader(!loader);
+    setRejectLoader(!rejectLoader);
     approveRejectBooking(Payload, onRejectSucces, onRejectFailure);
   };
 
   const onRejectSucces = data => {
-    const {Payload} = data;
-    console.log('Approve PAyload ->> ', Payload);
-    setLoader(!loader);
+    console.log('Approve PAyload ->> ', data);
+    setRejectLoader(!rejectLoader);
     navigation.goBack();
   };
 
@@ -468,7 +468,7 @@ const BookingDetails = props => {
                   <Text style={styles.titleInfo}>12345-6789101-2</Text>
                 </View>
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Registration No.: </Text>
+                  <Text style={styles.title}>Reg No.: </Text>
                   <Text style={styles.titleInfo}>
                     {Vehicle.registrationNumber}
                   </Text>
@@ -484,19 +484,6 @@ const BookingDetails = props => {
                   <Text style={styles.title}>Phone No. : </Text>
                   <Text style={styles.titleInfo}>{rentee.phone}</Text>
                 </View>
-                {/* <View>
-                <Rating
-                  type="custom"
-                  ratingColor={Colors.paleorange}
-                  // ratingBackgroundColor="#c8c7c8"
-                  startingValue={3.5}
-                  readonly
-                  ratingCount={5}
-                  imageSize={15}
-                  // onFinishRating={this.ratingCompleted}
-                  style={{paddingVertical: 3}}
-                />
-              </View> */}
               </View>
             </View>
 
@@ -611,20 +598,20 @@ const BookingDetails = props => {
                 {Bookings.BookingInfo.rentalStatus == '0' ? (
                   <View
                     style={{
-                      justifyContent: 'space-between',
+                      justifyContent: 'space-around',
                       flexDirection: 'row',
                     }}>
-                    <View style={{width: wp('42%')}}>
+                    <View style={{width: wp('43%')}}>
                       <CustomButton
                         onPress={approveBooking}
                         loader={loader}
                         title={'Approve Booking'}
                       />
                     </View>
-                    <View style={{width: wp('42%')}}>
+                    <View style={{width: wp('43%')}}>
                       <CustomButton
                         onPress={rejectBooking}
-                        loader={loader}
+                        loader={rejectLoader}
                         title={'Reject Booking'}
                       />
                     </View>
