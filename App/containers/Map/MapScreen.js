@@ -49,6 +49,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import FilterList from './BottomSheet/FilterList';
 import FilterModal from './FilterModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PhoneInput from 'react-native-phone-number-input';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -229,8 +230,9 @@ const MapScreen = props => {
             onFail={error => console.log(error)}
             onNotFound={() => console.log('no results')}
             textInputProps={{
+              leftIcon: { type: 'font-awesome', name: 'chevron-left' },
               onChangeText: text => {
-                // console.log('TEXT ->> ', text);
+                console.log('TEXT ->> ', text);
               },
               onFocus: () => setIsPlaces(true),
               onBlur: () => console.log('Not Focus'),
@@ -238,14 +240,15 @@ const MapScreen = props => {
             onPress={(data, details = null) => {
               setIsPlaces(false);
               console.log('DETAILS ->> ', details.geometry.location);
+              console.log('data ->> ', data);
               let payload= {
                 ownerId:_id,
                 pickupLoc : [67.0699,24.8604],
               }
               console.log("PAYLOAD ->> ",payload)
               // let pickupLocation = [67.0699,24.8604]
-              setVehicleLoading(true)
-              getNearByLocation(payload, onSuccess, onFailure);
+              // setVehicleLoading(true)
+              // getNearByLocation(payload, onSuccess, onFailure);
               // setRegion({
               // 	latitude: details.geometry.location.lat,
               // 	longitude: details.geometry.location.lng,
@@ -288,12 +291,15 @@ const MapScreen = props => {
           />
 
           <View style={{position: 'absolute', right: 10, top: 5}}>
+            <TouchableOpacity onPress={() => placesRef.current?.setAddressText('')}>
+
             <CustomIcons
-              type="material"
-              name="my-location"
+              type="entypo"
+              name="circle-with-cross"
               size={25}
               color={Colors.lightPurple}
             />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

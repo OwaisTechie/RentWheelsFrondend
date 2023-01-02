@@ -15,7 +15,8 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import {Colors, CustomIcons} from '../../../Theme';
+// import {COLOURS, Items} from '../database/Database';
+import {Colors, CustomIcons} from '../../../../Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 import {
@@ -24,22 +25,29 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {getLocalHost} from '../../../Constant/ConvertLocalHost';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getLocalHost} from '../../../../Constant/ConvertLocalHost';
+import {Rating} from 'react-native-ratings';
 import {useDispatch, useSelector} from 'react-redux';
 import Geocoder from 'react-native-geocoding';
-import CustomButton from '../../../Components/Custom_btn/CustomButton';
-
+import CustomButton from '../../../../Components/Custom_btn/CustomButton';
+import {getVehicleById} from '../../Redux/auth/Reducer/vehicleReducer';
+import {
+  setCarAddress,
+  setCarLatLong,
+} from '../../../Redux/auth/Reducer/AddressReducer';
 import moment from 'moment';
-
+// import {approveRejectBooking, startRental} from './apiCalls/apiCall';
+// import ModalPoup from '../../../Components/CustomModal/ModalPopup';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import * as Animatable from 'react-native-animatable';
 import QRCode from 'react-native-qrcode-svg';
-import ModalPoup from '../../../Components/CustomModal/ModalPopup';
-import { endRental } from '../apiCalls/apiCall';
+import ModalPoup from '../../../../Components/CustomModal/ModalPopup';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const RenteeCompletedBookingDetails = props => {
+const CompletedBookingDetails = props => {
   const {navigation, route} = props;
 
   const camera = useRef(null);
@@ -51,7 +59,6 @@ const RenteeCompletedBookingDetails = props => {
   const [Destination, setDestination] = useState('');
   const Bookings = route?.params;
   const Vehicle = Bookings.BookingInfo.vehicle;
-  console.log("ID ->> ",Vehicle)
   const rentee = Bookings.BookingInfo.rentee;
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
@@ -173,17 +180,17 @@ const RenteeCompletedBookingDetails = props => {
   };
 
   const onQrScan = e => {
-    console.log('SCAN CODE ->> ', e.data.toString());
+    console.log('SCAN CODE ->> ', e.data);
     // let Payload = {
     //   bookingID: Bookings.BookingInfo._id,
     //   startCode: e.data,
     // };
     let Payload = {
-      bookingID: Bookings.BookingInfo._id,
-      endCode:  e.data.toString(),
+      bookingID: "638f4df043b053cdd8969921",
+      startCode: "18688",
     };
     setQrLoader(true);
-    endRental(Payload, onRentalSuccess, onRentalFailure);
+    startRental(Payload, onRentalSuccess, onRentalFailure);
   };
 
   const onRentalSuccess = data => {
@@ -191,9 +198,7 @@ const RenteeCompletedBookingDetails = props => {
     console.log('Approve PAyload ->> ', Payload);
     setQrLoader(false);
     setQrScanner(false);
-    navigation.navigate('Review', {
-      vehicleId: Vehicle._id,
-    })
+    navigation.goBack();
   };
 
   const onRentalFailure = () => {
@@ -240,79 +245,7 @@ const RenteeCompletedBookingDetails = props => {
         backgroundColor={Colors.backgroundLight}
         barStyle="dark-content"
       />
-        {isQrScanner ? (
-        <QRCodeScanner
-          showMarker
-          reactivateTimeout={4}
-          onRead={onQrScan}
-          reactivate={Isactive}
-          // bottomContent={()}
-          cameraStyle={{height: SCREEN_HEIGHT}}
-          customMarker={
-            <View style={styles.rectangleContainer}>
-              <View style={styles.topOverlay}>
-                <View
-                  style={{
-                    alignItems: 'flex-end',
-                    padding: 20,
-                    width: wp('100%'),
-                  }}>
-                  <TouchableOpacity onPress={() => setQrScanner(false)}>
-                    <CustomIcons
-                      type="ionicon"
-                      name="close-circle-sharp"
-                      size={50}
-                      color={Colors.White}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={{fontSize: 30, color: 'white'}}>
-                  Scan Booking Start Code
-                </Text>
-              </View>
-
-              <View style={{flexDirection: 'row'}}>
-                <View style={styles.leftAndRightOverlay} />
-
-                <View style={styles.rectangle}>
-                  <CustomIcons
-                    type="ionicon"
-                    name="ios-scan-sharp"
-                    size={SCREEN_WIDTH * 0.6}
-                    color={iconScanColor}
-                  />
-                  {isQrLoader ? (
-                    <ActivityIndicator
-                      style={styles.activityIndicator}
-                      animating={loading}
-                      size="large"
-                    />
-                  ) : (
-                    <Animatable.View
-                      style={styles.scanBar}
-                      direction="alternate-reverse"
-                      iterationCount="infinite"
-                      duration={1700}
-                      easing="linear"
-                      animation={makeSlideOutTranslation(
-                        'translateY',
-                        SCREEN_WIDTH * -0.5,
-                      )}
-                    />
-                  )}
-                </View>
-
-                <View style={styles.leftAndRightOverlay} />
-              </View>
-              <View style={styles.bottomOverlay} />
-              <View style={{position: 'absolute', bottom: 12}}>
-                <Button title="Reactivate" onPress={startScan} />
-              </View>
-            </View>
-          }
-        />
-      ) : (
+      
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -429,11 +362,24 @@ const RenteeCompletedBookingDetails = props => {
                     
                     {Bookings.BookingInfo.rentalStatus == '4'
                       ? 'Active Bookings'
-                      : Bookings.BookingInfo.rentalStatus == '3'
+                      : Bookings.BookingInfo.rentalStatus == '5'
                       ? 'Completed Bookings'
                       : null}
                   </Text>
                 </View>
+                {/* <View>
+                <Rating
+                  type="custom"
+                  ratingColor={Colors.paleorange}
+                  // ratingBackgroundColor="#c8c7c8"
+                  startingValue={3.5}
+                  readonly
+                  ratingCount={5}
+                  imageSize={15}
+                  // onFinishRating={this.ratingCompleted}
+                  style={{paddingVertical: 3}}
+                />
+              </View> */}
               </View>
             </View>
             <View
@@ -465,6 +411,19 @@ const RenteeCompletedBookingDetails = props => {
                   <Text style={styles.title}>Phone No. : </Text>
                   <Text style={styles.titleInfo}>{rentee.phone}</Text>
                 </View>
+                {/* <View>
+                <Rating
+                  type="custom"
+                  ratingColor={Colors.paleorange}
+                  // ratingBackgroundColor="#c8c7c8"
+                  startingValue={3.5}
+                  readonly
+                  ratingCount={5}
+                  imageSize={15}
+                  // onFinishRating={this.ratingCompleted}
+                  style={{paddingVertical: 3}}
+                />
+              </View> */}
               </View>
             </View>
 
@@ -609,8 +568,108 @@ const RenteeCompletedBookingDetails = props => {
             </View>
           </View>
         </ScrollView>
-      )}
-        
+      
+        <ModalPoup
+        visible={isQrScanner}
+        onClose={() => setQrScanner(false)}>
+        <View
+          style={{
+            // flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems:'center',
+          }}>
+            <View style={{marginBottom:10}}>
+              <Text style={{color:Colors.lightPurple,fontSize:20,fontWeight:'bold',textAlign:'center'}}>Scan Qr Code for Booking End</Text>
+            </View>
+            <View>
+
+            <QRCode
+            size={200}
+      value={Bookings.BookingInfo.endCode}
+    />
+            </View>
+        </View>
+      </ModalPoup>
+      {/* <View
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          height: '8%',
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() => (product.isAvailable ? addToCart(product.id) : null)}
+          style={{
+            width: '86%',
+            height: '90%',
+            backgroundColor: COLOURS.blue,
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: '500',
+              letterSpacing: 1,
+              color: COLOURS.white,
+              textTransform: 'uppercase',
+            }}>
+            {product.isAvailable ? 'Add to cart' : 'Not Avialable'}
+          </Text>
+        </TouchableOpacity>
+      </View> */}
+
+      {/* <ModalPoup visible={isQrScanner} onClose={onCloseModal}>
+<QRCodeScanner
+      showMarker
+      reactivateTimeout={4}
+      onRead={onSuccess}
+      reactivate={Isactive}
+      // bottomContent={()}
+      cameraStyle={{height: SCREEN_HEIGHT}}
+      customMarker={
+        <View style={styles.rectangleContainer}>
+          <View style={styles.topOverlay}>
+            <Text style={{fontSize: 30, color: 'white'}}>QR CODE SCANNER</Text>
+          </View>
+
+          <View style={{flexDirection: 'row'}}>
+            <View style={styles.leftAndRightOverlay} />
+
+            <View style={styles.rectangle}>
+              <CustomIcons
+                type="ionicon"
+                name="ios-scan-sharp"
+                size={SCREEN_WIDTH * 0.6}
+                color={iconScanColor}
+              />
+              <Animatable.View
+                style={styles.scanBar}
+                direction="alternate-reverse"
+                iterationCount="infinite"
+                duration={1700}
+                easing="linear"
+                animation={makeSlideOutTranslation(
+                  'translateY',
+                  SCREEN_WIDTH * -0.5,
+                )}
+              />
+            </View>
+
+            <View style={styles.leftAndRightOverlay} />
+          </View>
+          <View style={styles.bottomOverlay} />
+          <View style={{position:'absolute',bottom:12}}>
+             <Button title="Reactivate" onPress={startScan} />
+          </View>
+
+        </View>
+      }
+    />
+      </ModalPoup> */}
     </View>
   );
 };
@@ -757,4 +816,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RenteeCompletedBookingDetails;
+export default CompletedBookingDetails;

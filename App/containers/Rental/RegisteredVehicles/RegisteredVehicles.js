@@ -10,6 +10,7 @@ import {
   StatusBar,
   FlatList,
   Keyboard,
+  Dimensions,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -21,19 +22,30 @@ import {Colors, CustomIcons} from '../../../Theme';
 import {ScrollView} from 'react-native-gesture-handler';
 import CustomDropdown from '../../../Components/CustomDropdown/CustomDropdown';
 import {ProgressStep, ProgressSteps} from 'react-native-progress-steps';
-import {getVehicleCategies} from './apiCalls/apiCalls';
+import {addVehicle, getVehicleCategies} from './apiCalls/apiCalls';
 import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
 import {useSelector} from 'react-redux';
 import {
+  heightPercentageToDP,
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import CustomInput from '../../../Components/CustomTextField/CustomInput';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import ModalPoup from '../../../Components/CustomModal/ModalPopup';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {mapStyle} from '../../../Theme/mapStyle';
 const GoogleApikey = 'AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g';
+import { useNavigation } from '@react-navigation/native';
 const RegisteredVehicles = () => {
+  const navigation = useNavigation();
+  const [pickupFlag, setPickupFlag] = useState(false);
+  const [isEnable, setIsEnable] = useState(false);
+  const [pickupText, setPickupText] = useState('');
   const [inputs, setInputs] = useState({
     vehicleCategory: '',
+    vehicleType: '',
+    fuelType: '',
     images: [],
     yearItems: '',
     brand: '',
@@ -46,21 +58,24 @@ const RegisteredVehicles = () => {
     selfDriveDailyCharges: '',
   });
   const [errors, setErrors] = useState({});
-
+  const mapRef = useRef();
+  const [showfilterModal, setShowFilterModal] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [SchemaSteps, setSchemaSteps] = useState(0);
+  const [pickupLocation, setPickupLocation] = useState({
+    latitude: 24.860966,
+    longitude: 66.990501,
+  });
   const [formikErrors, setFormikErrors] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAvailableForSelfDrive, setIsAvailableForSelfDrive] = useState(false);
-  const [isAircondition, setIsAircondition] = useState(false);
-  const [isAutomatic, setIsisAutomatic] = useState(false);
-
+  const [isAircondition, setIsAircondition] = useState('');
+  const [isAutomatic, setIsAutomatic] = useState('');
+  const [isplaces, setIsPlaces] = useState(false);
   const [value, setValue] = useState(null);
   const [active, setActive] = useState(false);
-  const userId = useSelector(state => state?.auth?.users?.user?._id);
+  const userId = useSelector(state => state?.auth?.users?.user);
   const auth = useSelector(state => state?.auth);
-  console.log('userId ->> ', userId);
-  console.log('auth ->> ', auth);
   // code remains same
   const [indexSelected, setIndexSelected] = useState(0);
   // const vehicleCategory = useRef(null);
@@ -79,6 +94,8 @@ const RegisteredVehicles = () => {
 
   const [items, setItems] = useState([]);
   const [images, setImages] = useState([]);
+  const [vehiclePapers, setVehiclePapers] = useState([]);
+  const [vehicleInsurance, setVehicleInsurance] = useState([]);
   const [isFocus, setIsFocus] = useState([]);
   // const [transmissionItem, setTransmissionItem] = useState([
   //   {label: 'Manual', value: true},
@@ -134,7 +151,6 @@ const RegisteredVehicles = () => {
       var year = thisYear - i;
       years.push({value: year.toString(), label: year.toString()});
     }
-    console.log('YEAR ->> ', years);
     setYearItem(years);
   }, []);
 
@@ -160,11 +176,72 @@ const RegisteredVehicles = () => {
     console.log('IMAGES ->> ', images);
   };
 
+  const onHandleSubmit = () => {
+    let Payload = {
+      ...inputs,
+    };
+    console.log("SUBMIT DATA ->>",Payload)
+    setIsEnable(true);
+    const formData = new FormData();
+    formData.append('vehicleOwner', JSON.parse(userId)._id);
+    formData.append('vehicleCategory', inputs.vehicleCategory);
+    formData.append('brand', inputs.brand);
+    formData.append('model', inputs.model);
+    formData.append('year', inputs.yearItems);
+    formData.append('registrationNumber', inputs.registrationNumber);
+    formData.append('vehicleType', inputs.vehicleType);
+    formData.append('pickupLocation[0]', pickupLocation.latitude);
+    formData.append('pickupLocation[1]', pickupLocation.longitude);
+    formData.append('description', inputs.description);
+    formData.append('noOfSeats', inputs.noOfSeats);
+    formData.append('fuelType', inputs.fuelType);
+    formData.append('noOfAirbags', inputs.noOfAirbags);
+    formData.append('isAutomatic', isAutomatic);
+    formData.append('noOfDoors', inputs.noOfDoors);
+    formData.append('isAircondition', isAircondition);
+    formData.append('selfDriveDailyCharges', inputs.selfDriveDailyCharges);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', {
+        name: images[i].image.split('/').pop(),
+        type: images[i].mime,
+        uri:
+        images[i].image
+      });
+    }
+    for (let i = 0; i < vehicleInsurance.length; i++) {
+      formData.append('vehicleInsurance', {
+        name: vehicleInsurance[i].image.split('/').pop(),
+        type: vehicleInsurance[i].mime,
+        uri:
+        vehicleInsurance[i].image
+      });
+    }
+    for (let i = 0; i < vehiclePapers.length; i++) {
+      formData.append('vehiclePapers', {
+        name: vehiclePapers[i].image.split('/').pop(),
+        type: vehiclePapers[i].mime,
+        uri:
+        vehiclePapers[i].image
+      });
+    }
+    addVehicle(formData,onVehicleSuccess,onVehicleFailure)
+  };
+
+  const onVehicleSuccess = (data) => {
+    navigation.goBack();
+    setIsEnable(false)
+
+  }
+  const onVehicleFailure = () => {
+    console.log("RESPONSE ->> ")
+    setIsEnable(false)
+  }
+
   const openImageLibrary = () => {
     ImagePicker.openPicker({
       multiple: true,
       compressImageQuality: 0.5,
-      maxFiles: `4`,
+      maxFiles: `10`,
       mediaType: 'photo',
       showsSelectedCount: true,
     }).then(async imgs => {
@@ -173,7 +250,6 @@ const RegisteredVehicles = () => {
         let id = 0;
         for await (const image of imgs) {
           id = id + 1;
-          console.log('IMAGE ->> ', image);
           const img = await ImagePicker.openCropper({
             mediaType: 'photo',
             path: image.path,
@@ -183,6 +259,7 @@ const RegisteredVehicles = () => {
           let imageData = {
             id: id,
             image: img.path,
+            mime:img.mime
           };
           result.push(imageData);
         }
@@ -191,18 +268,95 @@ const RegisteredVehicles = () => {
         ToastAndroid.show('Maximum of 4 images allowed', ToastAndroid.SHORT);
       }
       handleOnChange(result, 'images');
-      handleError(null,'images');
-      // setImages(result);
+      handleError(null, 'images');
+      setImages(result);
+      return result;
+    });
+  };
+  const uploadVehiclePapers = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+      compressImageQuality: 0.5,
+      maxFiles: `2`,
+      mediaType: 'photo',
+      showsSelectedCount: true,
+    }).then(async imgs => {
+      const result = [];
+      if (imgs.length <= 2) {
+        let id = 0;
+        for await (const image of imgs) {
+          id = id + 1;
+          const img = await ImagePicker.openCropper({
+            mediaType: 'photo',
+            path: image.path,
+
+            cropping: true,
+          });
+          let imageData = {
+            id: id,
+            image: img.path,
+            mime:img.mime
+          };
+          result.push(imageData);
+        }
+      } else {
+        // setImages([...images]);
+        ToastAndroid.show('Maximum of 4 images allowed', ToastAndroid.SHORT);
+      }
+      handleOnChange(result, 'images');
+      handleError(null, 'images');
+      setVehiclePapers(result);
+      return result;
+    });
+  };
+  const uploadVehicleInsurance = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+      compressImageQuality: 0.5,
+      maxFiles: `2`,
+      mediaType: 'photo',
+      showsSelectedCount: true,
+    }).then(async imgs => {
+      const result = [];
+      if (imgs.length <= 2) {
+        let id = 0;
+        for await (const image of imgs) {
+          id = id + 1;
+          const img = await ImagePicker.openCropper({
+            mediaType: 'photo',
+            path: image.path,
+
+            cropping: true,
+          });
+          let imageData = {
+            id: id,
+            image: img.path,
+            mime:img.mime
+          };
+          result.push(imageData);
+        }
+      } else {
+        // setImages([...images]);
+        ToastAndroid.show('Maximum of 2 images allowed', ToastAndroid.SHORT);
+      }
+      setVehicleInsurance(result);
       return result;
     });
   };
 
   const deleteImageById = id => {
-    console.log('INDEX -> ', id);
-    console.log(inputs.images)
-    const filteredData =  inputs.images.filter(item => item.id !== id);
-    console.log('FILTER', filteredData);
+    const filteredData = inputs.images.filter(item => item.id !== id);
     handleOnChange(filteredData, 'images');
+    // this.setState({ data: filteredData });
+  };
+  const deleteVehiclePaper = id => {
+    const filteredData = vehiclePapers.filter(item => item.id !== id);
+    setVehiclePapers(filteredData);
+    // this.setState({ data: filteredData });
+  };
+  const deleteVehicleInsurance = id => {
+    const filteredData = vehicleInsurance.filter(item => item.id !== id);
+    setVehicleInsurance(filteredData);
     // this.setState({ data: filteredData });
   };
 
@@ -210,7 +364,7 @@ const RegisteredVehicles = () => {
     activeStepIconBorderColor: Colors.lightPurple,
     labelColor: Colors.lightPurple,
     activeLabelColor: Colors.lightPurple,
-    borderWidth: 2,
+    borderWidth: 4,
     marginBottom: 15,
     topOffset: 2,
     activeStepNumColor: Colors.lightPurple,
@@ -260,6 +414,7 @@ const RegisteredVehicles = () => {
   };
   const ScrollViewProps = {
     keyboardShouldPersistTaps: 'handled',
+    nestedScrollEnabled: true,
     contentContainerStyle: {
       flex: 1,
       // backgroundColor:'black'
@@ -269,75 +424,19 @@ const RegisteredVehicles = () => {
   };
 
   const onPrevious = () => {
-    console.log('PRe');
-    setFormikErrors(true);
+    setFormikErrors(false);
   };
 
   const onSubmit = () => {
     console.log('SUBMIT');
   };
 
-  // const LoginSchema = Yup.object().shape({
-  //   // vehicleCategory: Yup.string().required('fuelType is Required'),
-  //   // yearItem: Yup.string().required('Year is Required'),
-  //   // vehicle: Yup.string().required('vehicleType is Required'),
-  //   brand: Yup.string().required('brand is Required'),
-  // });
-
-  // const LoginSchema1 = Yup.object().shape({
-  //   vehiclePapers: Yup.string().required('fuelType is Required'),
-  // });
-
-  // const LoginSchemaSteps = [LoginSchema, LoginSchema1];
-
-  // const {
-  //   handleChange,
-  //   handleSubmit,
-  //   handleBlur,
-  //   values,
-  //   setFieldValue,
-  //   errors,
-  //   touched,
-  // } = useFormik({
-  //   validationSchema: LoginSchemaSteps[SchemaSteps],
-  //   // validationSchema: LoginSchema,
-  //   initialValues: {
-  //     // fuelTypeItem: '',
-  //     // isAvailableForSelfDrive: false,
-  //     // isAircondition: false,
-  //     // isAutomatic: false,
-  //     // model: '',
-  //     // yearItem: '',
-  //     // vehicleCategory: '',
-  //     brand: '',
-  //     // images: [],
-  //     vehiclePapers: '',
-  //     // vehicleInsurance: [],
-  //     // noOfDoors: '',
-  //     // noOfAirbags: '',
-  //     // noOfSeats: '',
-  //     // description: '',
-  //     // registrationNumber: '',
-  //     // selfDriveDailyCharges: '',
-  //   },
-  //   onSubmit: payload => {
-  //     console.log('PAY ->> ', payload);
-  //     // setLoader(!loader);
-  //     // loginRequest(payload, onSuccess, onFailure);
-  //     // signIn()
-  //   },
-  // });
-
   const onNextStep = async () => {
-    // setSchemaSteps(step);
-    // console.log(errors, 'gg');
-    valid =await validate();
-    console.log("ERRORS ->> ",isValid)
-    if (isValid) {
-      console.log( 'gg');
-      setFormikErrors(true);
-    } else {
+    let valid = await validate();
+    if (valid) {
       setFormikErrors(false);
+    } else {
+      setFormikErrors(true);
     }
   };
 
@@ -347,76 +446,89 @@ const RegisteredVehicles = () => {
   // };
 
   const handleOnChange = (value, input) => {
+    if(input == "vehicleCategory"){
+      console.log("vehicleCategory ->> ",value._id)
+      console.log("vehicleCategory ->> ",value.vehicleType)
+      setInputs(prevState => ({...prevState, [input]: value._id}));
+      setInputs(prevState => ({...prevState, "vehicleType": value.vehicleType}));
+    }
+    else{
     setInputs(prevState => ({...prevState, [input]: value}));
+    }
   };
   const handleError = (errorMessage, input) => {
     setErrors(prevState => ({...prevState, [input]: errorMessage}));
   };
 
   const validate = () => {
+    let validCount = 0;
     Keyboard.dismiss();
-    console.log("!inputs.vehicleCategory ->> ",!inputs.vehicleCategory)
-    console.log("!inputs.yearItems->> ",!inputs.yearItems)
-    console.log("inputs.images.length",inputs.images.length)
-    console.log("!inputs.brand",!inputs.brand)
     if (!inputs.vehicleCategory) {
       handleError('Car Type is Required', 'vehicleCategory');
       setIsValid(false);
+      validCount++;
     }
 
     if (!inputs.yearItems) {
       handleError('Year is Required', 'yearItems');
       setIsValid(false);
+      validCount++;
     }
 
     if (!inputs.brand) {
       handleError('Please input brand', 'brand');
       setIsValid(false);
+      validCount++;
     }
 
     if (!inputs.model) {
       handleError('Model is Required', 'model');
       setIsValid(false);
+      validCount++;
     }
     if (!inputs.registrationNumber) {
       handleError('Registration Number is Required', 'registrationNumber');
       setIsValid(false);
+      validCount++;
     }
     if (!inputs.noOfSeats) {
       handleError('No of Seats is Required', 'noOfSeats');
       setIsValid(false);
+      validCount++;
     }
     if (!inputs.noOfDoors) {
       handleError('No of Doors is Required', 'noOfDoors');
       setIsValid(false);
+      validCount++;
     }
     if (!inputs.noOfAirbags) {
       handleError('No of Airbags is Required', 'noOfAirbags');
       setIsValid(false);
+      validCount++;
     }
     if (!inputs.description) {
       handleError('Description is Required', 'description');
       setIsValid(false);
+      validCount++;
     }
 
     if (!inputs.selfDriveDailyCharges) {
-      handleError(
-        'Rent Charges is Required',
-        'selfDriveDailyCharges',
-      );
+      handleError('Rent Charges is Required', 'selfDriveDailyCharges');
       setIsValid(false);
+      validCount++;
     }
 
     if (inputs.images.length < 1) {
       handleError('Please upload images', 'images');
       setIsValid(false);
+      validCount++;
     }
-    console.log("VALIDATION ->> ",isValid)
-  };
 
-  console.log("INPUTS ->> ",inputs);
-  console.log("isValid ->> ",isValid);
-  console.log("errors.vehicleCategory ->> ",errors);
+    if (validCount > 0) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <View style={styles.container}>
@@ -430,6 +542,7 @@ const RegisteredVehicles = () => {
             label="Vehicle Details"
             scrollViewProps={ScrollViewProps}
             nextBtnText="next"
+            // nextBtnDisabled={isEnable}
             onNext={onNextStep}
             nextBtnTextStyle={buttonTextStyle}
             errors={formikErrors}>
@@ -461,6 +574,7 @@ const RegisteredVehicles = () => {
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={items}
+                  value={inputs.vehicleCategory}
                   // ref={vehicleCategory}
                   // searchs
                   maxHeight={300}
@@ -473,9 +587,9 @@ const RegisteredVehicles = () => {
                   // onBlur={handleBlur('vehicle')}
                   // onChange={item => setFieldValue('vehicleCategory', item._id)}
                   onFocus={() => {
-                    handleError(null,'vehicleCategory')
+                    handleError(null, 'vehicleCategory');
                   }}
-                  onChange={item => handleOnChange(item._id, 'vehicleCategory')}
+                  onChange={item => handleOnChange(item, 'vehicleCategory')}
                   // onChange={onChange}
                 />
 
@@ -494,13 +608,13 @@ const RegisteredVehicles = () => {
               <View>
                 <View style={{alignItems: 'center'}}>
                   <Text>Photo Upload</Text>
-                  <Text>{`Photos · ${inputs.images.length} / 10 - You can add up to 20 photos.`}</Text>
+                  <Text>{`Photos · ${images.length} / 10 - You can add up to 10 photos.`}</Text>
                 </View>
 
                 {inputs.images.length > 0 ? (
                   <FlatList
                     horizontal={true}
-                    data={inputs.images}
+                    data={images}
                     // style={{ position: 'absolute', bottom: 80 }}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
@@ -508,8 +622,6 @@ const RegisteredVehicles = () => {
                     }}
                     keyExtractor={item => item.id}
                     renderItem={({item, index}) => (
-                      // console.log("ITem ->> ",item)
-                      // console.log("index ->> ",index)
                       <View style={{position: 'relative', marginVertical: 10}}>
                         <TouchableOpacity activeOpacity={0.9}>
                           <Image
@@ -586,16 +698,16 @@ const RegisteredVehicles = () => {
                 )}
               </View>
               {errors.images && (
-                  <Text
-                    style={{
-                      color: '#FF5A5F',
-                      fontSize: 12,
-                      paddingVertical: hp('1%'),
-                      marginHorizontal: wp('3%'),
-                    }}>
-                    {errors.images}
-                  </Text>
-                )}
+                <Text
+                  style={{
+                    color: '#FF5A5F',
+                    fontSize: 12,
+                    paddingVertical: hp('1%'),
+                    marginHorizontal: wp('3%'),
+                  }}>
+                  {errors.images}
+                </Text>
+              )}
               <View style={{marginBottom: 2}}>
                 <View>
                   <Text
@@ -618,6 +730,7 @@ const RegisteredVehicles = () => {
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={yearItem}
+                  value={inputs.yearItems}
                   // ref={year}
                   // searchs
                   maxHeight={300}
@@ -630,7 +743,7 @@ const RegisteredVehicles = () => {
                   // onBlur={handleBlur('vehicle')}
                   // onChange={item => setFieldValue('yearItem', item.value)}
                   onFocus={() => {
-                    handleError(null,'yearItems')
+                    handleError(null, 'yearItems');
                   }}
                   onChange={item => handleOnChange(item.value, 'yearItems')}
                   // onChange={onChange}
@@ -651,7 +764,7 @@ const RegisteredVehicles = () => {
                 <CustomInput
                   placeholder="Enter your brand"
                   onFocus={() => {
-                    handleError(null,'brand')
+                    handleError(null, 'brand');
                   }}
                   // iconName="account-key-outline"
                   // type="materialCommunity"
@@ -662,6 +775,7 @@ const RegisteredVehicles = () => {
                   //   password.current.focus();
                   // }}
                   name="brand"
+                  value={inputs.brand}
                   // onBlur={handleBlur}
                   error={errors.brand}
                   // touched={touched.brand}
@@ -680,8 +794,9 @@ const RegisteredVehicles = () => {
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onFocus={() => {
-                    handleError(null,'model')
+                    handleError(null, 'model');
                   }}
+                  value={inputs.model}
                   // ref={model}
                   // onBlur={handleBlur('model')}
                   error={errors.model}
@@ -701,8 +816,9 @@ const RegisteredVehicles = () => {
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onFocus={() => {
-                    handleError(null,'registrationNumber')
+                    handleError(null, 'registrationNumber');
                   }}
+                  value={inputs.registrationNumber}
                   // ref={registrationNumber}
                   // onBlur={handleBlur('registrationNumber')}
                   error={errors.registrationNumber}
@@ -720,12 +836,14 @@ const RegisteredVehicles = () => {
                   placeholder="Enter Number Of Seats"
                   // iconName="account-key-outline"
                   // type="materialCommunity"
+                  keyboardType="numeric"
                   label="Number Of Seats"
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onFocus={() => {
-                    handleError(null,'noOfSeats')
+                    handleError(null, 'noOfSeats');
                   }}
+                  value={inputs.noOfSeats}
                   // ref={noOfSeats}
                   // onBlur={handleBlur('noOfSeats')}
                   error={errors.noOfSeats}
@@ -741,12 +859,14 @@ const RegisteredVehicles = () => {
                   placeholder="Enter Number Of Doors"
                   // iconName="account-key-outline"
                   // type="materialCommunity"
+                  keyboardType="numeric"
                   label="Number Of Doors"
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onFocus={() => {
-                    handleError(null,'noOfDoors')
+                    handleError(null, 'noOfDoors');
                   }}
+                  value={inputs.noOfDoors}
                   // ref={noOfDoors}
                   // onBlur={handleBlur('noOfDoors')}
                   error={errors.noOfDoors}
@@ -762,12 +882,14 @@ const RegisteredVehicles = () => {
                   placeholder="Enter Number Of Air Bags"
                   // iconName="account-key-outline"
                   // type="materialCommunity"
+                  keyboardType="numeric"
                   label="Number Of Airbags"
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onFocus={() => {
-                    handleError(null,'noOfAirbags')
+                    handleError(null, 'noOfAirbags');
                   }}
+                  value={inputs.noOfAirbags}
                   // ref={noOfAirbags}
                   // onBlur={handleBlur('noOfAirbags')}
                   error={errors.noOfAirbags}
@@ -788,11 +910,12 @@ const RegisteredVehicles = () => {
                   returnKeyLabel="next"
                   // ref={description}
                   editable={true}
+                  value={inputs.description}
                   multiline={true}
                   numberOfLines={4}
                   maxLength={200}
                   onFocus={() => {
-                    handleError(null,'description')
+                    handleError(null, 'description');
                   }}
                   // onBlur={handleBlur('description')}
                   error={errors.description}
@@ -805,16 +928,42 @@ const RegisteredVehicles = () => {
               </View>
               <View>
                 <CustomInput
-                  placeholder="Rent Price"
+                  placeholder="Fuel Type"
                   // iconName="account-key-outline"
                   // type="materialCommunity"
+                  label="Fuel Type"
+                  returnKeyType="next"
+                  returnKeyLabel="next"
+                  // ref={description}
+                  value={inputs.fuelType}
+                  editable={true}
+                  maxLength={200}
+                  onFocus={() => {
+                    handleError(null, 'fuelType');
+                  }}
+                  // onBlur={handleBlur('description')}
+                  error={errors.fuelType}
+                  // touched={touched.description}
+                  onChangeText={text => handleOnChange(text, 'fuelType')}
+                  keyboardAppearance="dark"
+                  // returnKeyType='next'
+                  // returnKeyLabel='next'
+                />
+              </View>
+              <View>
+                <CustomInput
+                  placeholder="Rent Price (Per Day)"
+                  // iconName="account-key-outline"
+                  // type="materialCommunity"
+                  keyboardType="numeric"
                   label="Rent Price"
                   returnKeyType="next"
                   returnKeyLabel="next"
+                  value={inputs.selfDriveDailyCharges}
                   // ref={selfDriveDailyCharges}
                   // onBlur={handleBlur('selfDriveDailyCharges')}
                   onFocus={() => {
-                    handleError(null,'selfDriveDailyCharges')
+                    handleError(null, 'selfDriveDailyCharges');
                   }}
                   error={errors.selfDriveDailyCharges}
                   // touched={touched.selfDriveDailyCharges}
@@ -842,18 +991,19 @@ const RegisteredVehicles = () => {
             scrollViewProps={ScrollViewProps}
             nextBtnTextStyle={SubmitTextStyle}
             previousBtnTextStyle={buttonTextStyle}
+            nextBtnDisabled={isEnable}
             nextBtnText=">"
             previousBtnText="<"
             onPrevious={onPrevious}
             finishBtnText="Confirm "
-            onSubmit={() => onNextStep(1)}
+            onSubmit={onHandleSubmit}
             label="Vehicle Papers and more..">
             <View
               style={{
                 marginBottom: 15,
                 paddingHorizontal: wp('4%'),
               }}>
-              <View style={{marginBottom: 2}}>
+              {/* <View style={{marginBottom: 2}}>
                 <View>
                   <Text
                     style={{
@@ -873,20 +1023,23 @@ const RegisteredVehicles = () => {
                   onNotFound={() => console.log('no results')}
                   textInputProps={{
                     onChangeText: text => {
-                      // console.log('TEXT ->> ', text);
+                      console.log('TEXT ->> ', text);
                     },
                     onFocus: () => setIsPlaces(true),
                     onBlur: () => console.log('Not Focus'),
                   }}
                   onPress={(data, details = null) => {
                     setIsPlaces(false);
-
-                    // 'details' is provided when fetchDetails = true
                     console.log('DETAILS ->> ', details.geometry.location);
-                    let pickupLocation = [
-                      24.954179757526536, 67.14250599750613,
-                    ];
-                    getNearByLocation(pickupLocation, onSuccess, onFailure);
+                    console.log('data ->> ', data);
+                    let payload = {
+                      ownerId: _id,
+                      pickupLoc: [67.0699, 24.8604],
+                    };
+                    console.log('PAYLOAD ->> ', payload);
+                    // let pickupLocation = [67.0699,24.8604]
+                    // setVehicleLoading(true)
+                    // getNearByLocation(payload, onSuccess, onFailure);
                     // setRegion({
                     // 	latitude: details.geometry.location.lat,
                     // 	longitude: details.geometry.location.lng,
@@ -910,13 +1063,9 @@ const RegisteredVehicles = () => {
                       backgroundColor: '#FAFAFA',
                     },
                     textInput: {
-                      height: 60,
-                      color: Colors.Black,
-                      borderColor: Colors.darkgrey,
+                      height: 38,
+                      color: Colors.lightPurple,
                       fontSize: 16,
-                      paddingHorizontal: 15,
-                      // padding:10,
-                      borderWidth: 1,
                       borderRadius: 15,
                     },
                     predefinedPlacesDescription: {
@@ -928,10 +1077,10 @@ const RegisteredVehicles = () => {
                       <Text style={{color: Colors.lightPurple, fontSize: 15}}>
                         No results were found
                       </Text>
-                    </View>
+                    </View>fY
                   )}
                 />
-                 {errors.yearItem && (
+                {errors.yearItem && (
                   <Text
                     style={{
                       color: '#FF5A5F',
@@ -941,8 +1090,29 @@ const RegisteredVehicles = () => {
                     }}>
                     {errors.yearItem}
                   </Text>
-                )} 
-               </View>
+                )}
+              </View> */}
+              <View>
+                {/* <CustomInput
+                  placeholder="Pick Up Location"
+                  // iconName="account-key-outline"
+                  // type="materialCommunity"
+                  // keyboardType="numeric"
+                  editable={false}
+                  label="Pick Up Location"
+                  onFocus={() => {
+                    console.log("sasasasasasasasaasasassa");
+                  }}
+                  // error={errors.selfDriveDailyCharges}
+                  // touched={touched.selfDriveDailyCharges}
+                  // onChangeText={text =>
+                  //   handleOnChange(text, 'selfDriveDailyCharges')
+                  // }
+                  keyboardAppearance="dark"
+                  // returnKeyType='next'
+                  // returnKeyLabel='next'
+                /> */}
+              </View>
 
               <View>
                 <View>
@@ -955,13 +1125,13 @@ const RegisteredVehicles = () => {
                     }}>
                     Upload Vehicle Papers
                   </Text>
-                  {/* <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> */}
+                  <Text>{`Photos · ${vehiclePapers.length} / 2 - You can add up to 20 photos.`}</Text>
                 </View>
 
-                {images.length > 0 ? (
+                {vehiclePapers.length > 0 ? (
                   <FlatList
                     horizontal={true}
-                    data={images}
+                    data={vehiclePapers}
                     // style={{ position: 'absolute', bottom: 80 }}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
@@ -969,8 +1139,6 @@ const RegisteredVehicles = () => {
                     }}
                     keyExtractor={item => item.id}
                     renderItem={({item, index}) => (
-                      // console.log("ITem ->> ",item)
-                      // console.log("index ->> ",index)
                       <View style={{position: 'relative', marginVertical: 10}}>
                         <TouchableOpacity activeOpacity={0.9}>
                           <Image
@@ -992,7 +1160,7 @@ const RegisteredVehicles = () => {
 
                           <TouchableOpacity
                             style={{position: 'absolute', right: 15, top: 5}}
-                            onPress={() => deleteImageById(item.id)}>
+                            onPress={() => deleteVehiclePaper(item.id)}>
                             <CustomIcons
                               name={'ios-close-circle'}
                               type={'ionicon'}
@@ -1018,7 +1186,7 @@ const RegisteredVehicles = () => {
                   // ))
                   <View style={{alignItems: 'flex-start', marginVertical: 10}}>
                     <TouchableOpacity
-                      onPress={openImageLibrary}
+                      onPress={uploadVehiclePapers}
                       style={{
                         borderRadius: 20,
                         borderWidth: 1,
@@ -1057,13 +1225,13 @@ const RegisteredVehicles = () => {
                     }}>
                     Upload Vehicle Insurance
                   </Text>
-                  <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text>
-               </View>
+                  <Text>{`Photos · ${vehicleInsurance.length} / 2 - You can add up to 20 photos.`}</Text>
+                </View>
 
-               {images.length > 0 ? (
+                {vehicleInsurance.length > 0 ? (
                   <FlatList
                     horizontal={true}
-                    data={images}
+                    data={vehicleInsurance}
                     // style={{ position: 'absolute', bottom: 80 }}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
@@ -1094,7 +1262,7 @@ const RegisteredVehicles = () => {
 
                           <TouchableOpacity
                             style={{position: 'absolute', right: 15, top: 5}}
-                            onPress={() => deleteImageById(item.id)}>
+                            onPress={() => deleteVehicleInsurance(item.id)}>
                             <CustomIcons
                               name={'ios-close-circle'}
                               type={'ionicon'}
@@ -1107,20 +1275,9 @@ const RegisteredVehicles = () => {
                     )}
                   />
                 ) : (
-                  // images.map(image => (
-                  //   <View key={image.path}>
-                  //     <Image
-                  //       style={{
-                  //         width: 80,
-                  //         height: 80,
-                  //       }}
-                  //       source={{uri: image.path}}
-                  //     />
-                  //   </View>
-                  // ))
                   <View style={{alignItems: 'flex-start', marginVertical: 10}}>
                     <TouchableOpacity
-                      onPress={openImageLibrary}
+                      onPress={uploadVehicleInsurance}
                       style={{
                         borderRadius: 20,
                         borderWidth: 1,
@@ -1128,8 +1285,8 @@ const RegisteredVehicles = () => {
                         width: '100%',
                         borderColor: Colors.backgroundMedium,
                       }}>
-                      <View >
-              <View
+                      {/* <View > */}
+                      <View
                         style={{
                           flex: 1,
                           alignItems: 'center',
@@ -1142,10 +1299,66 @@ const RegisteredVehicles = () => {
                           color={Colors.lightPurple}
                         />
                         <Text>Add Photos</Text>
-                         </View> 
+                        {/* </View> */}
                       </View>
                     </TouchableOpacity>
                   </View>
+                )}
+              </View>
+
+              <View>
+                {!pickupFlag ? (
+                  <View>
+                    <View>
+                      <Text
+                        style={{
+                          marginVertical: hp('1%'),
+                          fontSize: 16,
+                          color: '#05375a',
+                          // color:Colors.grey,
+                        }}>
+                        Pick Up Location
+                      </Text>
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                      <TouchableOpacity
+                        onPress={() => setShowFilterModal(true)}>
+                        <Text style={{fontSize: 16, color: '#05375a'}}>
+                          Click here to Select the Location!
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : (
+                  <View>
+                  <CustomInput
+                    placeholder="PickUp Location"
+                    // iconName="account-key-outline"
+                    // type="materialCommunity"
+                    value={pickupText}
+                    keyboardType="numeric"
+                    label="PickUp Location"
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    editable={false}
+                    multiline={true}
+                    numberOfLines={4}
+                    // ref={selfDriveDailyCharges}
+                    // onBlur={handleBlur('selfDriveDailyCharges')}
+                    onFocus={() => {
+                      setShowFilterModal(true)
+                    }}
+                    keyboardAppearance="dark"
+                  />
+                  <View>
+                    <TouchableOpacity onPress={() => setShowFilterModal(true)}>
+
+                      <Text style={{textAlign:'right',fontWeight:'bold'}}>Change PickUp Location</Text>
+                    </TouchableOpacity>
+                  </View>
+                  </View>
+                  
                 )}
               </View>
 
@@ -1160,7 +1373,6 @@ const RegisteredVehicles = () => {
                     }}>
                     Characteristics:
                   </Text>
-                   <Text>{`Photos · ${images.length} / 10 - You can add up to 20 photos.`}</Text> 
                 </View>
                 <View>
                   <View>
@@ -1170,40 +1382,201 @@ const RegisteredVehicles = () => {
                         <CheckBox
                           disabled={false}
                           value={isAutomatic}
-                          onValueChange={newValue =>
-                            setIsisAutomaticA(newValue)
-                          }
+                          onValueChange={newValue =>{
+                            console.log(newValue)
+                            setIsAutomatic(newValue)
+                          } }
                         />
-                        <Text>Automatice</Text>
+                        <Text>Automatic</Text>
                       </View>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <CheckBox
                           disabled={false}
                           value={isAircondition}
-                          onValueChange={newValue =>
+                          onValueChange={newValue =>{
+                            console.log(newValue)
                             setIsAircondition(newValue)
-                          }
+                          } }
                         />
                         <Text>Air condition</Text>
                       </View>
                     </View>
                   </View>
                 </View>
-              </View> 
-
-               <View style={{alignItems: 'center'}}>
-                <CustomSwitch 
-                selectionMode={1}
-                option1='Hello'
-                option='Hello2'
-                onSelectSwitch={(e) => console.log("SWITVH",e)}
-                />
               </View>
+
+              {/* <View style={{alignItems: 'center'}}>
+                <CustomSwitch
+                  selectionMode={1}
+                  option1="Hello"
+                  option="Hello2"
+                  onSelectSwitch={e => console.log('SWITVH', e)}
+                />
+              </View> */}
             </View>
           </ProgressStep>
         </ProgressSteps>
       </ScrollView>
+
+      <ModalPoup
+        visible={showfilterModal}
+        onClose={() => setShowFilterModal(false)}>
+        <View>
+          <View>
+            <Text
+              style={{
+                marginBottom: hp('1%'),
+                fontSize: 16,
+                color: '#05375a',
+                // color:Colors.grey,
+              }}>
+              Pick Up Location :
+            </Text>
+          </View>
+          <View
+            style={{
+              zIndex: 1,
+              top: 20,
+              left: 0,
+              position: 'absolute',
+              padding: 18,
+              // justifyContent:'space-evenly',
+              // marginRight: 0,
+              flexDirection: 'row',
+            }}>
+            <GooglePlacesAutocomplete
+              ref={placesRef}
+              placeholder="Enter Location"
+              fetchDetails={true}
+              onFail={error => console.log(error)}
+              onNotFound={() => console.log('no results')}
+              textInputProps={{
+                leftIcon: {type: 'font-awesome', name: 'chevron-left'},
+                onChangeText: text => {
+                  // setPickupText(text)
+                  console.log("Text ",text);
+                },
+                onFocus: () => setIsPlaces(true),
+                onBlur: () => console.log('Not Focus'),
+              }}
+              onPress={(data, details = null) => {
+                setIsPlaces(false);
+                let coordinate = details.geometry.location;
+                console.log('DETAILS ->> ', details.geometry.location);
+                console.log('data ->> ', data);
+                setPickupText(data.description)
+                // console.log('PAYLOAD ->> ', payload);
+                setPickupLocation({
+                  latitude: coordinate.lat,
+                  longitude: coordinate.lng,
+                });
+                setPickupFlag(true);
+              }}
+              query={{
+                key: GoogleApikey,
+                language: 'en',
+                components: 'country:PK',
+                types: 'establishment',
+                // location: `${region.latitude}, ${region.longitude}`
+              }}
+              styles={{
+                // container: {
+                //   width: wp('80%'),
+                //   // backgroundColor: '#FAFAFA',
+                // },
+                listView: {
+                  backgroundColor: '#FAFAFA',
+                },
+                textInput: {
+                  height: 38,
+                  color: Colors.lightPurple,
+                  fontSize: 16,
+                  borderRadius: 15,
+                  // borderWidth: 2,
+                },
+                predefinedPlacesDescription: {
+                  color: 'red',
+                },
+              }}
+              listEmptyComponent={() => (
+                <View style={{flex: 1, margin: 10}}>
+                  <Text style={{color: Colors.lightPurple, fontSize: 15}}>
+                    No results were found
+                  </Text>
+                </View>
+              )}
+            />
+
+            <View style={{position: 'absolute', right: 25, top: 25}}>
+              <TouchableOpacity
+                onPress={() => placesRef.current?.setAddressText('')}>
+                <CustomIcons
+                  type="entypo"
+                  name="circle-with-cross"
+                  size={25}
+                  color={Colors.lightPurple}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <MapView
+              ref={mapRef}
+              customMapStyle={mapStyle}
+              provider={PROVIDER_GOOGLE}
+              // loadingEnabled={vehicles?.length > 0 ? false : true}
+              // showsUserLocation={true}
+              showsMyLocationButton={true}
+              loadingIndicatorColor={Colors.lightPurple}
+              style={{
+                width: Dimensions.get('window').width - 50,
+                height: Dimensions.get('window').height - 300,
+                // : Dimensions.get('window').height,
+              }}
+              region={{
+                latitude: pickupLocation.latitude,
+                longitude: pickupLocation.longitude,
+                latitudeDelta: 0.0012,
+                longitudeDelta: 0.0012,
+              }}
+              // onReady={result => {
+              //   console.log(`Distance: ${result.distance} km`);
+              //   console.log(`Duration: ${result.duration} min.`);
+
+              //   MapView.fitToCoordinates(result.coordinates, {
+              //     edgePadding: {
+              //       right: width / 20,
+              //       bottom: height / 20,
+              //       left: width / 20,
+              //       top: height / 20,
+              //     },
+              //   });
+              // }}
+              mapType="standard">
+              {/* {vehicles?.length > 0 ? (
+          vehicles.map((marker, index) => {
+            return (
+              <CustomMarker
+                key={marker._id}
+                id={marker._id}
+                selectedMarker={selectedMarker}
+                latitude={marker.pickupLocation.coordinates[1]}
+                longitude={marker.pickupLocation.coordinates[0]}></CustomMarker>
+            );
+          })
+        ):null} */}
+              <Marker
+                coordinate={{
+                  latitude: pickupLocation.latitude,
+                  longitude: pickupLocation.longitude,
+                  latitudeDelta: 0.0012,
+                  longitudeDelta: 0.0012,
+                }}></Marker>
+            </MapView>
+          </View>
+        </View>
+      </ModalPoup>
     </View>
   );
 };
@@ -1214,6 +1587,28 @@ const styles = StyleSheet.create({
 
     // backgroundColor: '#05375a',
     // backgroundColor: '#3E3D40',
+  },
+  inputContainer: {
+    height: 60,
+    // padding:2,
+    // backgroundColor: Colors.White,
+    borderRadius: 18,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 15,
+    // shadowColor: Colors.Black,
+    // shadowOpacity: 1,
+    // shadowRadius: 2,
+    // shadowOffset: {
+    //   height: 0,
+    //   width: 0,
+    // },
+    // elevation: ,
+    borderWidth: 1,
+    borderColor: Colors.darkgrey,
+    // alignItems:'center'
   },
   avatar: {
     paddingTop: 20,

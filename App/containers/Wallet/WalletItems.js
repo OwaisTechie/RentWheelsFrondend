@@ -1,15 +1,23 @@
-import {View, Text, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import { Colors } from '../../Theme';
+import {Colors} from '../../Theme';
+import moment from 'moment';
 
 const WalletItems = props => {
-  console.log('PROPS ->> ', props);
   const {item} = props;
+  console.log('PROPS ->> ', props.item);
   return (
     <Pressable
       style={({pressed}) => [
@@ -17,31 +25,31 @@ const WalletItems = props => {
           backgroundColor: pressed ? '#FAFAFA' : 'white',
         },
         styles.item,
-      ]}
-      // onPress={() => {
-      //   onPressElement
-      //     ? onPressElement(item._id, pickupLocation[1], pickupLocation[0])
-      //     : null;
-      // }}
-      >
-      {/* <View style={styles.logo}>
-        <Image
-          source={{
-            uri: 'https://i.pinimg.com/originals/5d/4d/b6/5d4db6e517a689e87c4266f61d77f803.png',
-          }}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
-      </View> */}
-      <View style={{flexDirection: 'row',width:'100%',justifyContent:"space-between"}}>
-        <View>
-          <Text style={styles.title}>{item?.name}</Text>
-          <Text style={styles.direction}>{item?.bookingId}</Text>
-          
+      ]}>
+      <View style={{width: '100%'}}>
+        <View style={styles.Section}>
+          <Text style={styles.title}>From :</Text>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              // textAlign:'center',
+              color: Colors.paleorange,
+            }}>
+            {item?.fromUser.username}
+          </Text>
         </View>
         <View>
-          <View style={{flexDirection: 'column',width:'100%'}}>
-            
+          <View style={styles.Section}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                textAlign: 'center',
+                color: Colors.lightPurple,
+              }}>
+              Paid Amount :
+            </Text>
             <Text
               style={{
                 fontSize: 14,
@@ -49,32 +57,77 @@ const WalletItems = props => {
                 // textAlign:'center',
                 color: Colors.paleorange,
               }}>
-              Rs. {item.balance}
+              Rs. {item.amount}
+            </Text>
+          </View>
+        </View>
+        <View>
+          <View style={styles.Section}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                textAlign: 'center',
+                color: Colors.lightPurple,
+              }}>
+              Service Charges :
             </Text>
             <Text
               style={{
                 fontSize: 14,
                 fontWeight: '600',
-                textAlign:'center',
-                color: Colors.lightPurple,
+                // textAlign:'center',
+                color: Colors.paleorange,
               }}>
-              {item.date}
+              Rs. {item.serviceCharges}
             </Text>
           </View>
-          {/* <Text style={styles.title}>{"item?.noOfSeats"} Seater</Text>
-          <View>
-            <TouchableOpacity
-              // onPress={() =>
-              //   navigation.navigate('VehicleInfo', {
-              //     vehicle: item,
-              //   })
-              // }
-              >
-              <Text style={{marginVertical: 7, color: Colors.paleorange}}>
-                View Details
-              </Text>
-            </TouchableOpacity>
-          </View> */}
+        </View>
+        <View>
+          <View style={styles.Section}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                textAlign: 'center',
+                color: Colors.lightPurple,
+              }}>
+              Date :
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                textAlign: 'center',
+                color: Colors.lightPurple,
+              }}>
+              {moment(item.transactionDate).format('DD-MM-YYYY')}
+            </Text>
+          </View>
+        </View>
+        <View>
+          <View style={styles.Section}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                textAlign: 'center',
+                color: Colors.lightPurple,
+              }}>
+              Booking ID :
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '600',
+                textAlign: 'center',
+                color: Colors.lightPurple,
+              }}>
+              {item.bookingId}
+            </Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -101,6 +154,11 @@ const styles = StyleSheet.create({
     padding: 15,
 
     elevation: 8,
+  },
+  Section: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 3,
   },
   logo: {
     height: 100,

@@ -22,6 +22,7 @@ import {getHeaders} from '../../../Constant/requestHeaders';
 // };
 
 const  AuthToken = async (onSuccess, onFailure) => {
+  console.log("AUTHTOKEN")
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
   const URL = `${baseUrl}${endpoint.user.isValidToken}`;

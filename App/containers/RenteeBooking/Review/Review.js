@@ -19,6 +19,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {Rating} from 'react-native-ratings';
 import CustomInput from '../../../Components/CustomTextField/CustomInput';
 import CustomButton from '../../../Components/Custom_btn/CustomButton';
+import { addReview } from '../apiCalls/apiCall';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Review = props => {
@@ -26,7 +27,8 @@ const Review = props => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [loader, setLoader] = useState(false);
-
+  const vehicleId = route.params.vehicleId;
+  // const []
   const info = {
     name: 'Owais',
     phone: '+923472913440',
@@ -48,6 +50,7 @@ const Review = props => {
       rating: rating,
     };
     console.log('PAYLOAD ->> ', Payload);
+    addReview(Payload,vehicleId,onSuccess, onFailure)
   };
 
   return (

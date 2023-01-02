@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect} from 'react';
+import React, {useState, useLayoutEffect, useEffect} from 'react';
 import {
   View,
   Text,
@@ -34,15 +34,15 @@ import {
   setCarAddress,
   setCarLatLong,
 } from '../../Redux/auth/Reducer/AddressReducer';
-import {isVerified} from './apiCalls/apiCalls';
+import {getReviewsOfVehicle, isVerified} from './apiCalls/apiCalls';
 import CustomSwitch from '../../Components/Custom_Switch/CustomSwitch';
 import ReviewList from './ReviewList/ReviewList';
 import moment from 'moment';
 
 const VehicleDetails = props => {
   const {navigation, route} = props;
-
-  const [transactionDetail, setTransactionDetail] = useState([
+  const [reviewLoading,setReviewLoading] = useState(true)
+  const [Reviews, setReviews] = useState([
     {
       bookingId: '1',
       name: 'Owais',
@@ -110,7 +110,7 @@ const VehicleDetails = props => {
     fuelType: Vehicle?.fuelType,
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(
       setCarLatLong({
         latitude: location[0],
@@ -121,12 +121,26 @@ const VehicleDetails = props => {
     Geocoder.from(location[0], location[1])
       .then(json => {
         var addressComponent = json.results[0].formatted_address;
-        console.log('ADDRESS ->> ', addressComponent);
         dispatch(setCarAddress(addressComponent));
         setDestination(addressComponent);
       })
       .catch(error => console.warn(error));
   }, []);
+  useEffect(() => {
+    setReviewLoading(true);
+    let VehicleID = Vehicle._id
+    getReviewsOfVehicle(VehicleID,onSuccessReview, onSuccessFailure)
+  }, []);
+
+  const onSuccessReview = (data) => {
+    console.log("DATA ->> ",data)
+    let {Payload} = data;
+    setReviewLoading(false);
+    setReviews(Payload)
+  }
+  const onSuccessFailure = () => {
+    onSuccessFailure(false);
+  }
 
   const [vehiclesCategory, setVehiclesCategory] = useState(
     Vehicle?.vehicleCategory,
@@ -165,7 +179,7 @@ const VehicleDetails = props => {
   };
 
   const onFailure = () => {
-    console.log('onFailure');
+
     setIsLoading(false);
   };
 
@@ -509,7 +523,7 @@ const VehicleDetails = props => {
               nestedScrollEnabled={true}>
               <View>
                 <FlatList
-                  data={transactionDetail}
+                  data={Reviews}
                   contentContainerStyle={styles.contentContainer}
                   //   refreshing={true}
                   // style={{height: '100%'}}
@@ -520,7 +534,6 @@ const VehicleDetails = props => {
                   renderItem={({item}) => (
                     <ReviewList
                       item={item}
-                      onPressElement={() => console.log('first')}
                     />
                   )}
                 />

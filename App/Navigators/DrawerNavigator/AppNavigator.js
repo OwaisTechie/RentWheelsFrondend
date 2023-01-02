@@ -259,6 +259,25 @@ const AppStack = props => {
               }}
             />
             <Drawer.Screen
+              name="Wallet"
+              component={Wallet}
+              options={{
+                // headerShown: false,
+                drawerLabel: 'Wallet',
+                // initialParams={{ itemId: 42 }}
+                drawerIcon: ({color}) => (
+                  <CustomIcons
+                    type="fontisto"
+                    name="wallet"
+                    size={25}
+                    color={color}
+                  />
+                ),
+                headerTitle: props => <Headercenter {...props} />,
+              }}
+            />
+
+            <Drawer.Screen
               name={'RegisteredVehicles'}
               component={RegisteredVehicles}
               options={{

@@ -1,11 +1,20 @@
-import {View, Text, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import React from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import { Colors } from '../../../Theme';
+import {Colors, General_Styles, Images} from '../../../Theme';
+import {Rating} from 'react-native-ratings';
 
 const ReviewList = props => {
   console.log('PROPS ->> ', props);
@@ -17,64 +26,130 @@ const ReviewList = props => {
           backgroundColor: pressed ? '#FAFAFA' : 'white',
         },
         styles.item,
-      ]}
-      // onPress={() => {
-      //   onPressElement
-      //     ? onPressElement(item._id, pickupLocation[1], pickupLocation[0])
-      //     : null;
-      // }}
-      >
-      {/* <View style={styles.logo}>
-        <Image
-          source={{
-            uri: 'https://i.pinimg.com/originals/5d/4d/b6/5d4db6e517a689e87c4266f61d77f803.png',
-          }}
-          style={styles.logoImage}
-          resizeMode="contain"
-        />
-      </View> */}
-      <View style={{flexDirection: 'row',width:'100%',justifyContent:"space-between"}}>
+      ]}>
+      <View style={{width: '100%'}}>
         <View>
-          <Text style={styles.title}>{item?.name}</Text>
-          <Text style={styles.direction}>{item?.bookingId}</Text>
-          
+          {/* <View>
+            <View
+              style={{
+                justifyContent: 'center',
+              }}>
+              <ImageBackground
+                source={Images.profileGif}
+                style={{
+                  height: 100,
+                  width: 100,
+                  resizeMode: 'contain',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={Images.menProfile}
+                  style={{
+                    height: 50,
+                    width: 60,
+                    resizeMode: 'contain',
+                    alignSelf: 'center',
+                  }}
+                />
+              </ImageBackground>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontWeight: 'bold',
+                  marginTop: 3,
+                  fontSize: General_Styles.generalWidth / 15,
+                }}>
+                {item.user.username ? item.user.username : 'Owais'}
+              </Text>
+            </View>
+          </View> */}
+          <View style={styles.logo}>
+            <ImageBackground
+              source={Images.profileGif}
+              style={{
+                height: 100,
+                width: 100,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                justifyContent: 'center',
+              }}>
+              <Image
+                source={Images.menProfile}
+                style={{
+                  height: 50,
+                  width: 60,
+                  resizeMode: 'contain',
+                  alignSelf: 'center',
+                }}
+              />
+            </ImageBackground>
+            <View>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontWeight: 'bold',
+                  marginTop: 3,
+                  color:Colors.lightPurple,
+                  fontSize: General_Styles.generalWidth / 15,
+                }}>
+                {item?.user?.username ? item?.user?.username : 'Owais'}
+              </Text>
+            </View>
+          </View>
         </View>
         <View>
-          <View style={{flexDirection: 'column',width:'100%'}}>
-            
+          <View style={styles.Section}>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: '600',
-                // textAlign:'center',
-                color: Colors.paleorange,
-              }}>
-              Rs. {item.balance}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: '600',
-                textAlign:'center',
+                // textAlign: 'center',
                 color: Colors.lightPurple,
               }}>
-              {item.date}
+              Rating :
             </Text>
+            <View>
+              <Rating
+                type="custom"
+                ratingColor={Colors.paleorange}
+                // ratingBackgroundColor="#c8c7c8"]
+                startingValue={item?.rating}
+                readonly
+                ratingCount={5}
+                imageSize={15}
+                // onFinishRating={this.ratingCompleted}
+                style={{paddingVertical: 3}}
+              />
+            </View>
           </View>
-          {/* <Text style={styles.title}>{"item?.noOfSeats"} Seater</Text>
-          <View>
-            <TouchableOpacity
-              // onPress={() =>
-              //   navigation.navigate('VehicleInfo', {
-              //     vehicle: item,
-              //   })
-              // }
-              >
-              <Text style={{marginVertical: 7, color: Colors.paleorange}}>
-                View Details
-              </Text>
-            </TouchableOpacity>
-          </View> */}
+        </View>
+        <View style={{overflow:'scroll'}}>
+          <View style={{paddingHorizontal:15,paddingBottom:5,flexDirection:'column'}}>
+            <View>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '600',
+                // overflow:'hidden',
+                textAlign: 'center',
+                color: Colors.Black,
+              }}>
+             Description 
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                // fontWeight: '600',
+                // overflow:'hidden',
+                textAlign: 'justify',
+                color: Colors.backgroundDark,
+              }}>
+              {/* {item.text} */}
+              Present the ideas in the original text accurately, ensuring you cover the main question the text attempts to address.
+            </Text>
+            </View>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -90,6 +165,12 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // marginVertical: 10,
   },
+  Section: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    marginVertical: 3,
+  },
   item: {
     flexDirection: 'row',
     margin: 10,
@@ -98,17 +179,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'center',
     borderRadius: 20,
-    padding: 15,
+    padding: 5,
 
     elevation: 8,
-  },
-  logo: {
-    height: 100,
-    width: 100,
-    borderRadius: 50,
-    marginRight: 19,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
   },
   logoImage: {
     height: '80%',
@@ -123,6 +196,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: '#989CA5',
+  },
+  logo: {
+    flexDirection: 'row',
+    height: 100,
+    // width: 100,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 

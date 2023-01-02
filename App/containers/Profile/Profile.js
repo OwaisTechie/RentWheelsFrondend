@@ -56,6 +56,7 @@ const Profile = () => {
   const [phoneInput,setPhoneInput] = useState('');
   const [email,setEmail] = useState('');
   const [cnicFront, setCnicFront] = useState('');
+  const [profilePicture,setprofilePicture] = useState('');
  
   const [cnicFrontImage, setCnicFrontImage] = useState('');
   const [cnicBackImage, setCnicBackImage] = useState('');
@@ -231,11 +232,23 @@ const Profile = () => {
     requestExternalWritePermission();
   }, []);
   useEffect(() => {
-    console.log("USERID ->> ",JSON.parse(userId).phone);
-    var {username,email,phone} = JSON.parse(userId);
+    console.log("USERID ->> ",userId);
+    var {username,email,phone,profilePicture,verification} = userId;
+    let {image,cnicBack,cnicFront,licenseBack,licenseFront,utilityBill} = verification;
+    console.log("utilityBills ->> ",utilityBill);
+    console.log("utilityBills ->> ",licenseFront);
+    console.log("utilityBills ->> ",licenseBack);
     setPhoneInput(phone);
+    setFormattedValue(phone);
     setUsername(username);
     setEmail(email);
+    setCnicBack(cnicBack);
+    setCnicFront(cnicFront);
+    setLicenseFront(licenseFront);
+    setlicenseBack(licenseBack);
+    setCnicVerification(image);
+    setUtilityBills(utilityBills);
+    setprofilePicture(profilePicture);
   }, [userId]);
 
   // function ProfileView() {
@@ -1010,6 +1023,13 @@ const Profile = () => {
     );
   };
 
+  const updateUser = () => {
+    console.log("USERS ->> ",email)
+    console.log("phoneInput ->> ",phoneInput)
+    console.log("formattedValue ->> ",formattedValue)
+    console.log("USERS ->> ",username)
+  }
+
   const openCameraLibray = () => {
     // setOpenCamera(true)
     setShowFilterModal(false);
@@ -1083,9 +1103,9 @@ const Profile = () => {
                   }}>
                   <Image
                     source={
-                      info.gender != 'men'
+                      profilePicture == ''
                         ? Images.menProfile
-                        : Images.womenProfile
+                        : {uri:profilePicture}
                     }
                     style={{
                       height: General_Styles.generalHeight / 10,
@@ -1102,7 +1122,7 @@ const Profile = () => {
                     marginTop: 10,
                     fontSize: General_Styles.generalWidth / 15,
                   }}>
-                  {info.name}
+                  {username ? username : "Owais"}
                 </Text>
               </View>
               <View style={styles.fieldContainer}>
@@ -1140,11 +1160,28 @@ const Profile = () => {
                     // onBlur={'handleBlur('username')'}
                     // error={errors.username}
                     // touched={touched.username}
-                    onChangeText={e => console.log(e)}
+                    onChangeText={e => setEmail(e)}
+                    keyboardAppearance="dark"
+                  />
+                  <CustomInput
+                    placeholder="Enter your Phone Number"
+                    iconName="account-key-outline"
+                    type="materialCommunity"
+                    label="Phone"
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    value={phoneInput}
+                    // onSubmitEditing={() => {
+                    //   password.current.focus();
+                    // }}
+                    // onBlur={'handleBlur('username')'}
+                    // error={errors.username}
+                    // touched={touched.username}
+                    onChangeText={e => setPhoneInput(e)}
                     keyboardAppearance="dark"
                   />
 
-                  <View>
+                  {/* <View>
                     <Text
                       style={{
                         marginVertical: hp('1%'),
@@ -1157,8 +1194,8 @@ const Profile = () => {
                   </View>
                   <PhoneInput
                     // ref={phoneInput}
-                    // value={phoneInput}
-                    defaultValue={phoneInput}
+                    value={phoneInput}
+                    // defaultValue={phoneInput}
                     containerStyle={{
                       height: hp('8%'),
                       width: hp('43%'),
@@ -1184,7 +1221,7 @@ const Profile = () => {
                     withDarkTheme
                     withShadow
                     // autoFocus
-                  />
+                  /> */}
                   {/* <CustomInput
                     placeholder="Enter your Address"
                     iconName="account-key-outline"
@@ -1742,7 +1779,7 @@ const Profile = () => {
             {switchValue == '1' ? (
               <CustomButton
                 loader={loader}
-                onPress={() => 'Update User'}
+                onPress={updateUser}
                 title="Update User"
               />
             ) : (

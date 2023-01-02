@@ -1,38 +1,25 @@
 import axios from 'axios';
-import {Config} from '../../../Config/Config';
+// import config from "../../../../config";
+import {Config} from '../../../../Config/Config';
 import Toast from 'react-native-toast-message';
-import {getHeaders} from '../../../Constant/requestHeaders';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getHeaders} from '../../../../Constant/requestHeaders';
 
-export function loginRequest(payload, onSuccess, onFailure){
+export async function getRentalBookings(onSuccess, onFailure) {
+  const header = await getHeaders().then(data => {
+    return data;
+  });
+  console.log('HEADERS ->>', header);
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
   console.log('baseURL ==>', baseUrl);
   console.log('Config ==>', Config);
-  const URL = `${baseUrl}${endpoint.user.login}`;
+  const URL = `${baseUrl}${endpoint.bookings.getmybookings}?isBooking=true&isRenter=true`;
   console.log('baseURL1 ==>', URL);
-  console.log('Payload =>> ', payload);
 
   axios
-    .post(URL, payload)
+    .get(URL, header)
     .then(res => {
-        Toast.show({
-          topOffset: 60,
-          type: 'success',
-          text1: 'Success',
-          text2: 'Successfully Logged In',
-          visibilityTime: 5000,
-          autoHide: true,
-        });
-        let header = res.headers['set-cookie'][0];
-        console.log('TOKEN =>> ', header);
-        let Token = header.split('=')[1].split(';')[0].trim();
-        console.log(Token);
-
-        res['Token'] = Token;
-
-        onSuccess(res);
-        
+      onSuccess(res.data);
     })
     .catch(error => {
       console.log(error, 'Error...');
@@ -89,28 +76,32 @@ export function loginRequest(payload, onSuccess, onFailure){
         // });
       }
     });
-};
-export function forgotPassword(payload, onSuccess, onFailure){
+}
+export async function approveRejectBooking(Payload, onSuccess, onFailure) {
+  const header = await getHeaders().then(data => {
+    return data;
+  });
+  console.log('HEADERS ->>', header);
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
-
-  const URL = `${baseUrl}${endpoint.user.forgotPassword}`;
+  console.log('Config ==>', Config);
+  const URL = `${baseUrl}${endpoint.bookings.approveReject}`;
   console.log('baseURL1 ==>', URL);
-  console.log('Payload =>> ', payload);
 
   axios
-    .post(URL, payload)
+    .post(URL, Payload, header)
     .then(res => {
-        Toast.show({
-          topOffset: 60,
-          type: 'success',
-          text1: 'Success',
-          text2: res.data.Message,
-          visibilityTime: 5000,
-          autoHide: true,
-        });
-        console.log("Response => ",res)
-        onSuccess(res);
+
+      console.log("APPROVE ->> ",res.data);
+      Toast.show({
+        topOffset: 60,
+        type: 'success',
+        text1: res.data.Message,
+        text2: `${res.data.responseCode}`,
+        visibilityTime: 10000,
+        autoHide: true,
+      });
+      onSuccess(res.data);
     })
     .catch(error => {
       console.log(error, 'Error...');
@@ -167,34 +158,31 @@ export function forgotPassword(payload, onSuccess, onFailure){
         // });
       }
     });
-};
-export function verifyOtp(payload, onSuccess, onFailure){
+}
+export async function startRental(Payload, onSuccess, onFailure) {
+  const header = await getHeaders().then(data => {
+    return data;
+  });
+  console.log('HEADERS ->>', header);
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
-
-  const URL = `${baseUrl}${endpoint.user.verifyOtp}`;
+  console.log('Config ==>', Config);
+  const URL = `${baseUrl}${endpoint.bookings.startrental}`;
   console.log('baseURL1 ==>', URL);
-  console.log('Payload =>> ', payload);
 
   axios
-    .post(URL, payload)
+    .post(URL, Payload, header)
     .then(res => {
-        Toast.show({
-          topOffset: 60,
-          type: 'success',
-          text1: 'Success',
-          text2: res.data.Message,
-          visibilityTime: 5000,
-          autoHide: true,
-        });
-        let header = res.headers['set-cookie'][0];
-        console.log('TOKEN =>> ', header);
-        let Token = header.split('=')[1].split(';')[0].trim();
-        console.log(Token);
+      Toast.show({
+        topOffset: 60,
+        type: 'success',
+        text1: res.data.Message,
+        text2: res.data.status,
+        visibilityTime: 3000,
+        autoHide: true,
+      });
 
-        res['Token'] = Token;
-
-        onSuccess(res);
+      onSuccess(res.data);
     })
     .catch(error => {
       console.log(error, 'Error...');
@@ -251,29 +239,32 @@ export function verifyOtp(payload, onSuccess, onFailure){
         // });
       }
     });
-};
-export async function  changePassword(payload, onSuccess, onFailure){
+}
+
+export async function activeRentals(onSuccess, onFailure) {
+  const header = await getHeaders().then(data => {
+    return data;
+  });
+  console.log('HEADERS ->>', header);
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
-
-  const URL = `${baseUrl}${endpoint.user.changePassword}`;
+  console.log('Config ==>', Config);
+  const URL = `${baseUrl}${endpoint.bookings.getmybookings}?isBooking=false&isRenter=true`;
   console.log('baseURL1 ==>', URL);
-  console.log('Payload =>> ', payload);
 
-  const header = await getHeaders()
-  .then(data => {return data})
   axios
-    .post(URL, payload,header)
+    .get(URL, header)
     .then(res => {
-        Toast.show({
-          topOffset: 60,
-          type: 'success',
-          text1: 'Success',
-          text2: res.data.Message,
-          visibilityTime: 5000,
-          autoHide: true,
-        });
-        onSuccess(res);
+      Toast.show({
+        topOffset: 60,
+        type: 'success',
+        text1: res.data.Message,
+        text2: res.data.status,
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+
+      onSuccess(res.data);
     })
     .catch(error => {
       console.log(error, 'Error...');
@@ -330,5 +321,5 @@ export async function  changePassword(payload, onSuccess, onFailure){
         // });
       }
     });
-};
+}
 

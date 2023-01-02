@@ -1,6 +1,9 @@
+
+import ip from './IpAddress'
+console.log("GET IP =>> ",ip.getIp())
 export const Config = {
   baseUrl: {
-    main: 'http://192.168.0.107:8000/api/v1/'
+    main: `http://${ip.getIp()}:8000/api/v1/`
   },
   endpoint: {
     user:{
@@ -26,6 +29,12 @@ export const Config = {
       approveReject:'bookings/approveorrejectbooking',
       startrental:'bookings/startrental',
       endrental:'bookings/endrental'
+    },
+    Wallet:{
+      getWalletDetails:'payments/getpayments'
+    },
+    Reviews:{
+      getAllReviewsOfVehicle:'/reviews',
     },
     compareFace: '/test',
   }

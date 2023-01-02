@@ -123,7 +123,7 @@ const MainApp = () => {
       let payload={
         user:userMode
       }
-      
+      console.log("HAHA")
       dispatch(modeChange(payload))
       if (userToken != null || userToken != undefined) {
         console.log("HAHA")
