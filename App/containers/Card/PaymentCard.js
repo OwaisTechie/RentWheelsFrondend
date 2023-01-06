@@ -24,9 +24,11 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import { addBookings } from './apiCalls/apiCalls';
+import { useNavigation,StackActions  } from '@react-navigation/native';
 const PaymentCard = props => {
   // const {navigation, route} = props;
-  // const {booking} = props.route.params;
+  const navigation = useNavigation();
+  const {booking} = props.route.params;
   const [isFlipped, setIsFlipped] = useState(false);
   const [cardHolderName, setCardHolderName] = useState('CARD HOLDER NAME');
   const [cvv, setCvv] = useState(123);
@@ -38,9 +40,6 @@ const PaymentCard = props => {
   const Cvv = useRef();
   const expire = useRef();
   const cardNumber = useRef();
-
-  // const Booking = route?.params.booking;
-  // console.log('Booking ->> ', Booking);
 
   const LoginSchema = Yup.object().shape({
     HolderName: Yup.string().required('Card Holder Name is Required'),
@@ -59,10 +58,7 @@ const PaymentCard = props => {
   });
 
   const onhandleChange = (name, value, extracted) => {
-    console.log('extracted ->> ', extracted);
-    console.log('name,value, ->> ', name, value);
     if (name == 'Cvv') {
-      console.log('CSSS');
       setIsFlipped(true);
       setCvv(value);
       handleChange(name)(value);
@@ -74,7 +70,6 @@ const PaymentCard = props => {
   };
 
   const onChangeText = (name, value) => {
-    console.log('AAAA ->> ', name, value);
     if (name == 'HolderName') {
       setIsFlipped(false);
       setCardHolderName(value);
@@ -91,8 +86,6 @@ const PaymentCard = props => {
       validationSchema: LoginSchema,
       initialValues: {HolderName: '', Cvv: '', expire: '', cardNumber: ''},
       onSubmit: payload => {
-        console.log('PAYLOAD ->> ', payload);
-
         let Payload = {
           startTime:booking.startTime,
           endTime:booking.endTime,
@@ -102,34 +95,19 @@ const PaymentCard = props => {
           cardHolderName:payload.HolderName,
           expiry:payload.expire
         }
-        setLoader(true);
+
         addBookings(Payload,onSuccess,onFailure);
-        // setLoader(!loader);
-        // var Payload = {
-        //   ...payload,
-        //   firebaseToken: fcmToken,
-        // };
-        // console.log("navigation.navigate --> ",navigation.navigate)
-        // navigation.navigate('HomeNavigator');
-        // loginRequest(Payload, onSuccess, onFailure);
+
       },
     });
 
-  // const handleSubmit = useCallback(() => {
-  //   if (creditCardRef.current) {
-  //     const {error, data} = creditCardRef.current.submit();
-  //     console.log('ERROR: ', error);
-  //     console.log('CARD DATA: ', data);
-  //   }
-  // }, []);
   
     const onSuccess = (data) => {
       setLoader(false);
-      console.log("data ->> ",data);
+      navigation.dispatch(StackActions.popToTop());
     }
     const onFailure = () => {
       setLoader(false);
-      console.log("Failure")
     }
 
   const onPressLearnMore = () => {
@@ -239,31 +217,10 @@ const PaymentCard = props => {
                   onChangeText={(value, extracted) => {
                     onhandleChange('Cvv', value, extracted);
                   }}
-                  // render={(props) => <TextInputMask {...props} mask={masked} />}
-                  // onFocus={() => {
-                  //   onFocus();
-                  //   setIsFocused(true);
-                  // }}
-                  // onBlur={() => {
-                  //   setIsFocused(true);
-                  // }}
-                  // render={props => (
-                  //   <MaskInput
-                  //     value={props}
-                  //     onChangeText={(masked, unmasked) => {
-                  //       // setPhone(masked); // you can use the unmasked value as well
-
-                  //       // assuming you typed "9" all the way:
-                  //       console.log(masked); // (99) 99999-999
-                  //     }}
-                  //     mask={masked}
-                  //   />
-                  // )}
                   style={{
                     color: Colors.Black,
                     width: widthPercentageToDP('80%'),
                   }}
-                  // style={styles.maskedInput}
                   mask={'[000]'}
                   {...props}
                 />
@@ -342,7 +299,7 @@ const PaymentCard = props => {
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.title}>Total Amount:</Text>
-            <Text style={styles.direction}>Rs. 123sdsdsd2</Text>
+            <Text style={styles.direction}>Rs. {booking.total}</Text>
           </View>
         </View>
         </View>
@@ -399,7 +356,7 @@ const styles = StyleSheet.create({
   direction: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#989CA5',
+    color: 'green',
     // color: Colors.paleorange,
   },
 });

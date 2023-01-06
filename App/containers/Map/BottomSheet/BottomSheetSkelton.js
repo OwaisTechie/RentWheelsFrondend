@@ -10,8 +10,6 @@ export const MAX_RATING_DEVIATION = 200;
 const {width, height} = Dimensions.get('window');
 
 const BottomSheetSkelton = () => {
-
-  console.log("<<-BottomSheetSkelton->>")
   return (
     <ScrollView
     style={{flex: 1}}

@@ -149,7 +149,7 @@ export default Login = ({navigation}) => {
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log('Authorization status:', authStatus);
+ 
       getToken();
     } else {
       console.log('NOT AUTHORIZED');
@@ -162,9 +162,8 @@ export default Login = ({navigation}) => {
       try {
         await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
-        console.log('token', token);
+  
         if (token) {
-          console.log('New Token ->>', token);
           setFcmToken(token);
 
           //   } catch (err) {
@@ -209,8 +208,6 @@ export default Login = ({navigation}) => {
       });
 
     messaging().onMessage(async remoteMessage => {
-      console.log('RE', remoteMessage);
-      console.log('Body ->> ', remoteMessage.notification.android);
 
       const channelId = Math.random().toString(36).substring(7);
       createChannel(channelId);
@@ -227,41 +224,7 @@ export default Login = ({navigation}) => {
     });
   };
 
-  // const sendFcmToken = async () => {
-  //   try {
-  //     await messaging().registerDeviceForRemoteMessages();
-  //     const token = await messaging().getToken();
-  //     console.log("TOKEN ->> ",token)
-  //     await axios.post('http://192.168.0.107:8000/api/v1/users/noti', {token})
-  //     .then((res) => {
-  //       console.log("Response ->> ",res.data);
-  //     });
-  //   } catch (err) {
-  //     //Do nothing
-  //     console.log(err.response.data);
-  //     return;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   sendFcmToken();
-  // }, []);
-
-  // const getToken = async () => {
-  //   let firebaseToken = await messaging().getToken();
-  //   console.log("firebaseToken -> ",firebaseToken)
-  // }
-  // const NotificationListner = async () => {
-
-  //   messaging().getInitialNotification().then(remoteMessage => {
-  //     if(remoteMessage){
-  //       console.log(
-  //         'Notification caused app to open from quit state: ',
-  //         remoteMessage.notification
-  //       )
-  //     }
-  //   } )
-  // }
+  
 
   const forgotEmailHandler = payload => {
     const data = {
@@ -358,19 +321,18 @@ export default Login = ({navigation}) => {
           ...payload,
           firebaseToken: fcmToken,
         };
-        // console.log("navigation.navigate --> ",navigation.navigate)
-        // navigation.navigate('HomeNavigator');
+   
         loginRequest(Payload, onSuccess, onFailure);
       },
     });
 
   const onSuccess = async response => {
+    console.log("response.data.Payload ->> ",response.data.Payload)
     const payload = {
       userToken: response.Token,
       user: response.data.Payload,
       isLoading: false,
     };
-    console.log("first =>>" ,payload);
     let Mode = {
       user: 'P',
     };

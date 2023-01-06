@@ -22,12 +22,12 @@ import { useSelector } from 'react-redux';
 export function ListItem(props) {
   const {item, onPressElement, address} = props;
   const navigation = useNavigation();
-  const vehicleCategory = item?.vehicleCategory;
+  const vehicleCategory = item;
   const pickupLocation = item?.pickupLocation?.coordinates;
   const Charges = item?.selfDriveDailyCharges;
   // const userAddress = useSelector(state => state.address.userAddress);
   // console.log("userAddress ->> ",userAddress)
-  let image = item?.images[0];
+  let image = item?.vehicleCategory.image;
   // const [skeletonLoader, setskeletonLoader] = useState(true);
   image = getLocalHost(image);
   
@@ -46,7 +46,7 @@ export function ListItem(props) {
       <View style={styles.logo}>
         <Image
           source={{
-            uri: 'https://i.pinimg.com/originals/5d/4d/b6/5d4db6e517a689e87c4266f61d77f803.png',
+            uri: image ? image :'https://i.pinimg.com/originals/5d/4d/b6/5d4db6e517a689e87c4266f61d77f803.png',
           }}
           style={styles.logoImage}
           resizeMode="contain"

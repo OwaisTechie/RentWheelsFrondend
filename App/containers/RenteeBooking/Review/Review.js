@@ -45,6 +45,7 @@ const Review = props => {
   };
 
   const handleSubmit = () => {
+    setLoader(true)
     const Payload = {
       text: review,
       rating: rating,
@@ -52,6 +53,14 @@ const Review = props => {
     console.log('PAYLOAD ->> ', Payload);
     addReview(Payload,vehicleId,onSuccess, onFailure)
   };
+
+  const onSuccess = (dat) => {
+    setLoader(false);
+    navigation.navigate('HomeNavigator');
+  }
+  const onFailure = () => {
+    setLoader(false);
+  }
 
   return (
     <View style={styles.container}>

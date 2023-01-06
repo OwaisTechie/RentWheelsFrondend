@@ -15,16 +15,11 @@ import {AppRegistry,Platform} from 'react-native';
    // (required) Called when a remote is received or opened, or local notification is opened
    onNotification: function (notification) {
      console.log("ntf:", notification);
- 
-     // process the notification
- 
-     // (required) Called when a remote is received or opened, or local notification is opened
-    //  notification.finish(PushNotificationIOS.FetchResult.NoData);
+
    },
  
    // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
    onAction: function (notification) {
-     console.log("act:", notification.action);
      console.log("ntfact:", notification);
  
      // process the action

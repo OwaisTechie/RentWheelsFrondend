@@ -8,17 +8,16 @@ export async function getRentalBookings(onSuccess, onFailure) {
   const header = await getHeaders().then(data => {
     return data;
   });
-  console.log('HEADERS ->>', header);
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
   console.log('baseURL ==>', baseUrl);
-  console.log('Config ==>', Config);
   const URL = `${baseUrl}${endpoint.bookings.getmybookings}?isBooking=true&isRenter=true`;
   console.log('baseURL1 ==>', URL);
 
   axios
     .get(URL, header)
     .then(res => {
+      console.log("Res Data ->> ",res.data)
       onSuccess(res.data);
     })
     .catch(error => {

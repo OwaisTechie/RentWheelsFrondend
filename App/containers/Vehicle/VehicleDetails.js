@@ -18,6 +18,7 @@ import {Colors, CustomIcons} from '../../Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 import {
+  heightPercentageToDP,
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
@@ -38,60 +39,12 @@ import {getReviewsOfVehicle, isVerified} from './apiCalls/apiCalls';
 import CustomSwitch from '../../Components/Custom_Switch/CustomSwitch';
 import ReviewList from './ReviewList/ReviewList';
 import moment from 'moment';
+import BottomSheetSkelton from '../Map/BottomSheet/BottomSheetSkelton';
 
 const VehicleDetails = props => {
   const {navigation, route} = props;
-  const [reviewLoading,setReviewLoading] = useState(true)
-  const [Reviews, setReviews] = useState([
-    {
-      bookingId: '1',
-      name: 'Owais',
-      balance: '123412323',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '2',
-      name: 'Nabeegh',
-      balance: '12',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '3',
-      name: 'Muzammil',
-      balance: '12345555',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '3',
-      name: 'Muzammil',
-      balance: '12345555',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '3',
-      name: 'Muzammil',
-      balance: '12345555',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '3',
-      name: 'Muzammil',
-      balance: '12345555',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '3',
-      name: 'Muzammil',
-      balance: '12345555',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-    {
-      bookingId: '3',
-      name: 'Muzammil',
-      balance: '12345555',
-      date: moment(new Date()).format('YYYY-MM-DD'),
-    },
-  ]);
+  const [reviewLoading, setReviewLoading] = useState(true);
+  const [Reviews, setReviews] = useState([]);
 
   const [Destination, setDestination] = useState('');
   const [switchValue, setSwitchValue] = useState('1');
@@ -128,19 +81,19 @@ const VehicleDetails = props => {
   }, []);
   useEffect(() => {
     setReviewLoading(true);
-    let VehicleID = Vehicle._id
-    getReviewsOfVehicle(VehicleID,onSuccessReview, onSuccessFailure)
+    let VehicleID = Vehicle._id;
+    getReviewsOfVehicle(VehicleID, onSuccessReview, onSuccessFailure);
   }, []);
 
-  const onSuccessReview = (data) => {
-    console.log("DATA ->> ",data)
+  const onSuccessReview = data => {
+    console.log('DATA ->> ', data);
     let {Payload} = data;
     setReviewLoading(false);
-    setReviews(Payload)
-  }
+    setReviews(Payload);
+  };
   const onSuccessFailure = () => {
     onSuccessFailure(false);
-  }
+  };
 
   const [vehiclesCategory, setVehiclesCategory] = useState(
     Vehicle?.vehicleCategory,
@@ -174,13 +127,12 @@ const VehicleDetails = props => {
       });
     } else {
       setLoader(false);
-      navigation.navigate('Profile');
     }
   };
 
   const onFailure = () => {
-
-    setIsLoading(false);
+    setLoader(false);
+    navigation.navigate('Profile');
   };
 
   //   useEffect(() => {
@@ -253,7 +205,7 @@ const VehicleDetails = props => {
         <Image
           onLoadEnd={() => setLoading(false)}
           source={{
-            uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+            uri: item ? item :'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
           }}
           style={styles.renderImage}
           onLoadStart={() => setLoading(true)}
@@ -371,9 +323,9 @@ const VehicleDetails = props => {
                   margin: 10,
                 }}>
                 <View>
-                  <Text style={styles.title}>{vehiclesCategory?.brand}</Text>
+                  <Text style={styles.title}>{Vehicle.brand}</Text>
                   <Text style={styles.direction}>
-                    {vehiclesCategory?.model} {vehiclesCategory?.year}
+                    {Vehicle?.model} {Vehicle?.year}
                   </Text>
                 </View>
 
@@ -521,23 +473,35 @@ const VehicleDetails = props => {
             <ScrollView
               showsVerticalScrollIndicator={false}
               nestedScrollEnabled={true}>
-              <View>
-                <FlatList
-                  data={Reviews}
-                  contentContainerStyle={styles.contentContainer}
-                  //   refreshing={true}
-                  // style={{height: '100%'}}
-                  keyExtractor={key => {
-                    return key._id;
-                  }}
-                  showsVerticalScrollIndicator={false}
-                  renderItem={({item}) => (
-                    <ReviewList
-                      item={item}
-                    />
-                  )}
-                />
-              </View>
+              {/* <View> */}
+                {reviewLoading ? (
+                  <BottomSheetSkelton />
+                ) : Reviews?.length < 1 ? (
+                  <View
+                    style={{
+                      height:heightPercentageToDP('50%'),
+
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{color: 'black'}}>
+                      Sorry there are no Reviews
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    data={Reviews}
+                    contentContainerStyle={styles.contentContainer}
+                    //   refreshing={true}
+                    // style={{height: '100%'}}
+                    keyExtractor={key => {
+                      return key._id;
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) => <ReviewList item={item} />}
+                  />
+                )}
+              {/* </View> */}
             </ScrollView>
           )}
         </View>

@@ -8,17 +8,15 @@ export async function getRenteeBookings(onSuccess, onFailure) {
   const header = await getHeaders().then(data => {
     return data;
   });
-  console.log('HEADERS ->>', header);
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint;
-  console.log('baseURL ==>', baseUrl);
-  console.log('Config ==>', Config);
   const URL = `${baseUrl}${endpoint.bookings.getmybookings}?isBooking=true&isRenter=false`;
   console.log('baseURL1 ==>', URL);
 
   axios
     .get(URL, header)
     .then(res => {
+      console.log("RES Data ->> ",res.data.Payload.pending);
       onSuccess(res.data);
     })
     .catch(error => {

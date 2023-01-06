@@ -25,7 +25,16 @@ const CustomDrawer = props => {
   const dispatch = useDispatch();
   const navigation =useNavigation();
 
-  const {userMode,isLoading} = useSelector(state => state.auth);
+  const {userMode,isLoading,users:{user}} = useSelector(state => state.auth);
+  var  Username;
+  var  userProfile;
+  if(typeof user == "string"){
+
+    Username=JSON.parse(user);
+  }
+  else{
+    Username=user;
+  }
   // useEffect(() => {
   //   let payload;
   //   if (mode) {
@@ -108,7 +117,7 @@ const CustomDrawer = props => {
       <DrawerContentScrollView {...props}>
         <ImageBackground source={Images.menu11} style={{padding: 20}}>
           <Image
-            source={Images.user11}
+            source={Username.profilePicture ? Username.profilePicture : Images.menProfile}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text
@@ -118,7 +127,7 @@ const CustomDrawer = props => {
               fontFamily: 'Roboto-Medium',
               marginBottom: 5,
             }}>
-            Nabeegh
+            {Username.username}
           </Text>
           {/* <View style={{flexDirection: 'row'}}>
             <Text

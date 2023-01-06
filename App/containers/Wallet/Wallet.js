@@ -32,7 +32,7 @@ const Wallet = () => {
   const onSuccees = data => {
     setLoading(false);
     console.log('DAta ->> ', data);
-    setTransactionDetail(data.Payload.payments);
+    setTransactionDetail(data.Payload.Payments);
     setBalance(data.Payload.walletBalance);
   };
   const onFailure = () => {
@@ -87,7 +87,7 @@ const Wallet = () => {
         ) : transactionDetail?.length < 1 ? (
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: 'black'}}>Sorry there are no Resuls</Text>
+            <Text style={{color: 'black'}}>There are no Previous Payments</Text>
           </View>
         ) : (
           <View>

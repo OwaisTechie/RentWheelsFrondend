@@ -3,6 +3,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useCallback,
 } from 'react';
 import {
   View,
@@ -42,7 +43,11 @@ import {SIZES} from '../../Theme/Fonts';
 import axios from 'axios';
 import {getHeaders} from '../../Constant/requestHeaders';
 import {Config} from '../../Config/Config';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import {updateProfile} from './apiCalls/apiCalls';
+import {updateProfiles} from '../../Redux/auth/Reducer/authReducer';
+import Toast  from 'react-native-toast-message';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -52,24 +57,27 @@ const maskColWidth = (width - 300) / 2;
 
 const Profile = () => {
   const userId = useSelector(state => state?.auth.users.user);
-  const [username,setUsername] = useState('');
-  const [phoneInput,setPhoneInput] = useState('');
-  const [email,setEmail] = useState('');
+  const dispatch = useDispatch();
+  const [username, setUsername] = useState('');
+  const [phoneInput, setPhoneInput] = useState('');
+  const [email, setEmail] = useState('');
+  // const [profilePic, setProfilePic] = useState('');
   const [cnicFront, setCnicFront] = useState('');
-  const [profilePicture,setprofilePicture] = useState('');
- 
-  const [cnicFrontImage, setCnicFrontImage] = useState('');
-  const [cnicBackImage, setCnicBackImage] = useState('');
-  const [licenseFrontImage, setLicenseFrontImage] = useState('');
-  const [licenseBackImage, setLicenseBackImage] = useState('');
-  const [utilityBillImage, setUtilityBillImage] = useState('');
-  const [cnicVerificationImage, setCnicVerificationImage] = useState('');
+  const [profilePicture, setprofilePicture] = useState('');
+
+  // const [cnicFrontImage, setCnicFrontImage] = useState('');
+  // const [cnicBackImage, setCnicBackImage] = useState('');
+  // const [licenseFrontImage, setLicenseFrontImage] = useState('');
+  // const [licenseBackImage, setLicenseBackImage] = useState('');
+  // const [utilityBillImage, setUtilityBillImage] = useState('');
+  // const [cnicVerificationImage, setCnicVerificationImage] = useState('');
 
   const [openCamera, setOpenCamera] = useState(false);
   const [documentValue, setDocumentValue] = useState('');
 
+  const [isDocumentValidation, setIsDocumentValidation] = useState(false);
   const [cnicBack, setCnicBack] = useState('');
-
+  const [pictureImage, setPictureImage] = useState('');
   const [licenseFront, setLicenseFront] = useState('');
 
   const [licenseBack, setlicenseBack] = useState('');
@@ -141,830 +149,146 @@ const Profile = () => {
   };
 
   const updateDocument = async () => {
-    const header = await getHeaders('multipart').then(data => {
-      return data;
-    });
-    console.log('HEADERS ->>', header);
-    setLoader(true);
-    const formData = new FormData();
-
-    formData.append('cnicFront', {
-      name: cnicFrontImage.path.split('/').pop(),
-      type: cnicFrontImage.mime,
-      uri:
-        Platform.OS === 'android'
-          ? cnicFrontImage.path
-          : files.path.replace('file://', ''),
-    });
-    formData.append('cnicBack', {
-      name: cnicBackImage.path.split('/').pop(),
-      type: cnicBackImage.mime,
-      uri:
-        Platform.OS === 'android'
-          ? cnicBackImage.path
-          : files.path.replace('file://', ''),
-    });
-    formData.append('licenseFront', {
-      name: licenseFrontImage.path.split('/').pop(),
-      type: licenseFrontImage.mime,
-      uri:
-        Platform.OS === 'android'
-          ? licenseFrontImage.path
-          : files.path.replace('file://', ''),
-    });
-    formData.append('licenseBack', {
-      name: licenseBackImage.path.split('/').pop(),
-      type: licenseBackImage.mime,
-      uri:
-        Platform.OS === 'android'
-          ? licenseBackImage.path
-          : files.path.replace('file://', ''),
-    });
-    formData.append('utilityBill', {
-      name: utilityBillImage.path.split('/').pop(),
-      type: utilityBillImage.mime,
-      uri:
-        Platform.OS === 'android'
-          ? utilityBillImage.path
-          : files.path.replace('file://', ''),
-    });
-    formData.append('image', {
-      name: cnicVerificationImage.path.split('/').pop(),
-      type: cnicVerificationImage.mime,
-      uri:
-        Platform.OS === 'android'
-          ? cnicVerificationImage.path
-          : files.path.replace('file://', ''),
-    });
-    const baseUrl = Config.baseUrl.main;
-    const endpoint = Config.endpoint;
-    console.log('Config ==>', Config);
-    const URL = `${baseUrl}${endpoint.user.verifyUser}`;
-    console.log('baseURL1 ==>', URL);
-    axios
-      .post(URL, formData, header)
-      .then(response => {
-        setLoader(false);
-        Toast.show({
-          topOffset: 60,
-          type: 'success',
-          text1: 'Success',
-          text2: response.data.Message,
-          visibilityTime: 5000,
-          autoHide: true,
-        });
-      })
-      .catch(error => {
-        setLoader(false);
-        Toast.show({
-          topOffset: 60,
-          type: 'error',
-          text1: error.response.data.Message,
-          text2: `${error.response.status}`,
-          visibilityTime: 5000,
-          autoHide: true,
-        });
-        console.log('EEEE', error);
+    if (
+      cnicFront == '' ||
+      cnicBack == '' ||
+      licenseFront == '' ||
+      licenseBack == '' ||
+      utilityBills == '' ||
+      cnicVerification == ''
+    ) {
+      Alert.alert('Document Validation', 'Please fill all the Documents!', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    } else {
+      const header = await getHeaders('multipart').then(data => {
+        return data;
       });
+      console.log('HEADERS ->>', header);
+      setLoader(true);
+      const formData = new FormData();
+
+      formData.append('cnicFront', {
+        name: cnicFront.path.split('/').pop(),
+        type: cnicFront.mime,
+        uri:
+          Platform.OS === 'android'
+            ? cnicFront.path
+            : cnicFront.path.replace('file://', ''),
+      });
+      formData.append('cnicBack', {
+        name: cnicBack.path.split('/').pop(),
+        type: cnicBack.mime,
+        uri:
+          Platform.OS === 'android'
+            ? cnicBack.path
+            : cnicBack.path.replace('file://', ''),
+      });
+      formData.append('licenseFront', {
+        name: licenseFront.path.split('/').pop(),
+        type: licenseFront.mime,
+        uri:
+          Platform.OS === 'android'
+            ? licenseFront.path
+            : licenseFront.path.replace('file://', ''),
+      });
+      formData.append('licenseBack', {
+        name: licenseBack.path.split('/').pop(),
+        type: licenseBack.mime,
+        uri:
+          Platform.OS === 'android'
+            ? licenseBack.path
+            : licenseBack.path.replace('file://', ''),
+      });
+      formData.append('utilityBill', {
+        name: utilityBills.path.split('/').pop(),
+        type: utilityBills.mime,
+        uri:
+          Platform.OS === 'android'
+            ? utilityBills.path
+            : utilityBills.path.replace('file://', ''),
+      });
+      formData.append('image', {
+        name: cnicVerification.path.split('/').pop(),
+        type: cnicVerification.mime,
+        uri:
+          Platform.OS === 'android'
+            ? cnicVerification.path
+            : cnicVerification.path.replace('file://', ''),
+      });
+
+      console.log('FORM DATA', formData);
+      const baseUrl = Config.baseUrl.main;
+      const endpoint = Config.endpoint;
+      console.log('Config ==>', Config);
+      const URL = `${baseUrl}${endpoint.user.verifyUser}`;
+      console.log('baseURL1 ==>', URL);
+      axios
+        .post(URL, formData, header)
+        .then(response => {
+          setLoader(false);
+          Toast.show({
+            topOffset: 60,
+            type: 'success',
+            text1: 'Success',
+            text2: response.data.Message,
+            visibilityTime: 5000,
+            autoHide: true,
+          });
+        })
+        .catch(error => {
+          console.log("ERR ->>",error)
+          setLoader(false);
+          Toast.show({
+            topOffset: 60,
+            type: 'error',
+            text1: error.response.data.Message,
+            text2: `${error.response.status}`,
+            visibilityTime: 5000,
+            autoHide: true,
+          });
+          console.log('EEEE', error);
+        });
+    }
   };
 
   useEffect(() => {
-    requestExternalWritePermission();
-  }, []);
-  useEffect(() => {
-    console.log("USERID ->> ",userId);
-    var {username,email,phone,profilePicture,verification} = userId;
-    let {image,cnicBack,cnicFront,licenseBack,licenseFront,utilityBill} = verification;
-    console.log("utilityBills ->> ",utilityBill);
-    console.log("utilityBills ->> ",licenseFront);
-    console.log("utilityBills ->> ",licenseBack);
+    console.log('USERID ->> ', userId);
+    var userData;
+    if (typeof userId == 'string') {
+      userData = JSON.parse(userId);
+    } else {
+      userData = userId;
+    }
+    const {username, email, phone, profilePicture, verification} = userData;
+    if (verification) {
+      let {image, cnicBack, cnicFront, licenseBack, licenseFront, utilityBill} =
+        verification;
+      console.log('utilityBills ->> ', utilityBill);
+      console.log('utilityBills ->> ', licenseFront);
+      console.log('utilityBills ->> ', licenseBack);
+      setCnicBack(cnicBack);
+      setCnicFront(cnicFront);
+      setLicenseFront(licenseFront);
+      setlicenseBack(licenseBack);
+      setCnicVerification(image);
+      setUtilityBills(utilityBills);
+    }
+    setPictureImage(profilePicture);
     setPhoneInput(phone);
     setFormattedValue(phone);
     setUsername(username);
     setEmail(email);
-    setCnicBack(cnicBack);
-    setCnicFront(cnicFront);
-    setLicenseFront(licenseFront);
-    setlicenseBack(licenseBack);
-    setCnicVerification(image);
-    setUtilityBills(utilityBills);
-    setprofilePicture(profilePicture);
   }, [userId]);
 
-  // function ProfileView() {
-  //   return (
-  //     <View>
-  //       <View
-  //         style={{
-  //           height: General_Styles.generalHeight / 5,
-  //           width: General_Styles.generalWidth,
-  //           // marginBottom:General_Styles.generalWidth-,
-  //           // backgroundColor: Colors,
-  //           justifyContent: 'center',
-  //         }}>
-  //         <ImageBackground
-  //           source={Images.profileGif}
-  //           style={{
-  //             height: General_Styles.generalHeight / 6,
-  //             width: General_Styles.generalHeight / 6,
-  //             resizeMode: 'contain',
-  //             alignSelf: 'center',
-  //             justifyContent: 'center',
-  //           }}>
-  //           <Image
-  //             source={
-  //               info.gender != 'men' ? Images.menProfile : Images.womenProfile
-  //             }
-  //             style={{
-  //               height: General_Styles.generalHeight / 10,
-  //               width: General_Styles.generalHeight / 10,
-  //               resizeMode: 'contain',
-  //               alignSelf: 'center',
-  //             }}
-  //           />
-  //         </ImageBackground>
-  //         <Text
-  //           style={{
-  //             alignSelf: 'center',
-  //             fontWeight: 'bold',
-  //             marginTop: 10,
-  //             fontSize: General_Styles.generalWidth / 15,
-  //           }}>
-  //           {info.name}
-  //         </Text>
-  //       </View>
-  //       <View style={styles.fieldContainer}>
-  //         {/* <View style={styles.gap}></View> */}
-  //         {/* list start */}
-  //         <View>
-  //           <CustomInput
-  //             placeholder="Enter your username"
-  //             iconName="account-key-outline"
-  //             type="materialCommunity"
-  //             label="Username"
-  //             returnKeyType="next"
-  //             returnKeyLabel="next"
-  //             // onSubmitEditing={() => {
-  //             //   password.current.focus();
-  //             // }}
-  //             ref={username}
-  //             // onBlur={'handleBlur('username')'}
-  //             // error={errors.username}
-  //             // touched={touched.username}
-  //             onChangeText={e => console.log(e)}
-  //             keyboardAppearance="dark"
-  //           />
-  //           <CustomInput
-  //             placeholder="Enter your Email"
-  //             iconName="account-key-outline"
-  //             type="materialCommunity"
-  //             label="Email"
-  //             returnKeyType="next"
-  //             returnKeyLabel="next"
-  //             // onSubmitEditing={() => {
-  //             //   password.current.focus();
-  //             // }}
-  //             ref={email}
-  //             // onBlur={'handleBlur('username')'}
-  //             // error={errors.username}
-  //             // touched={touched.username}
-  //             onChangeText={e => console.log(e)}
-  //             keyboardAppearance="dark"
-  //           />
-
-  //           <View>
-  //             <Text
-  //               style={{
-  //                 marginVertical: hp('1%'),
-  //                 fontSize: 16,
-  //                 color: '#05375a',
-  //                 // color:Colors.grey,
-  //               }}>
-  //               Phone
-  //             </Text>
-  //           </View>
-  //           <PhoneInput
-  //             ref={phoneInput}
-  //             defaultValue={value}
-  //             containerStyle={{
-  //               height: hp('8%'),
-  //               width: hp('43%'),
-  //               backgroundColor: Colors.White,
-  //               borderRadius: 18,
-  //               borderWidth: 1,
-  //               marginBottom: hp('1%'),
-  //               borderColor: Colors.darkgrey,
-  //             }}
-  //             textContainerStyle={{
-  //               backgroundColor: Colors.White,
-  //               paddingVertical: 6,
-  //               borderRadius: 18,
-  //             }}
-  //             defaultCode="PK"
-  //             layout="first"
-  //             onChangeText={text => {
-  //               setValue(text);
-  //             }}
-  //             onChangeFormattedText={text => {
-  //               setFormattedValue(text);
-  //             }}
-  //             withDarkTheme
-  //             withShadow
-  //             // autoFocus
-  //           />
-  //           <CustomInput
-  //             placeholder="Enter your Address"
-  //             iconName="account-key-outline"
-  //             type="materialCommunity"
-  //             label="Address"
-  //             returnKeyType="next"
-  //             returnKeyLabel="next"
-  //             // onSubmitEditing={() => {
-  //             //   password.current.focus();
-  //             // }}
-  //             ref={email}
-  //             // onBlur={'handleBlur('username')'}
-  //             // error={errors.username}
-  //             // touched={touched.username}
-  //             onChangeText={e => console.log(e)}
-  //             keyboardAppearance="dark"
-  //           />
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // }
-
-  // function DocumentView() {
-  //   return (
-  //     <View style={{flex: 1, marginVertical: hp('1%')}}>
-  //       <View style={{alignItems: 'center'}}>
-  //         <Text>
-  //           Click on the document then 1. Attach the document from the gallery
-  //           or 2. click on the camera icon to take the picture directly
-  //         </Text>
-  //       </View>
-  //       {/* <View > */}
-  //       <View style={styles.gap} />
-
-  //       {/* // Cnic front and back */}
-  //       <View
-  //         style={{
-  //           flexDirection: 'row',
-  //           justifyContent: 'space-around',
-  //           width: wp('100%'),
-  //         }}>
-  //         {/* Cnic front  */}
-  //         <View style={{width: wp('40%')}}>
-  //           <View style={{alignItems: 'center'}}>
-  //             <Text>Cnic Front Side</Text>
-  //             <Text style={{fontSize: 12}}>Required</Text>
-  //           </View>
-  //           <View>
-  //             <View style={{marginVertical: 10}}>
-  //               <View
-  //                 style={{
-  //                   borderRadius: 20,
-  //                   borderWidth: 2,
-  //                   alignItems: 'center',
-  //                   justifyContent: 'center',
-  //                   borderStyle: 'dotted',
-  //                   height: 150,
-  //                   // width: '100%',
-  //                   borderColor: Colors.backgroundMedium,
-  //                 }}>
-  //                 {cnicFront == '' ? (
-  //                   <TouchableOpacity onPress={() => ModalOpen('cnicFront')}>
-  //                     <View
-  //                       style={{
-  //                         flex: 1,
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       }}>
-  //                       <CustomIcons
-  //                         type="fa"
-  //                         name="id-card-o"
-  //                         size={30}
-  //                         color={Colors.lightPurple}
-  //                       />
-  //                       {/* <Text>Add Photos</Text> */}
-  //                       {/* </View> */}
-  //                     </View>
-  //                   </TouchableOpacity>
-  //                 ) : (
-  //                   <View style={{position: 'relative'}}>
-  //                     <TouchableOpacity
-  //                       style={{justifyContent: 'center', alignItems: 'center'}}
-  //                       activeOpacity={0.9}>
-  //                       <Image
-  //                         style={{
-  //                           width: 120,
-  //                           height: 100,
-  //                           // marginRight: 10,
-  //                           flexDirection: 'row',
-  //                           flexWrap: 'wrap',
-  //                           borderRadius: 16,
-  //                           // borderWidth: 4,
-  //                           // borderColor:
-  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
-  //                           // borderColor: Colors.lightPurple,
-  //                         }}
-  //                         source={{uri: cnicFront}}
-  //                         resizeMode="contain"
-  //                       />
-
-  //                       <TouchableOpacity
-  //                         style={{position: 'absolute', right: 4, top: 5}}
-  //                         onPress={() => setCnicFront('')}>
-  //                         <CustomIcons
-  //                           name={'ios-close-circle'}
-  //                           type={'ionicon'}
-  //                           color={Colors.White}
-  //                           size={25}
-  //                         />
-  //                       </TouchableOpacity>
-  //                     </TouchableOpacity>
-  //                   </View>
-  //                 )}
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </View>
-  //         {/* Cnic back */}
-  //         <View style={{width: wp('40%')}}>
-  //           <View style={{alignItems: 'center'}}>
-  //             <Text>Cnic Back Side</Text>
-
-  //             <Text style={{fontSize: 12}}>Required</Text>
-  //           </View>
-  //           <View>
-  //             <View style={{marginVertical: 10}}>
-  //               <View
-  //                 style={{
-  //                   borderRadius: 20,
-  //                   borderWidth: 2,
-  //                   alignItems: 'center',
-  //                   justifyContent: 'center',
-  //                   borderStyle: 'dotted',
-  //                   height: 150,
-  //                   // width: '100%',
-  //                   borderColor: Colors.backgroundMedium,
-  //                 }}>
-  //                 {cnicBack == '' ? (
-  //                   <TouchableOpacity onPress={() => ModalOpen('cnicBack')}>
-  //                     <View
-  //                       style={{
-  //                         flex: 1,
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       }}>
-  //                       <CustomIcons
-  //                         type="fa"
-  //                         name="id-card-o"
-  //                         size={30}
-  //                         color={Colors.lightPurple}
-  //                       />
-  //                       {/* <Text>Add Photos</Text> */}
-  //                       {/* </View> */}
-  //                     </View>
-  //                   </TouchableOpacity>
-  //                 ) : (
-  //                   <View style={{position: 'relative'}}>
-  //                     <TouchableOpacity
-  //                       style={{justifyContent: 'center', alignItems: 'center'}}
-  //                       activeOpacity={0.9}>
-  //                       <Image
-  //                         style={{
-  //                           width: 120,
-  //                           height: 100,
-  //                           // marginRight: 10,
-  //                           flexDirection: 'row',
-  //                           flexWrap: 'wrap',
-  //                           borderRadius: 16,
-  //                           borderWidth: 4,
-  //                           // borderColor:
-  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
-  //                           borderColor: Colors.lightPurple,
-  //                         }}
-  //                         source={{uri: cnicBack}}
-  //                         resizeMode="contain"
-  //                       />
-
-  //                       <TouchableOpacity
-  //                         style={{position: 'absolute', right: 4, top: 5}}
-  //                         onPress={() => setCnicBack('')}>
-  //                         <CustomIcons
-  //                           name={'ios-close-circle'}
-  //                           type={'ionicon'}
-  //                           color={Colors.White}
-  //                           size={25}
-  //                         />
-  //                       </TouchableOpacity>
-  //                     </TouchableOpacity>
-  //                   </View>
-  //                 )}
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </View>
-  //       </View>
-
-  //       {/* // Lincence front and back */}
-  //       <View
-  //         style={{
-  //           flexDirection: 'row',
-  //           justifyContent: 'space-around',
-  //           width: wp('100%'),
-  //         }}>
-  //         {/* front */}
-  //         <View style={{width: wp('40%')}}>
-  //           <View style={{alignItems: 'center'}}>
-  //             <Text>Licence Front Side</Text>
-  //             <Text style={{fontSize: 12}}>Required</Text>
-  //           </View>
-  //           <View>
-  //             <View style={{marginVertical: 10}}>
-  //               <View
-  //                 style={{
-  //                   borderRadius: 20,
-  //                   borderWidth: 2,
-  //                   alignItems: 'center',
-  //                   justifyContent: 'center',
-  //                   borderStyle: 'dotted',
-  //                   height: 150,
-  //                   // width: '100%',
-  //                   borderColor: Colors.backgroundMedium,
-  //                 }}>
-  //                 {licenseFront == '' ? (
-  //                   <TouchableOpacity onPress={() => ModalOpen('licenseFront')}>
-  //                     <View
-  //                       style={{
-  //                         flex: 1,
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       }}>
-  //                       <CustomIcons
-  //                         type="fa"
-  //                         name="id-card-o"
-  //                         size={30}
-  //                         color={Colors.lightPurple}
-  //                       />
-  //                       {/* <Text>Add Photos</Text> */}
-  //                       {/* </View> */}
-  //                     </View>
-  //                   </TouchableOpacity>
-  //                 ) : (
-  //                   <View style={{position: 'relative'}}>
-  //                     <TouchableOpacity
-  //                       style={{justifyContent: 'center', alignItems: 'center'}}
-  //                       activeOpacity={0.9}>
-  //                       <Image
-  //                         style={{
-  //                           width: 120,
-  //                           height: 100,
-  //                           // marginRight: 10,
-  //                           flexDirection: 'row',
-  //                           flexWrap: 'wrap',
-  //                           borderRadius: 16,
-  //                           borderWidth: 4,
-  //                           // borderColor:
-  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
-  //                           borderColor: Colors.lightPurple,
-  //                         }}
-  //                         source={{uri: licenseFront}}
-  //                         resizeMode="contain"
-  //                       />
-
-  //                       <TouchableOpacity
-  //                         style={{position: 'absolute', right: 4, top: 5}}
-  //                         onPress={() => setLicenseFront('')}>
-  //                         <CustomIcons
-  //                           name={'ios-close-circle'}
-  //                           type={'ionicon'}
-  //                           color={Colors.White}
-  //                           size={25}
-  //                         />
-  //                       </TouchableOpacity>
-  //                     </TouchableOpacity>
-  //                   </View>
-  //                 )}
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </View>
-  //         {/* back */}
-  //         <View style={{width: wp('40%')}}>
-  //           <View style={{alignItems: 'center'}}>
-  //             <Text>Licence Back Side</Text>
-
-  //             <Text style={{fontSize: 12}}>Required</Text>
-  //           </View>
-  //           <View>
-  //             <View style={{marginVertical: 10}}>
-  //               <View
-  //                 style={{
-  //                   borderRadius: 20,
-  //                   borderWidth: 2,
-  //                   alignItems: 'center',
-  //                   justifyContent: 'center',
-  //                   borderStyle: 'dotted',
-  //                   height: 150,
-  //                   // width: '100%',
-  //                   borderColor: Colors.backgroundMedium,
-  //                 }}>
-  //                 {licenseBack == '' ? (
-  //                   <TouchableOpacity onPress={() => ModalOpen('licenseBack')}>
-  //                     <View
-  //                       style={{
-  //                         flex: 1,
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       }}>
-  //                       <CustomIcons
-  //                         type="fa"
-  //                         name="id-card-o"
-  //                         size={30}
-  //                         color={Colors.lightPurple}
-  //                       />
-  //                       {/* <Text>Add Photos</Text> */}
-  //                       {/* </View> */}
-  //                     </View>
-  //                   </TouchableOpacity>
-  //                 ) : (
-  //                   <View style={{position: 'relative'}}>
-  //                     <TouchableOpacity
-  //                       style={{justifyContent: 'center', alignItems: 'center'}}
-  //                       activeOpacity={0.9}>
-  //                       <Image
-  //                         style={{
-  //                           width: 120,
-  //                           height: 100,
-  //                           // marginRight: 10,
-  //                           flexDirection: 'row',
-  //                           flexWrap: 'wrap',
-  //                           borderRadius: 16,
-  //                           borderWidth: 4,
-  //                           // borderColor:
-  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
-  //                           borderColor: Colors.lightPurple,
-  //                         }}
-  //                         source={{uri: licenseBack}}
-  //                         resizeMode="contain"
-  //                       />
-
-  //                       <TouchableOpacity
-  //                         style={{position: 'absolute', right: 4, top: 5}}
-  //                         onPress={() => setlicenseBack('')}>
-  //                         <CustomIcons
-  //                           name={'ios-close-circle'}
-  //                           type={'ionicon'}
-  //                           color={Colors.White}
-  //                           size={25}
-  //                         />
-  //                       </TouchableOpacity>
-  //                     </TouchableOpacity>
-  //                   </View>
-  //                 )}
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </View>
-  //       </View>
-
-  //       {/* // Utility bills and Cnic Verification */}
-  //       <View
-  //         style={{
-  //           flexDirection: 'row',
-  //           justifyContent: 'space-around',
-  //           width: wp('100%'),
-  //         }}>
-  //         {/* Utility */}
-
-  //         <View style={{width: wp('40%')}}>
-  //           <View style={{alignItems: 'center'}}>
-  //             <Text>Utility Bills</Text>
-  //             <Text style={{fontSize: 12}}>Required</Text>
-  //           </View>
-  //           <View>
-  //             <View style={{marginVertical: 10}}>
-  //               <View
-  //                 style={{
-  //                   borderRadius: 20,
-  //                   borderWidth: 2,
-  //                   alignItems: 'center',
-  //                   justifyContent: 'center',
-  //                   borderStyle: 'dotted',
-  //                   height: 150,
-  //                   // width: '100%',
-  //                   borderColor: Colors.backgroundMedium,
-  //                 }}>
-  //                 {utilityBills == '' ? (
-  //                   <TouchableOpacity onPress={() => ModalOpen('utilityBills')}>
-  //                     <View
-  //                       style={{
-  //                         flex: 1,
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       }}>
-  //                       <CustomIcons
-  //                         type="fa"
-  //                         name="id-card-o"
-  //                         size={30}
-  //                         color={Colors.lightPurple}
-  //                       />
-  //                       {/* <Text>Add Photos</Text> */}
-  //                       {/* </View> */}
-  //                     </View>
-  //                   </TouchableOpacity>
-  //                 ) : (
-  //                   <View style={{position: 'relative'}}>
-  //                     <TouchableOpacity
-  //                       style={{justifyContent: 'center', alignItems: 'center'}}
-  //                       activeOpacity={0.9}>
-  //                       <Image
-  //                         style={{
-  //                           width: 120,
-  //                           height: 100,
-  //                           // marginRight: 10,
-  //                           flexDirection: 'row',
-  //                           flexWrap: 'wrap',
-  //                           borderRadius: 16,
-  //                           borderWidth: 4,
-  //                           // borderColor:
-  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
-  //                           borderColor: Colors.lightPurple,
-  //                         }}
-  //                         source={{uri: utilityBills}}
-  //                         resizeMode="contain"
-  //                       />
-
-  //                       <TouchableOpacity
-  //                         style={{position: 'absolute', right: 4, top: 5}}
-  //                         onPress={() => setUtilityBills('')}>
-  //                         <CustomIcons
-  //                           name={'ios-close-circle'}
-  //                           type={'ionicon'}
-  //                           color={Colors.White}
-  //                           size={25}
-  //                         />
-  //                       </TouchableOpacity>
-  //                     </TouchableOpacity>
-  //                   </View>
-  //                 )}
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </View>
-
-  //         {/* Cnic Verification */}
-
-  //         <View style={{width: wp('40%')}}>
-  //           <View style={{alignItems: 'center'}}>
-  //             <Text>Cnic Verification</Text>
-
-  //             <Text style={{fontSize: 12}}>Required</Text>
-  //           </View>
-  //           <View>
-  //             <View style={{marginVertical: 10}}>
-  //               <View
-  //                 style={{
-  //                   borderRadius: 20,
-  //                   borderWidth: 2,
-  //                   alignItems: 'center',
-  //                   justifyContent: 'center',
-  //                   borderStyle: 'dotted',
-  //                   height: 150,
-  //                   // width: '100%',
-  //                   borderColor: Colors.backgroundMedium,
-  //                 }}>
-  //                 {cnicVerification == '' ? (
-  //                   <TouchableOpacity
-  //                     onPress={() => ModalOpen('cnicVerification')}>
-  //                     <View
-  //                       style={{
-  //                         flex: 1,
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       }}>
-  //                       <CustomIcons
-  //                         type="fa"
-  //                         name="id-card-o"
-  //                         size={30}
-  //                         color={Colors.lightPurple}
-  //                       />
-  //                       <Text style={{textAlign: 'center'}}>
-  //                         Cnic Verification with face Without glasses and mask.
-  //                       </Text>
-  //                       {/* </View> */}
-  //                     </View>
-  //                   </TouchableOpacity>
-  //                 ) : (
-  //                   <View style={{position: 'relative'}}>
-  //                     <TouchableOpacity
-  //                       style={{justifyContent: 'center', alignItems: 'center'}}
-  //                       activeOpacity={0.9}>
-  //                       <Image
-  //                         style={{
-  //                           width: 120,
-  //                           height: 100,
-  //                           // marginRight: 10,
-  //                           flexDirection: 'row',
-  //                           flexWrap: 'wrap',
-  //                           borderRadius: 16,
-  //                           borderWidth: 4,
-  //                           // borderColor:
-  //                           //   index === indexSelected ? Colors.lightPurple : 'white',
-  //                           borderColor: Colors.lightPurple,
-  //                         }}
-  //                         source={{uri: cnicVerification}}
-  //                         resizeMode="contain"
-  //                       />
-
-  //                       <TouchableOpacity
-  //                         style={{position: 'absolute', right: 4, top: 5}}
-  //                         onPress={() => setCnicVerification('')}>
-  //                         <CustomIcons
-  //                           name={'ios-close-circle'}
-  //                           type={'ionicon'}
-  //                           color={Colors.White}
-  //                           size={25}
-  //                         />
-  //                       </TouchableOpacity>
-  //                     </TouchableOpacity>
-  //                   </View>
-  //                 )}
-  //               </View>
-  //             </View>
-  //           </View>
-  //         </View>
-  //       </View>
-  //       {/* </View> */}
-  //     </View>
-  //   );
-  // }
-
-  // function renderCamera() {
-  //   if (device == null) {
-  //     console.log('first');
-  //     return <View style={{flex: 1}} />;
-  //   } else {
-  //     console.log('HEWL');
-  //     return (
-  //       <View style={{flex: 1}}>
-  //         <Camera
-  //           ref={camera}
-  //           style={StyleSheet.absoluteFill}
-  //           device={device}
-  //           isActive={true}
-  //           enableZoomGesture
-  //           photo={true}
-  //         />
-
-  //         <View style={styles.maskOutter}>
-  //           <View
-  //             style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
-  //           />
-  //           <View style={[{flex: 30}, styles.maskCenter]}>
-  //             <View style={[{width: maskColWidth}, styles.maskFrame]} />
-  //             <View style={styles.maskInner} />
-  //             <View style={[{width: maskColWidth}, styles.maskFrame]} />
-  //           </View>
-  //           <View
-  //             style={[{flex: maskRowHeight}, styles.maskRow, styles.maskFrame]}
-  //           />
-  //         </View>
-
-  //         <View
-  //           style={{
-  //             position: 'absolute',
-  //             alignItems: 'center',
-  //             bottom: SIZES.padding,
-  //             left: 0,
-  //             right: 0,
-  //           }}>
-  //           <TouchableOpacity
-  //             style={{
-  //               height: 60,
-  //               width: 60,
-  //               borderRadius: 30,
-  //               alignItems: 'center',
-  //               justifyContent: 'center',
-  //               backgroundColor: Colors.White,
-  //             }}
-  //             onPress={onPressButton}>
-  //             <CustomIcons
-  //               type="fa"
-  //               name="camera-retro"
-  //               size={35}
-  //               // style={{window}}
-  //               color={Colors.lightPurple}
-  //             />
-  //           </TouchableOpacity>
-  //         </View>
-  //       </View>
-  //     );
-  //   }
-  // }
+  useEffect(() => {
+    requestExternalWritePermission();
+  }, []);
 
   const ModalOpen = e => {
     setDocumentValue(e);
@@ -992,28 +316,31 @@ const Profile = () => {
 
         switch (documentValue) {
           case 'cnicFront':
-            setCnicFrontImage(img);
-            setCnicFront(img.path);
+            // setCnicFrontImage(img);
+            setCnicFront(img);
             break;
           case 'cnicBack':
-            setCnicBackImage(img);
-            setCnicBack(img.path);
+            // setCnicBackImage(img);
+            setCnicBack(img);
             break;
           case 'licenseFront':
-            setLicenseFrontImage(img);
-            setLicenseFront(img.path);
+            // setLicenseFrontImage(img);
+            setLicenseFront(img);
             break;
           case 'licenseBack':
-            setLicenseBackImage(img);
-            setlicenseBack(img.path);
+            // setLicenseBackImage(img);
+            setlicenseBack(img);
             break;
           case 'utilityBills':
-            setUtilityBillImage(img);
-            setUtilityBills(img.path);
+            // setUtilityBillImage(img);
+            setUtilityBills(img);
             break;
           case 'cnicVerification':
-            setCnicVerificationImage(img);
-            setCnicVerification(img.path);
+            // setCnicVerificationImage(img);
+            setCnicVerification(img);
+          case 'profilePicture':
+            setPictureImage(img.path);
+            setprofilePicture(img);
         }
 
         setShowFilterModal(false);
@@ -1024,11 +351,55 @@ const Profile = () => {
   };
 
   const updateUser = () => {
-    console.log("USERS ->> ",email)
-    console.log("phoneInput ->> ",phoneInput)
-    console.log("formattedValue ->> ",formattedValue)
-    console.log("USERS ->> ",username)
-  }
+    if (
+      email == '' ||
+      phoneInput == '' ||
+      username == '' ||
+      profilePicture == null
+    ) {
+      Alert.alert('User Details', 'Please fill all User Detail!', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    } else {
+      let Payload = {
+        email: email,
+        profilePicture: profilePicture,
+        phone: phoneInput,
+        username: username,
+      };
+      console.log('Payload ->> ', Payload);
+      setLoader(true);
+      updateProfile(Payload, onUpdateSuccess, onUpdateFailure);
+    }
+  };
+
+  const onUpdateSuccess = data => {
+    setLoader(false);
+    var userData;
+    if (typeof userId == 'string') {
+      userData = JSON.parse(userId);
+    } else {
+      userData = userId;
+    }
+    let Payload = {
+      ...userData,
+      email: email,
+      profilePicture: profilePicture.path,
+      phone: phoneInput,
+      username: username,
+    };
+    dispatch(updateProfiles(Payload));
+    console.log('data ->> ', data);
+  };
+  const onUpdateFailure = () => {
+    console.log('Failure');
+    setLoader(false);
+  };
 
   const openCameraLibray = () => {
     // setOpenCamera(true)
@@ -1042,15 +413,38 @@ const Profile = () => {
       compressImageQuality: 0.7,
       cropping: true,
     }).then(image => {
-      setCnicFrontImage(image);
-      console.log(image.path);
-      setCnicFront(image.path);
+      switch (documentValue) {
+        case 'cnicFront':
+          // setCnicFrontImage(img);
+          setCnicFront(image);
+          break;
+        case 'cnicBack':
+          // setCnicBackImage(img);
+          setCnicBack(image);
+          break;
+        case 'licenseFront':
+          // setLicenseFrontImage(img);
+          setLicenseFront(image);
+          break;
+        case 'licenseBack':
+          // setLicenseBackImage(img);
+          setlicenseBack(image);
+          break;
+        case 'utilityBills':
+          // setUtilityBillImage(img);
+          setUtilityBills(image);
+          break;
+        case 'cnicVerification':
+          // setCnicVerificationImage(img);
+          setCnicVerification(image);
+        case 'profilePicture':
+          setPictureImage(img.path);
+          setprofilePicture(img);
+      }
+
+      setShowFilterModal(false);
     });
   };
-
-  // if (device == null) {
-  //   return <ActivityIndicator size={20} color={'red'} />;
-  // }
 
   return (
     <View
@@ -1092,6 +486,17 @@ const Profile = () => {
                   // backgroundColor: Colors,
                   justifyContent: 'center',
                 }}>
+                {/* <View style={{position: 'absolute',top:hp('12%'),left:wp('12%')}}>
+                  <TouchableOpacity onPress={() => console.log("Why")} style={{backgroundColor:Colors.White,elevation:8,borderRadius:18,padding:3}}>
+
+                  <CustomIcons
+                    name={'camera'}
+                    type={'entypo'}
+                    color={Colors.Black}
+                    size={25}
+                  />
+                  </TouchableOpacity>
+                </View> */}
                 <ImageBackground
                   source={Images.profileGif}
                   style={{
@@ -1103,14 +508,16 @@ const Profile = () => {
                   }}>
                   <Image
                     source={
-                      profilePicture == ''
+                      pictureImage == ''
                         ? Images.menProfile
-                        : {uri:profilePicture}
+                        : {uri: pictureImage}
                     }
+                    // source={Images.menProfile}
                     style={{
                       height: General_Styles.generalHeight / 10,
                       width: General_Styles.generalHeight / 10,
-                      resizeMode: 'contain',
+                      borderRadius: 75,
+                      resizeMode: 'cover',
                       alignSelf: 'center',
                     }}
                   />
@@ -1122,7 +529,7 @@ const Profile = () => {
                     marginTop: 10,
                     fontSize: General_Styles.generalWidth / 15,
                   }}>
-                  {username ? username : "Owais"}
+                  {username ? username : 'Owais'}
                 </Text>
               </View>
               <View style={styles.fieldContainer}>
@@ -1180,66 +587,31 @@ const Profile = () => {
                     onChangeText={e => setPhoneInput(e)}
                     keyboardAppearance="dark"
                   />
+                </View>
 
-                  {/* <View>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    marginVertical: 3,
+                  }}
+                  onPress={() => ModalOpen('profilePicture')}>
+                  <View style={{marginHorizontal: 3}}>
+                    <CustomIcons
+                      name={'camera'}
+                      type={'entypo'}
+                      color={Colors.Black}
+                      size={25}
+                    />
+                  </View>
+                  <View>
                     <Text
-                      style={{
-                        marginVertical: hp('1%'),
-                        fontSize: 16,
-                        color: '#05375a',
-                        // color:Colors.grey,
-                      }}>
-                      Phone
+                      style={{color: Colors.lightPurple, fontWeight: 'bold'}}>
+                      Profile Picture
                     </Text>
                   </View>
-                  <PhoneInput
-                    // ref={phoneInput}
-                    value={phoneInput}
-                    // defaultValue={phoneInput}
-                    containerStyle={{
-                      height: hp('8%'),
-                      width: hp('43%'),
-                      backgroundColor: Colors.White,
-                      borderRadius: 18,
-                      borderWidth: 1,
-                      marginBottom: hp('1%'),
-                      borderColor: Colors.darkgrey,
-                    }}
-                    textContainerStyle={{
-                      backgroundColor: Colors.White,
-                      paddingVertical: 6,
-                      borderRadius: 18,
-                    }}
-                    defaultCode="PK"
-                    layout="first"
-                    onChangeText={text => {
-                      setPhoneInput(text);
-                    }}
-                    onChangeFormattedText={text => {
-                      setFormattedValue(text);
-                    }}
-                    withDarkTheme
-                    withShadow
-                    // autoFocus
-                  /> */}
-                  {/* <CustomInput
-                    placeholder="Enter your Address"
-                    iconName="account-key-outline"
-                    type="materialCommunity"
-                    label="Address"
-                    returnKeyType="next"
-                    returnKeyLabel="next"
-                    // onSubmitEditing={() => {
-                    //   password.current.focus();
-                    // }}
-                    value={email}
-                    // onBlur={'handleBlur('username')'}
-                    // error={errors.username}
-                    // touched={touched.username}
-                    onChangeText={e => console.log(e)}
-                    keyboardAppearance="dark"
-                  /> */}
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           ) : (
@@ -1317,12 +689,16 @@ const Profile = () => {
                                   flexDirection: 'row',
                                   flexWrap: 'wrap',
                                   borderRadius: 16,
+                                  borderWidth: 4,
+                                  // borderColor:
+                                  //   index === indexSelected ? Colors.lightPurple : 'white',
+                                  borderColor: Colors.lightPurple,
                                   // borderWidth: 4,
                                   // borderColor:
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   // borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicFront}}
+                                source={{uri: cnicFront.path}}
                                 resizeMode="contain"
                               />
 
@@ -1403,7 +779,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicBack}}
+                                source={{uri: cnicBack.path}}
                                 resizeMode="contain"
                               />
 
@@ -1492,7 +868,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: licenseFront}}
+                                source={{uri: licenseFront.path}}
                                 resizeMode="contain"
                               />
 
@@ -1573,7 +949,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: licenseBack}}
+                                source={{uri: licenseBack.path}}
                                 resizeMode="contain"
                               />
 
@@ -1663,7 +1039,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: utilityBills}}
+                                source={{uri: utilityBills.path}}
                                 resizeMode="contain"
                               />
 
@@ -1749,7 +1125,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicVerification}}
+                                source={{uri: cnicVerification.path}}
                                 resizeMode="contain"
                               />
 
@@ -1865,6 +1241,19 @@ const Profile = () => {
           </View>
         </View>
       </ModalPoup>
+
+      {/* Document Validation */}
+
+      {/* <ModalPoup
+        visible={isDocumentValidation}
+        onClose={() => setIsDocumentValidation(false)}>
+        <View
+          style={{
+            flex:1,
+          }}>
+          
+        </View>
+      </ModalPoup> */}
     </View>
   );
 };

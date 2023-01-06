@@ -62,7 +62,6 @@ import {
   setUserLatLong,
 } from '../../Redux/auth/Reducer/AddressReducer';
 import {useFocusEffect} from '@react-navigation/native';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const GoogleApikey = 'AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g'
 const Home = props => {
@@ -123,7 +122,7 @@ const Home = props => {
           Geolocation.getCurrentPosition(
             position => {
               let {latitude, longitude} = position.coords;
-
+              
               setLatLong({
                 latitude: latitude,
                 longitude: longitude,
@@ -148,7 +147,7 @@ const Home = props => {
             error => {
               // See error code charts below.
               setCheckLocation(!checkLocation);
-              console.log(error.code, error.message);
+          
             },
             {
               enableHighAccuracy: true,
@@ -160,7 +159,7 @@ const Home = props => {
           );
         } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
           fetchLocation();
-          console.log('ACCESS_FINE_LOCATION permission denied');
+        
         } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
           setModalState(!modalState);
         }

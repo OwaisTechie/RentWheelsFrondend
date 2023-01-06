@@ -76,7 +76,7 @@ const RenteeBooking = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            )  : pending.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View> : (
+            )  : pending.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>There are no Pending Bookings</Text></View> : (
               <View>
                 <FlatList
                   data={pending}
@@ -103,7 +103,7 @@ const RenteeBooking = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            ) : approve.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : (
+            ) : approve.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>There are no Approved Resuls</Text></View>  : (
               <View>
                 <FlatList
                   data={approve}
@@ -151,7 +151,7 @@ const RenteeBooking = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            ) : rejected.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : (
+            ) : rejected.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>There are no Rejected Resuls</Text></View>  : (
               <View>
                 <FlatList
                   data={rejected}

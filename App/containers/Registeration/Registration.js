@@ -48,7 +48,7 @@ import {
 // import {useDispatch} from 'react-redux';
 import Custom_Loader from '../../Components/Custom_Loader/Custom_Loader';
 // import {Config} from '../../Config/Config';
-import Validation from '../Registeration/apiCalls/apiCalls';
+import Validation, { registerUser } from '../Registeration/apiCalls/apiCalls';
 
 const heighto = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
@@ -65,7 +65,6 @@ export default Registration = ({navigation}) => {
   const confirmPassword = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [registerInfo, setRegisterInfo] = useState({});
-  // console.log("Config",Config.baseUrl.main)
 
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
@@ -122,22 +121,28 @@ export default Registration = ({navigation}) => {
       // const phone = {
       //   phone: payload?.phone.substring(1).replace(/^/, '+92'),
       // };
-      console.log("payload ->> ",payload)
-      console.log("formattedValue ->> ",formattedValue)
-      // const checkValid = phoneInput.current?.isValidNumber(value);
+      
+      payload = {
+        ...payload,
+        phone:formattedValue
+      }
+      // setRegisterInfo(payload);
+      console.log("formattedValue ->> ",payload)
+      setIsLoading(false);
+      navigation.navigate('OTP', {registerInfo:payload});
+      // registerUser(payload12, onSuccess, onFailure)
       // setShowMessage(true);
-      // setValid(checkValid ? checkValid : false);
 
       // const responseObj = {...payload, ...phone};
       // setIsLoading(true);
-      // setRegisterInfo(responseObj);
     },
   });
 
   const onSuccess = data => {
+    console.log("Data ->> ",data)
     // const { isLoading, islogin } = this.state;
     setIsLoading(false);
-    navigation.navigate('OTP', {registerInfo});
+    
     // props.navigation.navigate('OTP');
     // let Data = data;
     // this.setState({
@@ -159,6 +164,7 @@ export default Registration = ({navigation}) => {
     //   islogin: true,
     // });
   };
+
 
   return (
     // Container Start
@@ -231,9 +237,7 @@ export default Registration = ({navigation}) => {
                   ref={username}
                   returnKeyType="next"
                   returnKeyLabel="next"
-                  onSubmitEditing={() => {
-                    phoneInput.current?.focus();
-                  }}
+                  
                   placeholder="Enter your username"
                   iconName="account-key-outline"
                   type="materialCommunity"
@@ -354,7 +358,7 @@ export default Registration = ({navigation}) => {
                 />
               </View>
               <View>
-                <CustomButton onPress={handleSubmit} title="Sign Up" />
+                <CustomButton  loader={isLoading} onPress={handleSubmit} title="Sign Up" />
               </View>
               <View style={styles.bottonTextView}>
                 <Text style={{color: Colors.Black}}>

@@ -6,11 +6,9 @@ export const addBookings = async (payload, onSuccess, onFailure) => {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.bookings.getBookings;
   const URL = `${baseUrl}${endpoint}/`;
-  console.log('URL ->> ', URL);
   const header = await getHeaders().then(data => {
     return data;
   });
-  console.log("HEADER ->> ",header);
   axios
     .post(URL, payload, header)
     // .get(URL,{ params: { filter: `noOfSeats=${payload.noOfSeats}||noOfDoors${payload}` })
@@ -41,15 +39,7 @@ export const addBookings = async (payload, onSuccess, onFailure) => {
         });
         onFailure(error.response.status);
 
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        // onFailure(error.request.status);
-
-        console.log('error.response: ', error.response);
-        console.log(error.response.data);
-        console.log(error.response.status);
-        // console.log(error.response.data.message);
-        console.log(error.response.headers);
+       
       } else if (error.request) {
         console.log('error.request: ', error.request);
         // let errorRes = error.request._response ? error.request.response.Message : ;
@@ -64,23 +54,18 @@ export const addBookings = async (payload, onSuccess, onFailure) => {
         });
         onFailure(error.request.status);
 
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        // console.log("getDataAgainstCnic error.request: ", error.request);
-        // console.log(e)
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log('Unknown error: ', error);
         onFailure(error.request.status);
-        // Toast.show({
-        //   topOffset: 60,
-        //   type: 'error',
-        //   text1: 'Unknown error',
-        //   text2: error,
-        //   visibilityTime:5000,
-        //   autoHide :true
-        // });
+        Toast.show({
+          topOffset: 60,
+          type: 'error',
+          text1: 'Unknown error',
+          text2: error,
+          visibilityTime:5000,
+          autoHide :true
+        });
       }
     });
 };

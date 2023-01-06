@@ -129,7 +129,8 @@ export function getNearByLocation(payload,onSuccess, onFailure) {
 export function getVehicle(payload, onSuccess, onFailure) {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.getAllVehicles;
-  const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=60&selfDriveCharges.selfDriveDailyCharges[lte]=70&vehicleType=SUV&isAutomatic=true&isAircondition=true&fuelType=Petrol&pickupLocation=67.15148915985498,24.938165058441033`;
+  // const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&pickupLocation=${payload.longitude},${payload.latitude}`;
+  const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&averageRating=${payload.ratings}`;
 
   console.log("URL ->> ",URL)
   console.log("payload ->> ",payload)
@@ -182,7 +183,7 @@ export function getVehicle(payload, onSuccess, onFailure) {
           Toast.show({
             topOffset: 60,
             type: 'error',
-            text1: error.response.data.Message,
+            text1: "Data Not Found",
             text2: error.response.data.responseCode,
             visibilityTime: 5000,
             autoHide: true,

@@ -5,7 +5,6 @@ import {useTiming} from 'react-native-redash';
 
 export function useMarkerAnimation({id, selectedMarker}) {
   const [active, setActive] = useState(0);
-  // let active = 0;
   useEffect(() => {
     const isActive = id === selectedMarker ? 1 : 0;
     if(id === selectedMarker){

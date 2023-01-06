@@ -27,11 +27,14 @@ export function RenteeBookingItem(props) {
   const pickupLocation = item?.pickupLocation?.coordinates;
   const vehicle = item?.vehicle;
   const rentee = item?.rentee;
-  let image =
-    'http://localhost:8000/public/images/vehicle-papers/Aventador-1670076605975-548847761.jpeg';
+  const renter = item?.renter;
+  let image = vehicle.images
+    ? vehicle.images[0]
+    : 'https://freepngimg.com/thumb/car/4-2-car-png-hd.png';
   // let image = 'https://www.pngall.com/wp-content/uploads/2016/07/Car-Download-PNG.png';
   // const [skeletonLoader, setskeletonLoader] = useState(true);
   image = getLocalHost(image);
+  console.log('image ->> ', image);
 
   return (
     <Pressable
@@ -45,8 +48,7 @@ export function RenteeBookingItem(props) {
         navigation.navigate('RenteeBookingDetails', {
           BookingInfo: item,
         })
-      }
-    >
+      }>
       <View style={styles.logo}>
         <Image
           source={{
@@ -61,18 +63,18 @@ export function RenteeBookingItem(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Username:</Text>
           <Text style={[styles.userDetail, {fontSize: 12}]}>
-            {rentee.username}
+            {renter.username}
           </Text>
         </View>
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Number:</Text>
           <Text style={[styles.userDetail, {fontSize: 12}]}>
-            {rentee.phone}
+            {renter.phone}
           </Text>
         </View>
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Email:</Text>
-          <Text style={styles.userDetail}>{rentee.email}</Text>
+          <Text style={styles.userDetail}>{renter.email}</Text>
         </View>
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Start Time:</Text>
@@ -93,20 +95,26 @@ export function RenteeBookingItem(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Status :</Text>
           <Text style={styles.userDetail}>
-           {item.rentalStatus == "4" ? "Active Bookings " : item.rentalStatus == "5" ? "Completed Bookings" : null}
+            {item.rentalStatus == '0'
+              ? 'Pending Bookings'
+              : item.rentalStatus == '1'
+              ? 'Approved Bookings'
+              : item.rentalStatus == '2'
+              ? 'Rejected Bookings'
+              : null}
           </Text>
         </View>
         <View
-            style={{
-              marginTop:5,
-              borderBottomColor: 'black',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          />
+          style={{
+            marginTop: 5,
+            borderBottomColor: 'black',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        />
         <View style={{flexDirection: 'row', marginTop: hp('1%')}}>
           <Text style={styles.title}>Total Amount:</Text>
           <Text style={styles.userDetail}>{item.totalAmount}</Text>
-          
+
           <View style={{marginLeft: 'auto', padding: 2}}>
             <CustomIcons
               color={Colors.lightPurple}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef,useLayoutEffect,useContext} from 'react';
+import React, {useEffect, useState, useRef,useContext, useCallback} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   ActivityIndicator,
@@ -32,6 +32,7 @@ import registeration from './apiCalls/apiCalls';
 
 // import {AuthContext}  from '../../Context/context';
 import { userAuth } from '../userAuthentication/userAuth';
+import { useFocusEffect } from '@react-navigation/native';
 const OtpScreen = props => {
  
 
@@ -45,9 +46,6 @@ const OtpScreen = props => {
   console.log("PROPSS",registerInfo.phone)
   const {phone} = registerInfo;
 
-  const {signUp} =userAuth();
-  
-
   // // Handle user state changes
   // const onAuthStateChanged = (user) => {
   //   console.log("USER =>> ",user);
@@ -55,22 +53,30 @@ const OtpScreen = props => {
   //   // if (initializing) setInitializing(false);
   // }
 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     return () => {
+        
+  //     }
+  //   }, [])
+
+
+  // );
   useEffect(() => {
-    async function signInWithPhoneNumber() {
+  
+    signInWithPhoneNumber();
+  },[])
+
+  async function signInWithPhoneNumber() {
       try{
-         console.log(phone)
+         console.log("ABC ->> ",phone);
          const confirmation = await auth().signInWithPhoneNumber(phone);
-         console.log("confirmation =>> ",confirmation)
+         console.log("confirmation =>> ",confirmation.confirm)
          setConfirm(confirmation);
        }catch(e){
         alert('Network Error');
       }
      }
-
-    signInWithPhoneNumber();
-  }, [])
-
- 
 
   // useEffect(() => {
   //   const responseObj = props.route.params.responseObj;
@@ -96,16 +102,16 @@ const OtpScreen = props => {
       
   // }, []);
 
-  useEffect(() => {
-    console.log("What code",code.length)
-    if(code.length == 6){
-      console.log("VALIDATION ",code)
-      confirmCode();
-    }
-    else{
-      console.log("HEY",code)
-    }
-  },[code])
+  // useEffect(() => {
+  //   console.log("What code",code.length)
+  //   if(code.length == 6){
+  //     console.log("VALIDATION ",code)
+  //     confirmCode();
+  //   }
+  //   else{
+  //     console.log("HEY",code)
+  //   }
+  // },[code])
   // useEffect(() => {
   //   const responseObj = props.route.params.responseObj;
   //   console.log('responseObj =>> ', responseObj);
@@ -153,13 +159,18 @@ const OtpScreen = props => {
 
    const confirmCode = async () => {
     try {
+      console.log("Code ->> ",code)
       const response = await confirm.confirm(code);
       console.log("RES",response);
       if(response){
         setCode('');
         console.log("RES21213",response);
         setIsLoading(true);
-        registeration(registerInfo,onSuccess,onFailure);
+        let payload12 = {
+          ...registerInfo,
+          phone:"0".concat(registerInfo.phoneInput)
+        }
+        registeration(payload12,onSuccess,onFailure);
       }
     } catch (error) {
       alert("Incorrect Code")
@@ -239,7 +250,8 @@ const OtpScreen = props => {
                 marginLeft: wp('1%'),
                 color: '#EFB250',
               }}>
-              {phone}
+              {/* {phone} */}
+              +923323766916
             </Text>
           </View>
         </View>
@@ -295,10 +307,10 @@ const OtpScreen = props => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View>
-          <CustomButton onPress={() => {confirmCode()}} title="Verify" />
-          </View>
         </View>
+          <View style={{width:'60%'}}>
+          <CustomButton loader={isLoading} onPress={() => confirmCode()} title="Verify" />
+          </View>
       </View>
       {isLoading && <Custom_Loader />}
     </SafeAreaView>
@@ -310,7 +322,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent:'center',
     // paddingTop: StatusBar.currentHeight,
-    backgroundColor: '#161616',
+    // backgroundColor: '#161616',
+    backgroundColor: Colors.lightPurple,
     paddingTop: Platform.OS === 'android' ? 30 : 0, //Android
     // alignItems: 'center',
   },

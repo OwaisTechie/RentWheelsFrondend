@@ -79,23 +79,23 @@ const DateAndLocation = props => {
     });
   };
 
-  useEffect(() => {
-    if (selectedEndDate != null) {
-      const start = new Date(selectedStartDate),
-        end = new Date(selectedEndDate);
+  // useEffect(() => {
+  //   if (selectedEndDate != null) {
+  //     const start = new Date(selectedStartDate),
+  //       end = new Date(selectedEndDate);
 
-      if (
-        hasBlockedDatesInBetweenStartAndEnd(disableDates, start, end) == true
-      ) {
-        setSelectedStartDate(selectedEndDate);
-        // setSelectEndDate(selectedEndDate);
-      } else {
-        let noOfDays = days(start, end) + 1;  
-        let totalAmount = Number(vehicle.selfDriveDailyCharges) * noOfDays;
-        setTotal(totalAmount);
-      }
-    }
-  }, [selectedEndDate]);
+  //     if (
+  //       hasBlockedDatesInBetweenStartAndEnd(disableDates, start, end) == true
+  //     ) {
+  //       setSelectedStartDate(selectedEndDate);
+  //       // setSelectEndDate(selectedEndDate);
+  //     } else {
+  //       let noOfDays = days(start, end) + 1;  
+  //       let totalAmount = Number(vehicle.selfDriveDailyCharges) * noOfDays;
+  //       setTotal(totalAmount);
+  //     }
+  //   }
+  // }, [selectedEndDate]);
 
   //calculate days
   var days = (date_1, date_2) => {
@@ -117,8 +117,25 @@ const DateAndLocation = props => {
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       setSelectEndDate(date);
+      if (date != null) {
+        const start = new Date(selectedStartDate),
+          end = new Date(date);
+  
+        if (
+          hasBlockedDatesInBetweenStartAndEnd(disableDates, start, end) == true
+        ) {
+          setSelectedStartDate(date);
+          // setSelectEndDate(selectedEndDate);
+        } else {
+          let noOfDays = days(start, end) + 1;  
+          let totalAmount = Number(vehicle.selfDriveDailyCharges) * noOfDays;
+          setTotal(totalAmount);
+        }
+      }
+
     } else {
       setSelectedStartDate(date);
+      
     }
   };
   const onPrevious = () => {
@@ -168,6 +185,7 @@ const DateAndLocation = props => {
       startTime: StartTime,
       endTime: endTime,
       vehicle: vehicleId,
+      total:total,
     };
 
     navigation.navigate('PaymentScreen', {
@@ -195,12 +213,11 @@ const DateAndLocation = props => {
     fontSize: 25,
     borderRadius: 20,
     paddingHorizontal: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: heightPercentageToDP('3%'),
     backgroundColor: Colors.header_background,
-    position: 'absolute',
+    // position: 'relative',
+    // bottom: 70,
     elevation: 3,
-    bottom: 70,
   };
   const SubmitTextStyle = {
     color: Colors.lightPurple,
@@ -208,14 +225,24 @@ const DateAndLocation = props => {
     fontSize: 16,
     borderRadius: 20,
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#ffffff',
-    position: 'absolute',
-    bottom: 70,
+    marginBottom: heightPercentageToDP('3%'),
     elevation: 3,
-    right: 1,
+
   };
+
+  const onNextStep = () => {
+    
+    if (isValid) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+};
+
+const onSelectedEndDate = (e) => {
+  
+}
 
   return (
     <View style={styles.container}>
@@ -225,6 +252,7 @@ const DateAndLocation = props => {
         <ProgressSteps {...ProgressStepStyles}>
           <ProgressStep
             label="Pick Up"
+            onNext={onNextStep}
             scrollViewProps={defaultScrollViewProps}
             nextBtnText=">"
             nextBtnTextStyle={buttonTextStyle}
@@ -332,10 +360,10 @@ const DateAndLocation = props => {
                   <View>
 
                   <CustomIcons
-                      type="entypo"
-                      name="user"
-                      size={38}
-                      color={Colors.paleorange}
+                       type="materialCommunity"
+                       name="car-connected"
+                       size={38}
+                       color={Colors.lightPurple}
                     />
 
                   </View>
@@ -537,7 +565,7 @@ const DateAndLocation = props => {
               date={selectedStartTime}
               onConfirm={date => {
                 setStartOpen(false);
-                setEndTime(date);
+                setStartTime(date);
               }}
               onCancel={() => {
                 setStartOpen(false);
@@ -591,7 +619,7 @@ const styles = StyleSheet.create({
   container: {
     height: heightPercentageToDP('100%'),
     // backgroundColor: '#ecf0f1',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
     // padding: 8,
   },
   Calender: {
@@ -607,8 +635,8 @@ const styles = StyleSheet.create({
   },
   Mapcontainer: {
     ...StyleSheet.absoluteFillObject,
-    flex: 1, //the container will fill the whole screen.
-    justifyContent: 'center',
+    height:heightPercentageToDP('70%'), //the container will fill the whole screen.
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   map: {

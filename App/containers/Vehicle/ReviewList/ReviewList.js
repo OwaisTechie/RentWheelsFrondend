@@ -145,8 +145,8 @@ const ReviewList = props => {
                 textAlign: 'justify',
                 color: Colors.backgroundDark,
               }}>
-              {/* {item.text} */}
-              Present the ideas in the original text accurately, ensuring you cover the main question the text attempts to address.
+              {item.text}
+              
             </Text>
             </View>
           </View>

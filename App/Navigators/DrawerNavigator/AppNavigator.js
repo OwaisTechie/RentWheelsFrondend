@@ -28,6 +28,7 @@ import OnGoingBookingNavigator from '../StackNavigator/BookingNavigator/OnGoingB
 import RenteeBookingNavigator from '../StackNavigator/RenteeBookingNavigator/RenteeBookingNavigator';
 import RenteeOnGoingBookingNavigator from '../StackNavigator/RenteeBookingNavigator/RenteeOnGoingBookingNavigator';
 import Wallet from '../../containers/Wallet/Wallet';
+import OwnerVehicleNavigator from '../StackNavigator/OwnerVehiclNavigator/OwnerVehicleNavigator';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
 const AppStack = props => {
@@ -169,7 +170,7 @@ const AppStack = props => {
                 // headerRight: props => <HeaderRight {...props} />,
               }}
             />
-            <Drawer.Screen
+            {/* <Drawer.Screen
               name="AllVehicle"
               component={Vehicle}
               options={{
@@ -185,24 +186,7 @@ const AppStack = props => {
                 ),
                 headerTitle: props => <Headercenter {...props} />,
               }}
-            />
-            <Drawer.Screen
-              name="Wallet"
-              component={Wallet}
-              options={{
-                // headerShown: false,
-                drawerLabel: 'Wallet',
-                drawerIcon: ({color}) => (
-                  <CustomIcons
-                    type="fontisto"
-                    name="wallet"
-                    size={25}
-                    color={color}
-                  />
-                ),
-                headerTitle: props => <Headercenter {...props} />,
-              }}
-            />
+            /> */}
 
             {/* <Drawer.Screen name="HomeDrawer" component={RightDrawerScreen} /> */}
 
@@ -244,11 +228,26 @@ const AppStack = props => {
               }}
             />
             <Drawer.Screen
+              name="OwnerVehicleNavigator"
+              component={OwnerVehicleNavigator}
+              options={{
+                headerShown: false,
+                drawerLabel: 'My Vehicles',
+                drawerIcon: ({color}) => (
+                  <Ionicons name="ios-car-sharp" size={25} color={color} />
+                ),
+                // title: 'List Of Bookings',
+                // headerTitle: props => <Headercenter {...props} />,
+                // headerLeft: props => <HeaderLeft {...props} />,
+                // headerRight: props => <HeaderRight {...props} />,
+              }}
+            />
+            <Drawer.Screen
               name="OnGoingBookingNavigator"
               component={OnGoingBookingNavigator}
               options={{
                 headerShown: false,
-                drawerLabel: 'Current or Complete Bookings',
+                drawerLabel: 'Current Bookings',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),

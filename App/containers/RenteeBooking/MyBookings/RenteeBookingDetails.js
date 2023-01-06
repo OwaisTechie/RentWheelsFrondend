@@ -60,6 +60,7 @@ const RenteeBookingDetails = props => {
   const Bookings = route?.params;
   const Vehicle = Bookings.BookingInfo.vehicle;
   const rentee = Bookings.BookingInfo.rentee;
+  const renter = Bookings.BookingInfo.renter;
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
   var location = Vehicle?.pickupLocation?.coordinates;
@@ -186,8 +187,8 @@ const RenteeBookingDetails = props => {
     //   startCode: e.data,
     // };
     let Payload = {
-      bookingID: "638f4df043b053cdd8969921",
-      startCode: "18688",
+      bookingID: '638f4df043b053cdd8969921',
+      startCode: '18688',
     };
     setQrLoader(true);
     startRental(Payload, onRentalSuccess, onRentalFailure);
@@ -223,7 +224,9 @@ const RenteeBookingDetails = props => {
         <Image
           onLoadEnd={() => setLoading(false)}
           source={{
-            uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+            uri: item
+              ? item
+              : 'https://freepngimg.com/thumb/car/4-2-car-png-hd.png',
           }}
           style={styles.renderImage}
           onLoadStart={() => setLoading(true)}
@@ -245,351 +248,350 @@ const RenteeBookingDetails = props => {
         backgroundColor={Colors.backgroundLight}
         barStyle="dark-content"
       />
-      
-        <ScrollView showsVerticalScrollIndicator={false}>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            backgroundColor: Colors.backgroundLight,
+          }}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Entypo
+                name="chevron-left"
+                style={{
+                  fontSize: 30,
+                  color: Colors.lightPurple,
+                  padding: 12,
+                  // backgroundColor: Colors.Black,
+                  // borderRadius: 10,
+                }}
+              />
+            </TouchableOpacity>
+
+            <Text
+              style={{
+                fontSize: 20,
+                color: Colors.lightPurple,
+              }}>
+              Booking Details
+            </Text>
+          </View>
+          <FlatList
+            data={Vehicle?.images}
+            horizontal
+            renderItem={renderProduct}
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0.8}
+            snapToInterval={width}
+            bounces={false}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {x: scrollX}}}],
+              {useNativeDriver: false},
+            )}
+          />
+          <View style={styles.dot}>
+            {Vehicle?.images.map((data, index) => {
+              let opacity = position.interpolate({
+                inputRange: [index - 1, index, index + 1],
+                outputRange: [0.2, 1, 0.2],
+                extrapolate: 'clamp',
+              });
+              return (
+                <Animated.View
+                  key={index}
+                  style={{
+                    width: '16%',
+                    height: 2.4,
+                    backgroundColor: Colors.paleorange,
+                    opacity,
+                    marginHorizontal: 4,
+                    borderRadius: 100,
+                  }}></Animated.View>
+              );
+            })}
+          </View>
+        </View>
+        <View
+          style={{
+            // paddingHorizontal: 16,
+            padding: wp('5%'),
+            // marginTop: 6,
+            height: hp('60%'),
+            // flex:2,
+            borderTopLeftRadius: 40,
+            borderTopRightRadius: 40,
+            backgroundColor: Colors.White,
+          }}>
           <View
             style={{
-              width: '100%',
-              flex: 1,
-              backgroundColor: Colors.backgroundLight,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
-            <View style={styles.header}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Entypo
-                  name="chevron-left"
-                  style={{
-                    fontSize: 30,
-                    color: Colors.lightPurple,
-                    padding: 12,
-                    // backgroundColor: Colors.Black,
-                    // borderRadius: 10,
-                  }}
-                />
-              </TouchableOpacity>
-
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: Colors.lightPurple,
-                }}>
-                Booking Details
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.title}>Start Time : </Text>
+              <Text style={styles.titleInfo}>
+                {' '}
+                {`${moment(new Date(Bookings.BookingInfo.startTime))
+                  .format('YYYY-MM-DD')
+                  .toString()}`}
               </Text>
             </View>
-            <FlatList
-              data={Vehicle?.images}
-              horizontal
-              renderItem={renderProduct}
-              showsHorizontalScrollIndicator={false}
-              decelerationRate={0.8}
-              snapToInterval={width}
-              bounces={false}
-              onScroll={Animated.event(
-                [{nativeEvent: {contentOffset: {x: scrollX}}}],
-                {useNativeDriver: false},
-              )}
-            />
-            <View style={styles.dot}>
-              {Vehicle?.images.map((data, index) => {
-                let opacity = position.interpolate({
-                  inputRange: [index - 1, index, index + 1],
-                  outputRange: [0.2, 1, 0.2],
-                  extrapolate: 'clamp',
-                });
-                return (
-                  <Animated.View
-                    key={index}
-                    style={{
-                      width: '16%',
-                      height: 2.4,
-                      backgroundColor: Colors.paleorange,
-                      opacity,
-                      marginHorizontal: 4,
-                      borderRadius: 100,
-                    }}></Animated.View>
-                );
-              })}
+            <View style={{flexDirection: 'row', marginVertical: 3}}>
+              <Text style={styles.title}>End Time : </Text>
+              <Text style={styles.titleInfo}>{`${moment(
+                new Date(Bookings.BookingInfo.endTime),
+              )
+                .format('YYYY-MM-DD')
+                .toString()}`}</Text>
+            </View>
+
+            {/* <View>
+                <Rating
+                  type="custom"
+                  ratingColor={Colors.paleorange}
+                  // ratingBackgroundColor="#c8c7c8"
+                  startingValue={3.5}
+                  readonly
+                  ratingCount={5}
+                  imageSize={15}
+                  // onFinishRating={this.ratingCompleted}
+                  style={{paddingVertical: 3}}
+                />
+              </View> 
+              </View> */}
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{flexDirection: 'row',alignItems: 'center'}}>
+              <Text style={styles.title}>User Name : </Text>
+              <Text style={styles.titleInfo}>{renter.username}</Text>
+            </View>
+            <View style={{flexDirection: 'row',alignItems: 'center', marginVertical: 3}}>
+              <Text style={styles.title}>Total Amount:</Text>
+              <Text style={styles.titleInfo}>
+                {Bookings.BookingInfo.totalAmount}
+              </Text>
+            </View>
+
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+             <View style={{flexDirection: 'row',alignItems: 'center',}}>
+              <Text style={styles.title}>Status :</Text>
+              <Text style={styles.titleInfo}>
+                {Bookings.BookingInfo.rentalStatus == '0'
+                  ? 'Pending'
+                  : Bookings.BookingInfo.rentalStatus == '1'
+                  ? 'Approved'
+                  : Bookings.BookingInfo.rentalStatus == '2'
+                  ? 'Rejected'
+                  : null}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row',alignItems: 'center',marginVertical: 3}}>
+              <Text style={styles.title}>Registration No.: </Text>
+              <Text style={styles.titleInfo}>{Vehicle.registrationNumber}</Text>
             </View>
           </View>
           <View
             style={{
-              // paddingHorizontal: 16,
-              padding: wp('5%'),
-              // marginTop: 6,
-              height: hp('60%'),
-              // flex:2,
-              borderTopLeftRadius: 40,
-              borderTopRightRadius: 40,
-              backgroundColor: Colors.White,
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginVertical: 3,
+              justifyContent: 'space-between',
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                // width:wp('100%'),
-                justifyContent: 'space-between',
-                margin: 2,
-              }}>
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.title}>Start Time : </Text>
-                  <Text style={styles.titleInfo}>
-                    {' '}
-                    {`${moment(new Date(Bookings.BookingInfo.startTime))
-                      .format('YYYY-MM-DD')
-                      .toString()}`}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>End Time : </Text>
-                  <Text style={styles.titleInfo}>{`${moment(
-                    new Date(Bookings.BookingInfo.endTime),
-                  )
-                    .format('YYYY-MM-DD')
-                    .toString()}`}</Text>
-                </View>
-              </View>
-
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Total Amount:</Text>
-                  <Text style={styles.titleInfo}>
-                    
-                    {Bookings.BookingInfo.totalAmount}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Booking Status :</Text>
-                  <Text style={styles.titleInfo}>
-                    
-                    {Bookings.BookingInfo.rentalStatus == '0'
-                      ? 'Pending Bookings'
-                      : Bookings.BookingInfo.rentalStatus == '1'
-                      ? 'Approved Bookings'
-                      : Bookings.BookingInfo.rentalStatus == '2'
-                      ? 'Rejected Bookings'
-                      : null}
-                  </Text>
-                </View>
-                {/* <View>
-                <Rating
-                  type="custom"
-                  ratingColor={Colors.paleorange}
-                  // ratingBackgroundColor="#c8c7c8"
-                  startingValue={3.5}
-                  readonly
-                  ratingCount={5}
-                  imageSize={15}
-                  // onFinishRating={this.ratingCompleted}
-                  style={{paddingVertical: 3}}
-                />
-              </View> */}
-              </View>
+           <View style={{flexDirection: 'row',alignItems: 'center'}}>
+              <Text style={styles.title}>Email: </Text>
+              <Text style={styles.titleInfo}>{renter.email}</Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                // width:wp('100%'),
-                justifyContent: 'space-between',
-                margin: 2,
-              }}>
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Cnic: </Text>
-                  <Text style={styles.titleInfo}>12345-6789101-2</Text>
-                </View>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Registration No.: </Text>
-                  <Text style={styles.titleInfo}>
-                    {Vehicle.registrationNumber}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>User Name : </Text>
-                  <Text style={styles.titleInfo}>{rentee.username}</Text>
-                </View>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Phone No. : </Text>
-                  <Text style={styles.titleInfo}>{rentee.phone}</Text>
-                </View>
-                {/* <View>
-                <Rating
-                  type="custom"
-                  ratingColor={Colors.paleorange}
-                  // ratingBackgroundColor="#c8c7c8"
-                  startingValue={3.5}
-                  readonly
-                  ratingCount={5}
-                  imageSize={15}
-                  // onFinishRating={this.ratingCompleted}
-                  style={{paddingVertical: 3}}
-                />
-              </View> */}
-              </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: 3,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+           <View style={{flexDirection: 'row',alignItems: 'center'}}>
+              <Text style={styles.title}>Car Description: </Text>
+              <Text style={styles.titleInfo}>{Vehicle.description}</Text>
             </View>
+          </View>
 
-            <View style={{marginVertical: 5}}>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    marginVertical: widthPercentageToDP('2%'),
-                    fontWeight: 'bold',
-                    color: Colors.lightPurple,
-                  }}>
-                  Car Specifications
-                </Text>
-              </View>
-              <View>
-                {/* Specification */}
-                <ScrollView
-                  horizontal
-                  nestedScrollEnabled
-                  showsHorizontalScrollIndicator={false}>
-                  <View style={styles.Specification}>
-                    <CustomIcons
-                      type="materialCommunity"
-                      name="seat-passenger"
-                      size={22}
-                      color={Colors.paleorange}
-                    />
-                    <Text style={styles.SpecificationText}>
-                      {`${Specification.noOfSeats} Seater`}
-                    </Text>
-                  </View>
-                  <View style={styles.Specification}>
-                    <CustomIcons
-                      type="materialCommunity"
-                      name="air-conditioner"
-                      size={22}
-                      color={Colors.paleorange}
-                    />
-                    <Text style={styles.SpecificationText}>
-                      {Specification.isAircondition
-                        ? 'Air Condition'
-                        : 'Not air Condition'}
-                    </Text>
-                  </View>
-                  <View style={styles.Specification}>
-                    <CustomIcons
-                      type="materialCommunity"
-                      name="fuel"
-                      size={22}
-                      color={Colors.paleorange}
-                    />
-
-                    <Text style={styles.SpecificationText}>
-                      {Specification.fuelType}
-                    </Text>
-                  </View>
-                  <View style={styles.Specification}>
-                    <CustomIcons
-                      type="materialCommunity"
-                      name="refresh-auto"
-                      size={22}
-                      color={Colors.paleorange}
-                    />
-                    <Text style={styles.SpecificationText}>
-                      {Specification.isAutomatic ? 'Automatic' : 'Manual'}
-                    </Text>
-                  </View>
-                  <View style={styles.Specification}>
-                    <CustomIcons
-                      type="materialCommunity"
-                      name="car-door-lock"
-                      size={22}
-                      color={Colors.paleorange}
-                    />
-                    <Text style={styles.SpecificationText}>
-                      {`${Specification.noOfDoors} Doors`}
-                    </Text>
-                  </View>
-                </ScrollView>
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    marginVertical: widthPercentageToDP('2%'),
-                    fontWeight: 'bold',
-                    color: Colors.lightPurple,
-                  }}>
-                  Car Location
-                </Text>
-              </View>
-              <View style={styles.addressContainer}>
-                <TouchableOpacity onPress={onMapView}>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={{
-                      fontSize: 14,
-                      // fontWeight: 'bold',
-                      // margin:5,
-                      color: Colors.paleorange,
-                    }}>
-                    {Destination}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
+          <View style={{marginVertical: 5}}>
+            <View>
+              <Text
                 style={{
-                  marginVertical: wp('5%'),
+                  fontSize: 20,
+                  marginVertical: widthPercentageToDP('2%'),
+                  fontWeight: 'bold',
+                  color: Colors.lightPurple,
                 }}>
-                { Bookings.BookingInfo.rentalStatus == '1' ? (
-                  <CustomButton
-                    // onPress={startBooking}
-                    onPress={viewQrCode}
-                    loader={loader}
-                    title={'Start Rental Qr Code'}
+                Car Specifications
+              </Text>
+            </View>
+            <View>
+              {/* Specification */}
+              <ScrollView
+                horizontal
+                nestedScrollEnabled
+                showsHorizontalScrollIndicator={false}>
+                <View style={styles.Specification}>
+                  <CustomIcons
+                    type="materialCommunity"
+                    name="seat-passenger"
+                    size={22}
+                    color={Colors.paleorange}
                   />
-                ) : null}
-                {/* {Bookings.BookingInfo.rentalStatus == '0'
+                  <Text style={styles.SpecificationText}>
+                    {`${Specification.noOfSeats} Seater`}
+                  </Text>
+                </View>
+                <View style={styles.Specification}>
+                  <CustomIcons
+                    type="materialCommunity"
+                    name="air-conditioner"
+                    size={22}
+                    color={Colors.paleorange}
+                  />
+                  <Text style={styles.SpecificationText}>
+                    {Specification.isAircondition
+                      ? 'Air Condition'
+                      : 'No air Condition'}
+                  </Text>
+                </View>
+                <View style={styles.Specification}>
+                  <CustomIcons
+                    type="materialCommunity"
+                    name="fuel"
+                    size={22}
+                    color={Colors.paleorange}
+                  />
+
+                  <Text style={styles.SpecificationText}>
+                    {Specification.fuelType}
+                  </Text>
+                </View>
+                <View style={styles.Specification}>
+                  <CustomIcons
+                    type="materialCommunity"
+                    name="refresh-auto"
+                    size={22}
+                    color={Colors.paleorange}
+                  />
+                  <Text style={styles.SpecificationText}>
+                    {Specification.isAutomatic ? 'Automatic' : 'Manual'}
+                  </Text>
+                </View>
+                <View style={styles.Specification}>
+                  <CustomIcons
+                    type="materialCommunity"
+                    name="car-door-lock"
+                    size={22}
+                    color={Colors.paleorange}
+                  />
+                  <Text style={styles.SpecificationText}>
+                    {`${Specification.noOfDoors} Doors`}
+                  </Text>
+                </View>
+              </ScrollView>
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 20,
+                  marginVertical: widthPercentageToDP('2%'),
+                  fontWeight: 'bold',
+                  color: Colors.lightPurple,
+                }}>
+                Car Location
+              </Text>
+            </View>
+            <View style={styles.addressContainer}>
+              <TouchableOpacity onPress={onMapView}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{
+                    fontSize: 14,
+                    // fontWeight: 'bold',
+                    // margin:5,
+                    color: Colors.paleorange,
+                  }}>
+                  {Destination}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                marginVertical: wp('5%'),
+              }}>
+              {Bookings.BookingInfo.rentalStatus == '1' ? (
+                <CustomButton
+                  // onPress={startBooking}
+                  onPress={viewQrCode}
+                  loader={loader}
+                  title={'Start Rental Qr Code'}
+                />
+              ) : null}
+              {/* {Bookings.BookingInfo.rentalStatus == '0'
                     ? <CustomButton onPress={handleSubmit} title={'Accept Booking'} /> : Bookings.BookingInfo.rentalStatus == '1' ? <CustomButton onPress={handleSubmit} title={'Start Booking'} /> :null} */}
 
-                {/* // ? 'Accept Booking'
+              {/* // ? 'Accept Booking'
                     // : Bookings.BookingInfo.rentalStatus == '1'
                     // ? 'Approve'
                     // : Bookings.BookingInfo.rentalStatus == '2'
                     // ? 'Rejected' */}
-                {/* // : null} />
+              {/* // : null} />
                     // : Bookings.BookingInfo.rentalStatus == '1'
                     // ? 'Approve'
                     // : Bookings.BookingInfo.rentalStatus == '2'
                     // ? 'Rejected' */}
-                {/* // : null} */}
-                {/* <CustomButton onPress={handleSubmit} title={Bookings.BookingInfo.rentalStatus == '0'
+              {/* // : null} */}
+              {/* <CustomButton onPress={handleSubmit} title={Bookings.BookingInfo.rentalStatus == '0'
                     ? 'Accept Booking'
                     : Bookings.BookingInfo.rentalStatus == '1'
                     ? 'Approve'
                     : Bookings.BookingInfo.rentalStatus == '2'
                     ? 'Rejected'
                     : null} /> */}
-              </View>
             </View>
           </View>
-        </ScrollView>
-      
-        <ModalPoup
-        visible={isQrScanner}
-        onClose={() => setQrScanner(false)}>
+        </View>
+      </ScrollView>
+
+      <ModalPoup visible={isQrScanner} onClose={() => setQrScanner(false)}>
         <View
           style={{
             // flexDirection: 'row',
             justifyContent: 'center',
-            alignItems:'center',
+            alignItems: 'center',
           }}>
-            <View style={{marginBottom:10}}>
-              <Text style={{color:Colors.lightPurple,fontSize:15,fontWeight:'bold',textAlign:'center'}}>Scan Qr Code for Booking start</Text>
-            </View>
-            <View>
-
-            <QRCode
-            size={200}
-      value={Bookings.BookingInfo.startCode}
-    />
-            </View>
+          <View style={{marginBottom: 10}}>
+            <Text
+              style={{
+                color: Colors.lightPurple,
+                fontSize: 15,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
+              Scan Qr Code for Booking start
+            </Text>
+          </View>
+          <View>
+            <QRCode size={200} value={Bookings.BookingInfo.startCode} />
+          </View>
         </View>
       </ModalPoup>
       {/* <View
@@ -696,12 +698,12 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
     color: Colors.lightPurple,
   },
   titleInfo: {
-    fontSize:12,
+    fontSize: 12,
     fontWeight: '600',
     textAlign: 'justify',
     color: Colors.paleorange,

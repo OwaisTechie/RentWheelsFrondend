@@ -41,7 +41,7 @@ const App = props => {
     // console.log("IPADDRESS ->> ",ipAddress);
   }
   
-  if(showRoute) {
+  if(!showRoute) {
     return (<Route />)
   }
 

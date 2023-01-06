@@ -31,7 +31,7 @@ import {CustomIcons, Colors, Images} from '../../Theme';
 
 import {MARKERS_DATA} from '../../Components/MapChildComponent/mapData';
 import {TopBar} from './TopBar/TopBar';
-import {shallowEqual, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {getAllVehicle} from '../../Redux/auth/Reducer/vehicleReducer';
 import {getNearByLocation, getVehicle} from './BottomSheet/apiCalls/apiCalls';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -50,6 +50,7 @@ import FilterList from './BottomSheet/FilterList';
 import FilterModal from './FilterModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhoneInput from 'react-native-phone-number-input';
+import { setUserAddress, setUserLatLong } from '../../Redux/auth/Reducer/AddressReducer';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -66,66 +67,63 @@ const MapScreen = props => {
   const {LocationMarker} = props;
 
   const [vehicles, setVehicles] = useState([]);
-  // const [filter, setFilter] = useState({
-  //   vehicleType: '',
-  //   noOfSeats: '',
-  //   fuelType: '',
-  //   noOfAirbags: '',
-  //   isAutomatic: false,
-  //   isAircondition: false,
-  // });
-  // const vehicles = useSelector(getAllVehicle);
-  // const [locationMarker, setLocationMarker] = useState({
-  //   latitude: 0,
-  //   longitude: 0,
-  //   address: '',
-  // });
+
 
   const [address, setAddress] = useState('');
-
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const snapPoints = useMemo(() => ['50%', '65%', '65%'], []);
-  // const snapFilterPoints = useMemo(() => ['90%'], []);
 
-  // const vehicles = useSelector(state => state?.vehicles?.nearByVehicles);
-  // const [vehicles, setVehicles] = useState([]);
   const userLatLong = useSelector(state => state?.address?.userLatLong);
   const userAddress = useSelector(state => state?.address?.userAddress);
   const userId = useSelector(state => state?.auth.users.user);
-  // const {_id} = JSON.parse(userId);
-  // console.log("USERID ->> ",userId);
+
   const [isplaces, setIsPlaces] = useState(false);
   const [showfilterModal, setShowFilterModal] = useState(false);
 
   const [vehicleLoading, setVehicleLoading] = useState(true);
   const placesRef = useRef();
 
-  useEffect(() => {
-    if (vehicles?.length < 1 && LocationMarker.latitude != 0 && LocationMarker.longitude != 0 && userId ) {
-      console.log("userLatLong ->> ",LocationMarker)
-      console.log("userId ->> ",userId)
-        let payload= {
-          ownerId:userId._id,
-          pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
-        }
-        console.log("PAYLOAD ->> ",payload)
-        // let pickupLocation = [67.0699,24.8604]
-        setVehicleLoading(true);
-        getNearByLocation(payload, onSuccess, onFailure);
-    }
 
-    return () => {
-      setVehicles([]);
-      setVehicleLoading(false);
-    };
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (vehicles?.length < 1 && LocationMarker.latitude != 0 && LocationMarker.longitude != 0 && userId ) {
+  //       console.log("userLatLong ->> ",LocationMarker)
+  //       console.log("userId ->> ",userId)
+  //         let payload= {
+  //           ownerId:userId._id,
+  //           pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
+  //         }
+  //         console.log("PAYLOAD ->> ",payload)
+  //         // let pickupLocation = [67.0699,24.8604]
+  //         setVehicleLoading(true);
+  //         getNearByLocation(payload, onSuccess, onFailure);
+  //     }
+
+
+  //   }, [LocationMarker,userId])
+  // );
+
+  useEffect(() => {
+    // navigation.addListener('focus', () => {
+      if (vehicles?.length < 1 && LocationMarker.latitude != 0 && LocationMarker.longitude != 0 && userId ) {
+        console.log("userId" ,userId)
+          let payload= {
+            ownerId:userId._id,
+            pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
+          }
+          setVehicleLoading(true);
+          getNearByLocation(payload, onSuccess, onFailure);
+      }
+    // });
+    
+    
   }, [LocationMarker,userId]);
 
   const onSuccess = data => {
     console.log("DATA ->> ",data);
     setVehicleLoading(false);
     setVehicles(data.data);
-    // dispatch(setNearByVehicle(data.vehicles));
-    // setLoading(false);
   };
 
   const onFilterSuccess = payload => {
@@ -135,7 +133,7 @@ const MapScreen = props => {
     // setLoading(false);
   };
 
-  const onFailure = err => {
+  const onFailure = () => {
     setVehicleLoading(false);
   };
 
@@ -147,6 +145,7 @@ const MapScreen = props => {
 
   // callbacks
   const handleRefresh = () => {
+    console.log("USER ->> ",userId)
     let payload= {
       ownerId:userId._id,
       pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
@@ -168,6 +167,7 @@ const MapScreen = props => {
       ...filterData,
       pickupLocation: userLatLong,
     };
+    console.log("PAYLOAD ->> ",payload);
     getVehicle(payload, onFilterSuccess, onFailure);
     // setShowFilterModal(!showfilterModal)
     // setCount(current => current + num);
@@ -185,6 +185,7 @@ const MapScreen = props => {
   };
 
   const onSuccessVehicle = data => {
+    
     console.log('onSuccessVehicle ->> ', data);
   };
 
@@ -235,20 +236,22 @@ const MapScreen = props => {
                 console.log('TEXT ->> ', text);
               },
               onFocus: () => setIsPlaces(true),
+              isFocused:(e) => console.log("SSS",e),
               onBlur: () => console.log('Not Focus'),
             }}
             onPress={(data, details = null) => {
               setIsPlaces(false);
               console.log('DETAILS ->> ', details.geometry.location);
-              console.log('data ->> ', data);
+              console.log('data ->> ', data.description);
+              setAddress(data.description)
               let payload= {
-                ownerId:_id,
-                pickupLoc : [67.0699,24.8604],
+                ownerId:userId._id,
+                pickupLoc : [details.geometry.location.lng,details.geometry.lat],
               }
               console.log("PAYLOAD ->> ",payload)
               // let pickupLocation = [67.0699,24.8604]
-              // setVehicleLoading(true)
-              // getNearByLocation(payload, onSuccess, onFailure);
+              setVehicleLoading(true)
+              getNearByLocation(payload, onSuccess, onFailure);
               // setRegion({
               // 	latitude: details.geometry.location.lat,
               // 	longitude: details.geometry.location.lng,
@@ -346,8 +349,8 @@ const MapScreen = props => {
                 key={marker._id}
                 id={marker._id}
                 selectedMarker={selectedMarker}
-                latitude={marker.pickupLocation.coordinates[1]}
-                longitude={marker.pickupLocation.coordinates[0]}></CustomMarker>
+                latitude={marker.pickupLocation.coordinates[0]}
+                longitude={marker.pickupLocation.coordinates[1]}></CustomMarker>
             );
           })
         ):null}

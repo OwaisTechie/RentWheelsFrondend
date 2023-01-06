@@ -20,6 +20,7 @@ import TwoPointSlider from '../../Components/Two_Points_Slider/TwoPointSlider';
 import {Colors, CustomIcons, Fonts, Images} from '../../Theme';
 import FilterList from './BottomSheet/FilterList';
 import {
+  heightPercentageToDP,
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
@@ -151,7 +152,7 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
     isAutomatic: false,
     // isAudio: false,
     noOfAirbags: '',
-    isAircondition: false,
+    isAircondition: true,
     priceRange: ['', ''],
   });
 
@@ -379,7 +380,7 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
             <Section title="Price Range">
               <View style={{alignItems: 'center'}}>
                 <TwoPointSlider
-                  values={[2500, 5000]}
+                  values={[800,4000]}
                   min={1}
                   max={10000}
                   prefix="Rs."
@@ -496,7 +497,7 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
           <View
             style={{
               position: 'absolute',
-              bottom: 70,
+              bottom: heightPercentageToDP('13%'),
               left: 0,
               right: 0,
               paddingHorizontal: Fonts.SIZES.padding,

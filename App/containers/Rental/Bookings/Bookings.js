@@ -12,6 +12,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
 import {Colors} from '../../../Theme';
 import {
+  heightPercentageToDP,
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
@@ -76,6 +77,18 @@ const Bookings = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
+            ) : pending?.length < 1 ? (
+              <View
+                style={{
+                  flex:1,
+
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'black'}}>
+                  Sorry there are no Pending Bookings
+                </Text>
+              </View>
             ) : (
               <View>
                 <FlatList
@@ -103,6 +116,18 @@ const Bookings = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
+            ) : approve?.length < 1 ? (
+              <View
+                style={{
+                  flex:1,
+
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'black'}}>
+                  Sorry there are no Approve Bookings
+                </Text>
+              </View>
             ) : (
               <View>
                 <FlatList
@@ -146,6 +171,17 @@ const Bookings = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
+            ) : rejected?.length < 1 ? (
+              <View
+                style={{
+                  flex:1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'black'}}>
+                  Sorry there are no Rejected Bookings
+                </Text>
+              </View>
             ) : (
               <View>
                 <FlatList
@@ -191,11 +227,11 @@ const Bookings = () => {
     const {
       Payload: {pending, approved, rejected, completed},
     } = data;
-    
+    console.log("Payload ->> ",data.Payload);
     setPending(pending);
     setApprove(approved);
     setRejected(rejected);
-    setCompleted(completed);
+    // setCompleted(completed);
     setIsLoading(false);
   };
 

@@ -3,7 +3,8 @@ import ip from './IpAddress'
 console.log("GET IP =>> ",ip.getIp())
 export const Config = {
   baseUrl: {
-    main: `http://${ip.getIp()}:8000/api/v1/`
+    // main: `http://${ip.getIp()}:8000/api/v1/`
+    main: `http://192.168.43.197:8000/api/v1/`
   },
   endpoint: {
     user:{
@@ -16,7 +17,9 @@ export const Config = {
       isValidRegister: 'users/isvalidcred',
       isValidToken: 'users/verify',
       verifyUser: 'users/verification/verifyuser',
-      isVerified:'users/verification/isverified'
+      verifyUser: 'users/verification/verifyuser',
+      isVerified:'users/verification/isverified',
+      updateProfile:'users/updateprofile',
     },
     vehicles:{
       getAllVehicles: 'vehicles/',

@@ -1,7 +1,11 @@
 import { useSelector } from "react-redux";
+import ip from "../Config/IpAddress";
 
-const {ipAddress} = useSelector(state => state?.auth);
+// console.log("GET IP =>> ",ip.getIp())
 export function getLocalHost(image) {
-    const Convert = image?.replace('localhost', ipAddress)
+  var http = image.split("//")[0]+"//";
+  var removeLocalHost= image.split("//")[1].split('/').slice(1).join('/');
+  // var Convert = http +ip.getIp()+':8000/'+removeLocalHost 
+  var Convert = http +'192.168.43.197:8000/'+removeLocalHost 
     return Convert;
   }

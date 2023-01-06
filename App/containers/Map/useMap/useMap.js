@@ -11,16 +11,18 @@ export function useMap(props) {
 
   const handleNavigateToPoint = useCallback(
     (id, lat, long) => {
-      console.log("id ->>");
+
       console.log("id ->> ",id);
+      console.log("lat ->> ",lat);
+      console.log("long ->> ",long);
       if (mapRef) {
         mapRef.current.animateCamera(
           {
             center: {
-              latitude: lat - DEVIATION,
-              longitude: long,
+              latitude: long - DEVIATION,
+              longitude: lat,
             },
-            zoom: 18.5,
+            zoom: 18.5, 
           },
           500
         );

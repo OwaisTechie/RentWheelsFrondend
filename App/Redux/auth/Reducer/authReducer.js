@@ -16,6 +16,9 @@ export const AuthSlice = createSlice({
     setIpAddrees: (state,action) => {
         state.users.ipAddress=action.payload;
     },
+    updateProfiles: (state,action) => {
+        state.users.user=action.payload;
+    },
     login: (state,action) => {
         state.users=action.payload;
     },
@@ -49,7 +52,7 @@ export const AuthSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, register,retrieveToken,modeChange ,setIpAddrees,globalLoader} = AuthSlice.actions
+export const { login, logout, register,retrieveToken,modeChange ,setIpAddrees,globalLoader,updateProfiles} = AuthSlice.actions
 
 export default AuthSlice.reducer
 

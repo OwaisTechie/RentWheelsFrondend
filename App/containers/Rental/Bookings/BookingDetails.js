@@ -78,7 +78,7 @@ const BookingDetails = props => {
 
   const startScan = () => {
     console.log('first');
-    setIsActive(!Isactive);
+    setIsActive(true);
   };
 
   const [Specification, setSpecification] = useState({
@@ -180,14 +180,16 @@ const BookingDetails = props => {
 
   const onQrScan = e => {
     console.log('SCAN CODE ->> ', e.data);
+    console.log("Bookings.BookingInfo._id ->> ",Bookings.BookingInfo._id)
+    let Payload = {
+      bookingID: Bookings.BookingInfo._id,
+      startCode: e.data,
+    };
+    console.log('Payload ->> ', Payload);
     // let Payload = {
-    //   bookingID: Bookings.BookingInfo._id,
+    //   bookingID: Bookings._id,
     //   startCode: e.data,
     // };
-    let Payload = {
-      bookingID: "638f4df043b053cdd8969921",
-      startCode: "18688",
-    };
     setQrLoader(true);
     startRental(Payload, onRentalSuccess, onRentalFailure);
   };
@@ -222,7 +224,7 @@ const BookingDetails = props => {
         <Image
           onLoadEnd={() => setLoading(false)}
           source={{
-            uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+            uri: item ? item :'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
           }}
           style={styles.renderImage}
           onLoadStart={() => setLoading(true)}
@@ -403,7 +405,6 @@ const BookingDetails = props => {
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Start Time : </Text>
                   <Text style={styles.titleInfo}>
-                    {' '}
                     {`${moment(new Date(Bookings.BookingInfo.startTime))
                       .format('YYYY-MM-DD')
                       .toString()}`}
@@ -423,23 +424,17 @@ const BookingDetails = props => {
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Total Amount:</Text>
                   <Text style={styles.titleInfo}>
-                    {' '}
                     {Bookings.BookingInfo.totalAmount}
                   </Text>
                 </View>
+                <View style={{flexDirection: 'column'}}>
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Booking Status :</Text>
-                  <Text style={styles.titleInfo}>
-                    {' '}
-                    {Bookings.BookingInfo.rentalStatus == '0'
-                      ? 'Pending'
-                      : Bookings.BookingInfo.rentalStatus == '1'
-                      ? 'Approve'
-                      : Bookings.BookingInfo.rentalStatus == '2'
-                      ? 'Rejected'
-                      : null}
-                  </Text>
+                  <Text style={styles.title}>User Name : </Text>
+                  <Text style={styles.titleInfo}>{rentee.username}</Text>
                 </View>
+                
+              </View>
+               
                 {/* <View>
                 <Rating
                   type="custom"
@@ -463,10 +458,7 @@ const BookingDetails = props => {
                 margin: 2,
               }}>
               <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Cnic: </Text>
-                  <Text style={styles.titleInfo}>12345-6789101-2</Text>
-                </View>
+                
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Reg No.: </Text>
                   <Text style={styles.titleInfo}>
@@ -475,16 +467,39 @@ const BookingDetails = props => {
                 </View>
               </View>
 
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>User Name : </Text>
-                  <Text style={styles.titleInfo}>{rentee.username}</Text>
+              <View style={{flexDirection: 'row', marginVertical: 3}}>
+                  <Text style={styles.title}>Booking Status :</Text>
+                  <Text style={styles.titleInfo}>
+                    {Bookings.BookingInfo.rentalStatus == '0'
+                      ? 'Pending'
+                      : Bookings.BookingInfo.rentalStatus == '1'
+                      ? 'Approve'
+                      : Bookings.BookingInfo.rentalStatus == '2'
+                      ? 'Rejected'
+                      : null}
+                  </Text>
                 </View>
+              
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                // width:wp('100%'),
+                justifyContent: 'space-between',
+                margin: 2,
+              }}>
+              <View style={{flexDirection: 'column'}}>
+                
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Phone No. : </Text>
-                  <Text style={styles.titleInfo}>{rentee.phone}</Text>
+                  <Text style={styles.title}>Car Description </Text>
+                  <Text style={styles.titleInfo}>
+                    {Vehicle.description}
+                  </Text>
                 </View>
               </View>
+
+             
+              
             </View>
 
             <View style={{marginVertical: 5}}>

@@ -180,7 +180,7 @@ const RenteeCompletedBookingDetails = props => {
     // };
     let Payload = {
       bookingID: Bookings.BookingInfo._id,
-      endCode:  e.data.toString(),
+      endCode:  e.data,
     };
     setQrLoader(true);
     endRental(Payload, onRentalSuccess, onRentalFailure);

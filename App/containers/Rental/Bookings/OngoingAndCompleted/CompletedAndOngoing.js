@@ -56,7 +56,7 @@ const CompletedAndOngoing = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            )  : onGoing.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View> : (
+            )  : onGoing.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Active Rentals</Text></View> : (
               <View>
                 <FlatList
                   data={onGoing}
@@ -83,7 +83,7 @@ const CompletedAndOngoing = () => {
           <View style={{height: '100%'}}>
             {isLoading ? (
               <BottomSheetSkelton />
-            ) : completed.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : (
+            ) : completed.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Completed Rentals</Text></View>  : (
               <View>
                 <FlatList
                   data={completed}
