@@ -4,7 +4,7 @@ console.log("GET IP =>> ",ip.getIp())
 export const Config = {
   baseUrl: {
     // main: `http://${ip.getIp()}:8000/api/v1/`
-    main: `http://192.168.43.197:8000/api/v1/`
+    main: `http://10.0.112.106:8000/api/v1/`
   },
   endpoint: {
     user:{
@@ -25,6 +25,7 @@ export const Config = {
       getAllVehicles: 'vehicles/',
       nearByVehicle: 'vehicles/getnearbyvehicles',
       getVehiclesCategory: 'vehicles/vehiclecategory',
+      rentalVehicles: 'vehicles/myvehicles/getmyvehicles'
     },
     bookings:{
       getBookings:'bookings',

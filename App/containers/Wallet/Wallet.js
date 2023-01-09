@@ -32,7 +32,7 @@ const Wallet = () => {
   const onSuccees = data => {
     setLoading(false);
     console.log('DAta ->> ', data);
-    setTransactionDetail(data.Payload.Payments);
+    setTransactionDetail(data.Payload.payments);
     setBalance(data.Payload.walletBalance);
   };
   const onFailure = () => {

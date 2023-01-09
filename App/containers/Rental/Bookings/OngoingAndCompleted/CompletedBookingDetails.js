@@ -329,10 +329,9 @@ const CompletedBookingDetails = props => {
                 margin: 2,
               }}>
               <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Start Time : </Text>
                   <Text style={styles.titleInfo}>
-                    {' '}
                     {`${moment(new Date(Bookings.BookingInfo.startTime))
                       .format('YYYY-MM-DD')
                       .toString()}`}
@@ -352,21 +351,17 @@ const CompletedBookingDetails = props => {
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Total Amount:</Text>
                   <Text style={styles.titleInfo}>
-                    
                     {Bookings.BookingInfo.totalAmount}
                   </Text>
                 </View>
+                <View style={{flexDirection: 'column'}}>
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Booking Status :</Text>
-                  <Text style={styles.titleInfo}>
-                    
-                    {Bookings.BookingInfo.rentalStatus == '4'
-                      ? 'Active Bookings'
-                      : Bookings.BookingInfo.rentalStatus == '5'
-                      ? 'Completed Bookings'
-                      : null}
-                  </Text>
+                  <Text style={styles.title}>User Name : </Text>
+                  <Text style={styles.titleInfo}>{rentee.username}</Text>
                 </View>
+                
+              </View>
+               
                 {/* <View>
                 <Rating
                   type="custom"
@@ -390,42 +385,50 @@ const CompletedBookingDetails = props => {
                 margin: 2,
               }}>
               <View style={{flexDirection: 'column'}}>
+                
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Cnic: </Text>
-                  <Text style={styles.titleInfo}>12345-6789101-2</Text>
-                </View>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Registration No.: </Text>
+                  <Text style={styles.title}>Reg No.: </Text>
                   <Text style={styles.titleInfo}>
                     {Vehicle.registrationNumber}
                   </Text>
                 </View>
               </View>
 
-              <View style={{flexDirection: 'column'}}>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>User Name : </Text>
-                  <Text style={styles.titleInfo}>{rentee.username}</Text>
+              <View style={{flexDirection: 'row', marginVertical: 3}}>
+                  <Text style={styles.title}>Booking Status :</Text>
+                  <Text style={styles.titleInfo}>
+                    {Bookings.BookingInfo.rentalStatus == '0'
+                      ? 'Pending'
+                      : Bookings.BookingInfo.rentalStatus == '1'
+                      ? 'Approve'
+                      : Bookings.BookingInfo.rentalStatus == '2'
+                      ? 'Rejected'
+                      : null}
+                  </Text>
                 </View>
-                <View style={{flexDirection: 'row', marginVertical: 3}}>
-                  <Text style={styles.title}>Phone No. : </Text>
-                  <Text style={styles.titleInfo}>{rentee.phone}</Text>
-                </View>
-                {/* <View>
-                <Rating
-                  type="custom"
-                  ratingColor={Colors.paleorange}
-                  // ratingBackgroundColor="#c8c7c8"
-                  startingValue={3.5}
-                  readonly
-                  ratingCount={5}
-                  imageSize={15}
-                  // onFinishRating={this.ratingCompleted}
-                  style={{paddingVertical: 3}}
-                />
-              </View> */}
-              </View>
+              
             </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                // width:wp('100%'),
+                justifyContent: 'space-between',
+                margin: 2,
+              }}>
+              <View style={{flexDirection: 'column'}}>
+                
+                <View style={{flexDirection: 'row', marginVertical: 3}}>
+                  <Text style={styles.title}>Car Description </Text>
+                  <Text style={styles.titleInfo}>
+                    {Vehicle.description}
+                  </Text>
+                </View>
+              </View>
+
+             
+              
+            </View>
+
 
             <View style={{marginVertical: 5}}>
               <View>

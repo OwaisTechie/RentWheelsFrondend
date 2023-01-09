@@ -96,12 +96,12 @@ const WalletItems = props => {
             </Text>
 
             <Text
-              style={{
-                fontSize: 14,
-                fontWeight: '600',
-                textAlign: 'center',
-                color: Colors.lightPurple,
-              }}>
+             style={{
+              fontSize: 14,
+              fontWeight: '600',
+              // textAlign:'center',
+              color: Colors.paleorange,
+            }}>
               {moment(item.transactionDate).format('DD-MM-YYYY')}
             </Text>
           </View>
@@ -122,8 +122,8 @@ const WalletItems = props => {
               style={{
                 fontSize: 14,
                 fontWeight: '600',
-                textAlign: 'center',
-                color: Colors.lightPurple,
+                // textAlign:'center',
+                color: Colors.paleorange,
               }}>
               {item.bookingId}
             </Text>

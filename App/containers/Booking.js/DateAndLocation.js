@@ -69,6 +69,10 @@ const DateAndLocation = props => {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
 
+  const thousandSeparator = (number) => {
+    return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   const hasBlockedDatesInBetweenStartAndEnd = (blockedDays, start, end) => {
     start = removeTime(new Date(start));
     end = removeTime(new Date(end));
@@ -117,10 +121,9 @@ const DateAndLocation = props => {
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       setSelectEndDate(date);
-      if (date != null) {
+      if(date != null) {
         const start = new Date(selectedStartDate),
           end = new Date(date);
-  
         if (
           hasBlockedDatesInBetweenStartAndEnd(disableDates, start, end) == true
         ) {
@@ -552,7 +555,7 @@ const onSelectedEndDate = (e) => {
               {total? (
               <View style={{flexDirection:'row',justifyContent:'center',marginVertical:10}}>
                 <Text style={{fontWeight:'bold',color:Colors.lightPurple}}>Total Amount : </Text>
-                <Text style={{fontWeight:'bold',fontSize:15}} >{total}</Text>
+                <Text style={{fontWeight:'bold',fontSize:15}} >{thousandSeparator(total)}</Text>
               </View>
               ):
               null}

@@ -48,6 +48,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {updateProfile} from './apiCalls/apiCalls';
 import {updateProfiles} from '../../Redux/auth/Reducer/authReducer';
 import Toast  from 'react-native-toast-message';
+import { getLocalHost } from '../../Constant/ConvertLocalHost';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -63,7 +64,7 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   // const [profilePic, setProfilePic] = useState('');
   const [cnicFront, setCnicFront] = useState('');
-  const [profilePicture, setprofilePicture] = useState('');
+  const [profile, setprofilePicture] = useState('');
 
   // const [cnicFrontImage, setCnicFrontImage] = useState('');
   // const [cnicBackImage, setCnicBackImage] = useState('');
@@ -269,17 +270,23 @@ const Profile = () => {
     if (verification) {
       let {image, cnicBack, cnicFront, licenseBack, licenseFront, utilityBill} =
         verification;
+
       console.log('utilityBills ->> ', utilityBill);
       console.log('utilityBills ->> ', licenseFront);
       console.log('utilityBills ->> ', licenseBack);
-      setCnicBack(cnicBack);
-      setCnicFront(cnicFront);
-      setLicenseFront(licenseFront);
-      setlicenseBack(licenseBack);
-      setCnicVerification(image);
-      setUtilityBills(utilityBills);
+      setCnicBack(getLocalHost(cnicBack));
+      setCnicFront(getLocalHost(cnicFront));
+      setLicenseFront(getLocalHost(licenseFront));
+      setlicenseBack(getLocalHost(licenseBack));
+      setCnicVerification(getLocalHost(image));
+      setUtilityBills(getLocalHost(utilityBill));
     }
-    setPictureImage(profilePicture);
+    // var imageProfile = getLocalHost(profilePicture ? profilePicture : '');
+    // console.log(imageProfile,"imageProfile")
+    if(profilePicture){
+      let pic=getLocalHost(profilePicture);
+      setPictureImage(pic);
+    }
     setPhoneInput(phone);
     setFormattedValue(phone);
     setUsername(username);
@@ -317,28 +324,31 @@ const Profile = () => {
         switch (documentValue) {
           case 'cnicFront':
             // setCnicFrontImage(img);
+            setDocumentValue('');
             setCnicFront(img);
             break;
           case 'cnicBack':
             // setCnicBackImage(img);
+            setDocumentValue('');
             setCnicBack(img);
             break;
           case 'licenseFront':
             // setLicenseFrontImage(img);
+            setDocumentValue('');
             setLicenseFront(img);
             break;
           case 'licenseBack':
             // setLicenseBackImage(img);
+            setDocumentValue('');
             setlicenseBack(img);
             break;
           case 'utilityBills':
             // setUtilityBillImage(img);
+            setDocumentValue('');
             setUtilityBills(img);
             break;
-          case 'cnicVerification':
-            // setCnicVerificationImage(img);
-            setCnicVerification(img);
           case 'profilePicture':
+            setDocumentValue('');
             setPictureImage(img.path);
             setprofilePicture(img);
         }
@@ -355,7 +365,7 @@ const Profile = () => {
       email == '' ||
       phoneInput == '' ||
       username == '' ||
-      profilePicture == null
+      profile == null
     ) {
       Alert.alert('User Details', 'Please fill all User Detail!', [
         {
@@ -368,11 +378,12 @@ const Profile = () => {
     } else {
       let Payload = {
         email: email,
-        profilePicture: profilePicture,
+        profilePicture: profile,
         phone: phoneInput,
         username: username,
       };
       console.log('Payload ->> ', Payload);
+      console.log('Payload PROFILE ->> ', Payload.profilePicture);
       setLoader(true);
       updateProfile(Payload, onUpdateSuccess, onUpdateFailure);
     }
@@ -416,30 +427,37 @@ const Profile = () => {
       switch (documentValue) {
         case 'cnicFront':
           // setCnicFrontImage(img);
+          setDocumentValue('');
           setCnicFront(image);
           break;
         case 'cnicBack':
           // setCnicBackImage(img);
+          setDocumentValue('');
           setCnicBack(image);
           break;
         case 'licenseFront':
           // setLicenseFrontImage(img);
+          setDocumentValue('');
           setLicenseFront(image);
           break;
         case 'licenseBack':
           // setLicenseBackImage(img);
+          setDocumentValue('');
           setlicenseBack(image);
           break;
         case 'utilityBills':
           // setUtilityBillImage(img);
+          setDocumentValue('');
           setUtilityBills(image);
           break;
-        case 'cnicVerification':
-          // setCnicVerificationImage(img);
-          setCnicVerification(image);
         case 'profilePicture':
-          setPictureImage(img.path);
-          setprofilePicture(img);
+          setPictureImage(image.path);
+          setprofilePicture(image);
+          setDocumentValue('');
+          break
+        default:
+        setCnicVerification(image);
+        setDocumentValue('');
       }
 
       setShowFilterModal(false);
@@ -508,7 +526,7 @@ const Profile = () => {
                   }}>
                   <Image
                     source={
-                      pictureImage == ''
+                      pictureImage == null
                         ? Images.menProfile
                         : {uri: pictureImage}
                     }
@@ -698,7 +716,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   // borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicFront.path}}
+                                source={{uri: cnicFront.path ? cnicFront.path : cnicFront}}
                                 resizeMode="contain"
                               />
 
@@ -779,7 +797,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicBack.path}}
+                                source={{uri: cnicBack.path ? cnicBack.path : cnicBack}}
                                 resizeMode="contain"
                               />
 
@@ -868,7 +886,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: licenseFront.path}}
+                                source={{uri: licenseFront.path ? licenseFront.path : licenseFront}}
                                 resizeMode="contain"
                               />
 
@@ -949,7 +967,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: licenseBack.path}}
+                                source={{uri: licenseBack.path ? licenseBack.path : licenseBack}}
                                 resizeMode="contain"
                               />
 
@@ -1039,7 +1057,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: utilityBills.path}}
+                                source={{uri: utilityBills.path ? utilityBills.path : utilityBills}}
                                 resizeMode="contain"
                               />
 
@@ -1084,7 +1102,7 @@ const Profile = () => {
                         }}>
                         {cnicVerification == '' ? (
                           <TouchableOpacity
-                            onPress={() => ModalOpen('cnicVerification')}>
+                            onPress={openCameraLibray}>
                             <View
                               style={{
                                 flex: 1,
@@ -1125,7 +1143,7 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicVerification.path}}
+                                source={{uri: cnicVerification.path ? cnicVerification.path : cnicVerification}}
                                 resizeMode="contain"
                               />
 

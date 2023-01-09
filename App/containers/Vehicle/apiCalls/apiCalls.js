@@ -288,7 +288,7 @@ export async function getReviewsOfVehicle(Payload,onSuccess, onFailure) {
   const vehicles = Config.endpoint.vehicles.getAllVehicles;
 
   console.log('Config ==>', Config);
-  const URL = `${baseUrl}${vehicles}63b3d1f934dc98d221247312${endpoint.Reviews.getAllReviewsOfVehicle}`;
+  const URL = `${baseUrl}${vehicles}${Payload}${endpoint.Reviews.getAllReviewsOfVehicle}`;
   // const URL = `${baseUrl}${vehicles}${Payload}${endpoint.Reviews.getAllReviewsOfVehicle}`;
   console.log('baseURL1 ==>', URL);
 

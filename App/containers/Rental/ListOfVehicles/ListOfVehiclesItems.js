@@ -40,11 +40,6 @@ export function ListOfVehiclesItems(props) {
         },
         styles.item,
       ]}
-      onPress={() =>
-        navigation.navigate('CompletedBookingDetails', {
-          BookingInfo: item,
-        })
-      }
     >
       <View style={styles.logo}>
         <Image

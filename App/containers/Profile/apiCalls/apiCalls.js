@@ -80,10 +80,11 @@ export async function updateProfile(Payload, onSuccess, onFailure) {
     return data;
   });
   console.log('HEADERS ->>', header);
+  console.log('Payload.profilePicture.path   ->>', Payload.profilePicture.path);
   
   const formData = new FormData();
   formData.append('username', Payload.username);
-  formData.append('email', Payload.eamil);
+  formData.append('email', Payload.email);
   formData.append('phone', Payload.phone);
   formData.append('profilePicture', {
     name: Payload.profilePicture.path.split('/').pop(),
@@ -100,7 +101,7 @@ export async function updateProfile(Payload, onSuccess, onFailure) {
   console.log('baseURL1 ==>', URL);
 
   axios
-    .post(URL, Payload, header)
+    .post(URL, formData, header)
     .then(res => {
       Toast.show({
         // topOffset: 30,

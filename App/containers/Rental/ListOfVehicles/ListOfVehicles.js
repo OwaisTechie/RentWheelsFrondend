@@ -21,6 +21,7 @@ import {ListOfVehiclesItems} from './ListOfVehiclesItems';
 import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
 import BottomSheetSkelton from '../../Map/BottomSheet/BottomSheetSkelton';
 import {Colors} from '../../../Theme';
+import { getRentalVehicles } from './apiCalls/apiCall';
 
 const ListOfVehicles = () => {
   const [switchValue, setSwitchValue] = useState(1);
@@ -1419,30 +1420,28 @@ const ListOfVehicles = () => {
  
 
   // useEffect(() => {
+  //   setIsLoading(true);
   //   console.log("PENDING",Payload.pending)
+    
   //   setPending(Payload.pending);
   //   setApprove(Payload.approved);
   //   setPending(Payload.rejected);
-  //   setIsLoading(false);
+    
   // },[])
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setIsLoading(true);
-  //     // activeRentals(onSuccess, onFailure);
-  //     setPending(Payload.pending)
-  //     setApprove(Payload.approved)
-  //     setPending(Payload.rejected)
-  //     setIsLoading(false);
-  //     // Do something when the screen is focused
-  //     return (() => {
-  //       setPending([]);
-  //       setRejected([]);
-  //       setApprove([]);
-  //       setIsLoading(false);
-  //     });
-  //   }, [])
-  //  );
+  useFocusEffect(
+    useCallback(() => {
+      setIsLoading(true);
+      getRentalVehicles(onSuccess,onFailure);
+      // Do something when the screen is focused
+      return (() => {
+        setPending([]);
+        setRejected([]);
+        setApprove([]);
+        setIsLoading(false);
+      });
+    }, [])
+   );
 
   function bookingView() {
     switch (switchValue) {
@@ -1602,12 +1601,14 @@ const ListOfVehicles = () => {
   }
 
   const onSuccess = data => {
-    const {
-      Payload: {onGoing, completed},
-    } = data;
+    console.log("DATA ->> ",data)
+    // const {
+    //   Payload: {onGoing, completed},
+    // } = data;
 
-    setOnGoing(onGoing);
-    setCompleted(completed);
+    // setPending(onGoing);
+    // setApprove(completed);
+    // setRejected(completed);
     setIsLoading(false);
   };
 
