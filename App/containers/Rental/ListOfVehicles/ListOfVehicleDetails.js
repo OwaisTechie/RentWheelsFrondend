@@ -14,7 +14,6 @@ import {
   StyleSheet,
 } from 'react-native';
 // import {COLOURS, Items} from '../database/Database';
-import {Colors, CustomIcons} from '../../Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 import {
@@ -23,25 +22,20 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getLocalHost} from '../../Constant/ConvertLocalHost';
 import {Rating} from 'react-native-ratings';
 import {useDispatch, useSelector} from 'react-redux';
 import Geocoder from 'react-native-geocoding';
-import CustomButton from '../../Components/Custom_btn/CustomButton';
+import CustomButton from '../../../Components/Custom_btn/CustomButton';
 import {getVehicleById} from '../../Redux/auth/Reducer/vehicleReducer';
 import {
   setCarAddress,
   setCarLatLong,
-} from '../../Redux/auth/Reducer/AddressReducer';
-import {getReviewsOfVehicle, isVerified} from './apiCalls/apiCalls';
-import CustomSwitch from '../../Components/Custom_Switch/CustomSwitch';
-import ReviewList from './ReviewList/ReviewList';
-import moment from 'moment';
-import BottomSheetSkelton from '../Map/BottomSheet/BottomSheetSkelton';
+} from '../../../Redux/auth/Reducer/AddressReducer';
+import { getLocalHost } from '../../../Constant/ConvertLocalHost';
+import { Colors, CustomIcons } from '../../../Theme';
 
-const VehicleDetails = props => {
+const ListOfVehicleDetails = props => {
   const {navigation, route} = props;
   const [reviewLoading, setReviewLoading] = useState(true);
   const [Reviews, setReviews] = useState([]);
@@ -53,6 +47,7 @@ const VehicleDetails = props => {
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
   var location = Vehicle?.pickupLocation?.coordinates;
+  console.log("LOCATIOn ->> ",location);
   const markerAddress = useSelector(state => state.address.userAddress);
 
   const [Specification, setSpecification] = useState({
@@ -64,36 +59,14 @@ const VehicleDetails = props => {
   });
 
   useEffect(() => {
-    dispatch(
-      setCarLatLong({
-        latitude: location[0],
-        longitude: location[1],
-      }),
-    );
-    // Geocoder.init('AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g'); // use a valid API key
+    Geocoder.init('AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g'); // use a valid API key
     Geocoder.from(location[0], location[1])
       .then(json => {
         var addressComponent = json.results[0].formatted_address;
-        dispatch(setCarAddress(addressComponent));
         setDestination(addressComponent);
       })
       .catch(error => console.warn(error));
   }, []);
-  useEffect(() => {
-    setReviewLoading(true);
-    let VehicleID = Vehicle._id;
-    getReviewsOfVehicle(VehicleID, onSuccessReview, onSuccessFailure);
-  }, []);
-
-  const onSuccessReview = data => {
-    console.log('DATA ->> ', data);
-    let {Payload} = data;
-    setReviewLoading(false);
-    setReviews(Payload);
-  };
-  const onSuccessFailure = () => {
-    onSuccessFailure(false);
-  };
 
   const [vehiclesCategory, setVehiclesCategory] = useState(
     Vehicle?.vehicleCategory,
@@ -118,22 +91,7 @@ const VehicleDetails = props => {
     isVerified(onSuccess, onFailure);
   };
 
-  const onSuccess = data => {
-    const {Success} = data;
-    if (Success === true) {
-      setLoader(false);
-      navigation.navigate('DateAndLocation', {
-        vehicleId: Vehicle._id,
-      });
-    } else {
-      setLoader(false);
-    }
-  };
-
-  const onFailure = () => {
-    setLoader(false);
-    navigation.navigate('Profile');
-  };
+ 
 
   //   useEffect(() => {
   //     const unsubscribe = navigation.addListener('focus', () => {
@@ -199,7 +157,6 @@ const VehicleDetails = props => {
   //product horizontal scroll product card
   const renderProduct = ({item, index}) => {
     item = getLocalHost(item);
-    console.log('IMAGE =>> ', item);
     return (
       <View style={styles.renderProduct}>
         <Image
@@ -305,15 +262,7 @@ const VehicleDetails = props => {
             borderTopRightRadius: 40,
             backgroundColor: Colors.White,
           }}>
-          <View>
-            <CustomSwitch
-              selectionMode={1}
-              option1="Vehicle Details"
-              option2="Reviews"
-              onSelectSwitch={e => setSwitchValue(e)}
-            />
-          </View>
-          {switchValue == '1' ? (
+          
             <View>
               <View
                 style={{
@@ -460,50 +409,10 @@ const VehicleDetails = props => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View style={{marginVertical: wp('5%')}}>
-                  <CustomButton
-                    loader={loader}
-                    onPress={handleSubmit}
-                    title="Book Now"
-                  />
-                </View>
+                
               </View>
             </View>
-          ) : (
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              nestedScrollEnabled={true}>
-              {/* <View> */}
-                {reviewLoading ? (
-                  <BottomSheetSkelton />
-                ) : Reviews?.length < 1 ? (
-                  <View
-                    style={{
-                      height:heightPercentageToDP('50%'),
 
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{color: 'black'}}>
-                      Sorry there are no Reviews
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    data={Reviews}
-                    contentContainerStyle={styles.contentContainer}
-                    //   refreshing={true}
-                    // style={{height: '100%'}}
-                    keyExtractor={key => {
-                      return key._id;
-                    }}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({item}) => <ReviewList item={item} />}
-                  />
-                )}
-              {/* </View> */}
-            </ScrollView>
-          )}
         </View>
       </ScrollView>
 
@@ -613,10 +522,11 @@ const styles = StyleSheet.create({
     borderColor: Colors.backgroundMedium,
     borderWidth: 2,
     width: '100%',
-    height: '10%',
+    height: '20%',
     paddingHorizontal: 4,
+    paddingVertical:10,
     justifyContent: 'center',
   },
 });
 
-export default VehicleDetails;
+export default ListOfVehicleDetails;

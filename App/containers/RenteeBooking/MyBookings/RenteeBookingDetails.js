@@ -735,9 +735,9 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   renderImage: {
-    width: '100%',
-    height: '90%',
-    resizeMode: 'contain',
+    width: '90%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   renderProduct: {
     width: wp('100%'),

@@ -13,7 +13,6 @@ import {
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 // import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import {RNHoleView} from 'react-native-hole-view';
 import {Colors, CustomIcons} from '../../Theme';
 import {
   useScanBarcodes,

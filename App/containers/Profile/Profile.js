@@ -72,6 +72,7 @@ const Profile = () => {
   // const [licenseBackImage, setLicenseBackImage] = useState('');
   // const [utilityBillImage, setUtilityBillImage] = useState('');
   // const [cnicVerificationImage, setCnicVerificationImage] = useState('');
+  const [cnic, setCnic] = useState('');
 
   const [openCamera, setOpenCamera] = useState(false);
   const [documentValue, setDocumentValue] = useState('');
@@ -156,7 +157,8 @@ const Profile = () => {
       licenseFront == '' ||
       licenseBack == '' ||
       utilityBills == '' ||
-      cnicVerification == ''
+      cnicVerification == '' ||
+      cnic == ''
     ) {
       Alert.alert('Document Validation', 'Please fill all the Documents!', [
         {
@@ -173,6 +175,8 @@ const Profile = () => {
       console.log('HEADERS ->>', header);
       setLoader(true);
       const formData = new FormData();
+
+      formData.append('cnicNo',cnic);
 
       formData.append('cnicFront', {
         name: cnicFront.path.split('/').pop(),
@@ -280,6 +284,7 @@ const Profile = () => {
       setlicenseBack(getLocalHost(licenseBack));
       setCnicVerification(getLocalHost(image));
       setUtilityBills(getLocalHost(utilityBill));
+      
     }
     // var imageProfile = getLocalHost(profilePicture ? profilePicture : '');
     // console.log(imageProfile,"imageProfile")
@@ -644,6 +649,28 @@ const Profile = () => {
                 </Text>
               </View>
               {/* <View > */}
+              <View style={styles.gap} />
+
+              <View>
+                  <CustomInput
+                    placeholder="Enter your Cnic"
+                    iconName="account-key-outline"
+                    type="materialCommunity"
+                    label="Cnic"
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    value={cnic}
+                    // onSubmitEditing={() => {
+                    //   password.current.focus();
+                    // }}
+                    // onBlur={'handleBlur('username')'}
+                    // error={errors.username}
+                    // touched={touched.username}
+                    onChangeText={e => setCnic(e)}
+                    keyboardAppearance="dark"
+                  />
+
+                </View>
               <View style={styles.gap} />
 
               {/* // Cnic front and back */}

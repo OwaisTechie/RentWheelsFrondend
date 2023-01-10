@@ -218,7 +218,7 @@ const RenteeCompletedBookingDetails = props => {
         <Image
           onLoadEnd={() => setLoading(false)}
           source={{
-            uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+            uri: item ? item :'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
           }}
           style={styles.renderImage}
           onLoadStart={() => setLoading(true)}
@@ -672,9 +672,9 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   renderImage: {
-    width: '100%',
-    height: '90%',
-    resizeMode: 'contain',
+    width: '90%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   renderProduct: {
     width: wp('100%'),

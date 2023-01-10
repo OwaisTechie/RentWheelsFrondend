@@ -25,11 +25,12 @@ import PaymentCard from '../../../containers/Card/PaymentCard';
 import Bookings from '../../../containers/Rental/Bookings/Bookings';
 import BookingDetails from '../../../containers/Rental/Bookings/BookingDetails';
 import ListOfVehicles from '../../../containers/Rental/ListOfVehicles/ListOfVehicles';
-import { ListOfVehiclesItems } from '../../../containers/Rental/ListOfVehicles/ListOfVehiclesItems';
+import {ListOfVehiclesItems} from '../../../containers/Rental/ListOfVehicles/ListOfVehiclesItems';
+import ListOfVehicleDetails from '../../../containers/Rental/ListOfVehicles/ListOfVehicleDetails';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-const OwnerVehicleNavigator = (props) => {
-    const {navigation}= props;
+const OwnerVehicleNavigator = props => {
+  const {navigation} = props;
   function HeaderLeft(properties) {
     return (
       <TouchableOpacity
@@ -46,7 +47,7 @@ const OwnerVehicleNavigator = (props) => {
       <TouchableOpacity
         style={{alignSelf: 'center', marginLeft: 8}}
         onPress={() => {
-            navigation.openDrawer();
+          navigation.openDrawer();
         }}>
         <Icon size={35} color={Colors.lightPurple} name={'ios-menu-sharp'} />
       </TouchableOpacity>
@@ -97,20 +98,27 @@ const OwnerVehicleNavigator = (props) => {
         name="OwnerVehicle"
         component={ListOfVehicles}
         options={{
-            // drawerLabel:'List of Bookings',
-            drawerIcon: ({color}) => (
-              <Ionicons name="home-outline" size={22} color={color} />
-            ),
-            title: 'My Vehicles',
-            headerTitle: props => <Headercenter {...props} />,
-            headerLeft: props => <BookingHeaderLeft {...props} />
+          // drawerLabel:'List of Bookings',
+          drawerIcon: ({color}) => (
+            <Ionicons name="home-outline" size={22} color={color} />
+          ),
+          title: 'My Vehicles',
+          headerTitle: props => <Headercenter {...props} />,
+          headerLeft: props => <BookingHeaderLeft {...props} />,
         }}
       />
 
       <OwnerVehicleStack.Screen
         name={'OwnerVehicleDetail'}
-        component={ListOfVehiclesItems}
+        component={ListOfVehicleDetails}
         options={{headerShown: false}}
+      />
+      <OwnerVehicleStack.Screen
+        name="VehicleMap"
+        component={VehicleMap}
+        options={{
+          headerShown: false,
+        }}
       />
     </OwnerVehicleStack.Navigator>
   );

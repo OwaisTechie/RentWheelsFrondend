@@ -14,6 +14,8 @@ import {
   StyleSheet,
   Button,
   Alert,
+  Modal,
+  Pressable,
 } from 'react-native';
 // import {COLOURS, Items} from '../database/Database';
 import {Colors, CustomIcons} from '../../../Theme';
@@ -42,6 +44,7 @@ import {approveRejectBooking, startRental} from './apiCalls/apiCall';
 import ModalPoup from '../../../Components/CustomModal/ModalPopup';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import * as Animatable from 'react-native-animatable';
+import CustomInput from '../../../Components/CustomTextField/CustomInput';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -51,6 +54,7 @@ const BookingDetails = props => {
 
   const camera = useRef(null);
   const [Isactive, setIsActive] = useState(false);
+  const [cnic, setCnic] = useState('');
 
   const [loader, setLoader] = useState(false);
   const [isQrScanner, setQrScanner] = useState(false);
@@ -65,6 +69,12 @@ const BookingDetails = props => {
   console.log('LOCATION ->> ', location);
   const markerAddress = useSelector(state => state.address.userAddress);
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleSubmit = () => {
+    setModalVisible(!modalVisible)
+    setQrScanner(true);
+  }
+
   const makeSlideOutTranslation = (translationType, fromValue) => {
     return {
       from: {
@@ -77,7 +87,6 @@ const BookingDetails = props => {
   };
 
   const startScan = () => {
-    console.log('first');
     setIsActive(true);
   };
 
@@ -144,13 +153,13 @@ const BookingDetails = props => {
   const onApproveSuccess = data => {
     // const {Payload} = data;
     console.log('Approve PAyload ->> ', data);
-    setLoader(!loader);
+    setLoader(false);
     navigation.goBack();
   };
 
   const onApproveFailure = () => {
     console.log('onFailure');
-    setLoader(!loader);
+    setLoader(false);
   };
 
   const rejectBooking = () => {
@@ -170,12 +179,12 @@ const BookingDetails = props => {
 
   const onRejectFailure = () => {
     console.log('onFailure');
-    setLoader(!loader);
+    setRejectLoader(!rejectLoader);
   };
 
   const startBooking = () => {
     console.log('startBooking');
-    setQrScanner(true);
+    setModalVisible(true);
   };
 
   const onQrScan = e => {
@@ -184,6 +193,7 @@ const BookingDetails = props => {
     let Payload = {
       bookingID: Bookings.BookingInfo._id,
       startCode: e.data,
+      cnicNo:cnic
     };
     console.log('Payload ->> ', Payload);
     // let Payload = {
@@ -745,6 +755,39 @@ const BookingDetails = props => {
       }
     />
       </ModalPoup> */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+              <View style={{width:widthPercentageToDP('80%')}}>
+                  <CustomInput
+                    placeholder={'Enter Cnic'}
+                    iconName="ios-timer-sharp"
+                    type="ionicon"
+                    label="Cnic"
+                    value={cnic}
+                    returnKeyType="next"
+                    returnKeyLabel="next"
+                    onChangeText={values => setCnic(values)}
+                    selectTextOnFocus={false}
+                    autoCompleteType="off"
+                    autoCapitalize="none"
+                    keyboardAppearance="dark"
+                  />
+                </View>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={handleSubmit}>
+                  <Text style={styles.textStyle}>Submit</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
     </View>
   );
 };
@@ -806,9 +849,9 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   renderImage: {
-    width: '100%',
-    height: '90%',
-    resizeMode: 'contain',
+    width: '90%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   renderProduct: {
     width: wp('100%'),
@@ -889,6 +932,46 @@ const styles = StyleSheet.create({
     height: scanBarHeight,
     backgroundColor: scanBarColor,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    // marginTop: 22
+  },
+  modalView: {
+    padding:15,
+    backgroundColor: "white",
+    borderRadius: 20,
+    alignItems: "flex-end",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor:Colors.lightPurple,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 
 export default BookingDetails;

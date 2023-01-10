@@ -223,7 +223,7 @@ const CompletedBookingDetails = props => {
         <Image
           onLoadEnd={() => setLoading(false)}
           source={{
-            uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+            uri: item ? item :'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
           }}
           style={styles.renderImage}
           onLoadStart={() => setLoading(true)}
@@ -397,12 +397,11 @@ const CompletedBookingDetails = props => {
               <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>Booking Status :</Text>
                   <Text style={styles.titleInfo}>
-                    {Bookings.BookingInfo.rentalStatus == '0'
-                      ? 'Pending'
-                      : Bookings.BookingInfo.rentalStatus == '1'
-                      ? 'Approve'
-                      : Bookings.BookingInfo.rentalStatus == '2'
-                      ? 'Rejected'
+                    {Bookings.BookingInfo.rentalStatus == '4'
+                      ? 'Active Bookings'
+                      : Bookings.BookingInfo.rentalStatus == '3'
+                      ? 'Completed Bookings'
+                     
                       : null}
                   </Text>
                 </View>
@@ -520,7 +519,7 @@ const CompletedBookingDetails = props => {
                 </Text>
               </View>
               <View style={styles.addressContainer}>
-                <TouchableOpacity onPress={onMapView}>
+                <TouchableOpacity>
                   <Text
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -734,9 +733,9 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   renderImage: {
-    width: '100%',
-    height: '90%',
-    resizeMode: 'contain',
+    width: '90%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   renderProduct: {
     width: wp('100%'),

@@ -26,7 +26,7 @@ const CustomDrawer = props => {
   const navigation =useNavigation();
 
   const {userMode,isLoading,users:{user}} = useSelector(state => state.auth);
-  var  Username;
+  var Username;
   var  userProfile;
   if(typeof user == "string"){
 
@@ -117,7 +117,7 @@ const CustomDrawer = props => {
       <DrawerContentScrollView {...props}>
         <ImageBackground source={Images.menu11} style={{padding: 20}}>
           <Image
-            source={Username.profilePicture ? Username.profilePicture : Images.menProfile}
+            source={Images.menProfile}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text

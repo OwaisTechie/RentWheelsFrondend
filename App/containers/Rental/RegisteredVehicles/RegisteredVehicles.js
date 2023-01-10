@@ -246,7 +246,7 @@ const RegisteredVehicles = () => {
       showsSelectedCount: true,
     }).then(async imgs => {
       const result = [];
-      if (imgs.length <= 4) {
+      if (imgs.length <= 10) {
         let id = 0;
         for await (const image of imgs) {
           id = id + 1;
@@ -265,7 +265,7 @@ const RegisteredVehicles = () => {
         }
       } else {
         // setImages([...images]);
-        ToastAndroid.show('Maximum of 4 images allowed', ToastAndroid.SHORT);
+        ToastAndroid.show('Maximum of 10 images allowed', ToastAndroid.SHORT);
       }
       handleOnChange(result, 'images');
       handleError(null, 'images');

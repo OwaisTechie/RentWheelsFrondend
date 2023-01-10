@@ -27,10 +27,7 @@ export function CompletedBookingsItem(props) {
   const pickupLocation = item?.pickupLocation?.coordinates;
   const vehicle = item?.vehicle;
   const rentee = item?.rentee;
-  let image =
-    'http://localhost:8000/public/images/vehicle-papers/Aventador-1670076605975-548847761.jpeg';
-  // let image = 'https://www.pngall.com/wp-content/uploads/2016/07/Car-Download-PNG.png';
-  // const [skeletonLoader, setskeletonLoader] = useState(true);
+  let image = vehicle.images[0] ? vehicle.images[0] : 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png'
   image = getLocalHost(image);
 
   return (
@@ -93,7 +90,7 @@ export function CompletedBookingsItem(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Status :</Text>
           <Text style={styles.userDetail}>
-           {item.rentalStatus == "4" ? "Active Bookings " : item.rentalStatus == "5" ? "Completed Bookings" : null}
+           {item.rentalStatus == "4" ? "Active Bookings" : item.rentalStatus == "3" ? "Completed Bookings" : null}
           </Text>
         </View>
         <View

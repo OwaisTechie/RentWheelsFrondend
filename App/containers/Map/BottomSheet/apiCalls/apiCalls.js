@@ -6,7 +6,7 @@ export function getNearByLocation(payload,onSuccess, onFailure) {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.getAllVehicles;
   // const URL = `${baseUrl}${endpoint}?pickupLocation=${pickupLoc[0]},${pickupLoc[1]}&excludeOwner=${ownerId}`;
-  const URL = `${baseUrl}${endpoint}?pickupLocation=${pickupLoc[0]},${pickupLoc[1]}`;
+  const URL = `${baseUrl}${endpoint}?pickupLocation=${pickupLoc[0]},${pickupLoc[1]}&excludeOwner=${ownerId}`;
   console.log("URL ->> ",URL);
   // const CancelToken = axios.CancelToken;
   // const source = CancelToken.source();
@@ -130,22 +130,14 @@ export function getVehicle(payload, onSuccess, onFailure) {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.getAllVehicles;
   // const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&pickupLocation=${payload.longitude},${payload.latitude}`;
-  const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&averageRating=${payload.ratings}`;
+  const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&averageRating=${payload.ratings}&excludeOwner=${payload.ownerId}`;
 
   console.log("URL ->> ",URL)
   console.log("payload ->> ",payload)
   axios
-    .get(URL
-      // , 
-    //   {
-    //   // cancelToken: source?.token,
-    //   params: `selfDriveCharges.selfDriveDailyCharges[gte]=${payload?.startPrice}&elfDriveCharges.selfDriveDailyCharges[lte]=${payload.endPrice}`
-    // }
-    )
+    .get(URL)
     // .get(URL,{ params: `selfDriveCharges.selfDriveDailyCharges[gte]=${payload.noOfSeats}||noOfSeats=${payload.noOfSeats}||noOfDoors${payload}`})
     .then(res => {
-      // if (res.data.responseCode === 200) {
-
       Toast.show({
         // topOffset: 30,
         topOffset: 60,
@@ -156,7 +148,6 @@ export function getVehicle(payload, onSuccess, onFailure) {
         autoHide: true,
       });
       onSuccess(res.data.Payload);
-      // console.log(`onSuccess Passing : ${JSON.stringify({cnic:cnic,...res.data})}`)
     })
     .catch(error => {
       console.log(error, 'Error...');
@@ -189,19 +180,14 @@ export function getVehicle(payload, onSuccess, onFailure) {
             autoHide: true,
           });
         }
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        // onFailure(error.request.status);
 
         console.log('error.response: ', error.response);
         console.log(error.response.data);
         console.log(error.response.status);
-        // console.log(error.response.data.message);
+        
         console.log(error.response.headers);
       } else if (error.request) {
         console.log('error.request: ', error.request);
-        // let errorRes = error.request._response ? error.request.response.Message : ;
-        // 'Server Not Found!'
         Toast.show({
           topOffset: 60,
           type: 'error',

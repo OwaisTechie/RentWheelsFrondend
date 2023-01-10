@@ -50,7 +50,10 @@ import FilterList from './BottomSheet/FilterList';
 import FilterModal from './FilterModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhoneInput from 'react-native-phone-number-input';
-import { setUserAddress, setUserLatLong } from '../../Redux/auth/Reducer/AddressReducer';
+import {
+  setUserAddress,
+  setUserLatLong,
+} from '../../Redux/auth/Reducer/AddressReducer';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -68,7 +71,6 @@ const MapScreen = props => {
 
   const [vehicles, setVehicles] = useState([]);
 
-
   const [address, setAddress] = useState('');
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -83,7 +85,6 @@ const MapScreen = props => {
 
   const [vehicleLoading, setVehicleLoading] = useState(true);
   const placesRef = useRef();
-
 
   // useFocusEffect(
   //   useCallback(() => {
@@ -100,28 +101,35 @@ const MapScreen = props => {
   //         getNearByLocation(payload, onSuccess, onFailure);
   //     }
 
-
   //   }, [LocationMarker,userId])
   // );
 
   useEffect(() => {
     // navigation.addListener('focus', () => {
-      if (vehicles?.length < 1 && LocationMarker.latitude != 0 && LocationMarker.longitude != 0 && userId ) {
-        console.log("userId" ,userId)
-          let payload= {
-            ownerId:userId._id,
-            pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
-          }
-          setVehicleLoading(true);
-          getNearByLocation(payload, onSuccess, onFailure);
+    if (
+      vehicles?.length < 1 &&
+      LocationMarker.latitude != 0 &&
+      LocationMarker.longitude != 0 &&
+      userId
+    ) {
+      console.log('userId', userId);
+      var userData;
+      if (typeof userId == 'string') {
+        userData = JSON.parse(userId);
+      } else {
+        userData = userId;
       }
+      let payload = {
+        ownerId: userData._id,
+        pickupLoc: [LocationMarker.longitude, LocationMarker.latitude],
+      };
+      setVehicleLoading(true);
+      getNearByLocation(payload, onSuccess, onFailure);
+    }
     // });
-    
-    
-  }, [LocationMarker,userId]);
+  }, [LocationMarker, userId]);
 
   const onSuccess = data => {
-    console.log("DATA ->> ",data);
     setVehicleLoading(false);
     setVehicles(data.data);
   };
@@ -145,12 +153,12 @@ const MapScreen = props => {
 
   // callbacks
   const handleRefresh = () => {
-    console.log("USER ->> ",userId)
-    let payload= {
-      ownerId:userId._id,
-      pickupLoc : [LocationMarker.longitude,LocationMarker.latitude],
-    }
-    console.log("PAYLOAD ->> ",payload)
+    console.log('USER ->> ', userId);
+    let payload = {
+      ownerId: userId._id,
+      pickupLoc: [LocationMarker.longitude, LocationMarker.latitude],
+    };
+    console.log('PAYLOAD ->> ', payload);
     // let location = [LocationMarker.latitude, LocationMarker.longitude];
     // let pickupLocation = [24.954179757526536, 67.14250599750613];
     setVehicles([]);
@@ -159,15 +167,15 @@ const MapScreen = props => {
   };
 
   const applyFilter = filterData => {
-    
     setVehicleLoading(true);
     setShowFilterModal(false);
     setVehicles([]);
     const payload = {
       ...filterData,
-      pickupLocation: userLatLong,
+      pickupLocation: [LocationMarker.longitude, LocationMarker.latitude],
+      ownerId: userId._id,
     };
-    console.log("PAYLOAD ->> ",payload);
+    console.log('PAYLOAD ->> ', payload);
     getVehicle(payload, onFilterSuccess, onFailure);
     // setShowFilterModal(!showfilterModal)
     // setCount(current => current + num);
@@ -185,7 +193,6 @@ const MapScreen = props => {
   };
 
   const onSuccessVehicle = data => {
-    
     console.log('onSuccessVehicle ->> ', data);
   };
 
@@ -231,26 +238,29 @@ const MapScreen = props => {
             onFail={error => console.log(error)}
             onNotFound={() => console.log('no results')}
             textInputProps={{
-              leftIcon: { type: 'font-awesome', name: 'chevron-left' },
+              leftIcon: {type: 'font-awesome', name: 'chevron-left'},
               onChangeText: text => {
                 console.log('TEXT ->> ', text);
               },
               onFocus: () => setIsPlaces(true),
-              isFocused:(e) => console.log("SSS",e),
+              isFocused: e => console.log('SSS', e),
               onBlur: () => console.log('Not Focus'),
             }}
             onPress={(data, details = null) => {
               setIsPlaces(false);
               console.log('DETAILS ->> ', details.geometry.location);
               console.log('data ->> ', data.description);
-              setAddress(data.description)
-              let payload= {
-                ownerId:userId._id,
-                pickupLoc : [details.geometry.location.lng,details.geometry.lat],
-              }
-              console.log("PAYLOAD ->> ",payload)
+              setAddress(data.description);
+              let payload = {
+                ownerId: userId._id,
+                pickupLoc: [
+                  details.geometry.location.lng,
+                  details.geometry.lat,
+                ],
+              };
+              console.log('PAYLOAD ->> ', payload);
               // let pickupLocation = [67.0699,24.8604]
-              setVehicleLoading(true)
+              setVehicleLoading(true);
               getNearByLocation(payload, onSuccess, onFailure);
               // setRegion({
               // 	latitude: details.geometry.location.lat,
@@ -294,14 +304,14 @@ const MapScreen = props => {
           />
 
           <View style={{position: 'absolute', right: 10, top: 5}}>
-            <TouchableOpacity onPress={() => placesRef.current?.setAddressText('')}>
-
-            <CustomIcons
-              type="entypo"
-              name="circle-with-cross"
-              size={25}
-              color={Colors.lightPurple}
-            />
+            <TouchableOpacity
+              onPress={() => placesRef.current?.setAddressText('')}>
+              <CustomIcons
+                type="entypo"
+                name="circle-with-cross"
+                size={25}
+                color={Colors.lightPurple}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -314,7 +324,6 @@ const MapScreen = props => {
         loadingEnabled={vehicles?.length > 0 ? false : true}
         // showsUserLocation={true}
         showsMyLocationButton={true}
-
         loadingIndicatorColor={Colors.lightPurple}
         style={{
           width: Dimensions.get('window').width,
@@ -342,25 +351,27 @@ const MapScreen = props => {
         //   });
         // }}
         mapType="standard">
-        {vehicles?.length > 0 ? (
-          vehicles.map((marker, index) => {
-            return (
-              <CustomMarker
-                key={marker._id}
-                id={marker._id}
-                selectedMarker={selectedMarker}
-                latitude={marker.pickupLocation.coordinates[0]}
-                longitude={marker.pickupLocation.coordinates[1]}></CustomMarker>
-            );
-          })
-        ):null}
+        {vehicles?.length > 0
+          ? vehicles.map((marker, index) => {
+              return (
+                <CustomMarker
+                  key={marker._id}
+                  id={marker._id}
+                  selectedMarker={selectedMarker}
+                  latitude={marker.pickupLocation.coordinates[0]}
+                  longitude={
+                    marker.pickupLocation.coordinates[1]
+                  }></CustomMarker>
+              );
+            })
+          : null}
         <Marker
-            coordinate={{
-              latitude: LocationMarker?.latitude,
-              longitude: LocationMarker?.longitude,
-              latitudeDelta: 0.003,
-              longitudeDelta: 0.003,
-            }}></Marker>
+          coordinate={{
+            latitude: LocationMarker?.latitude,
+            longitude: LocationMarker?.longitude,
+            latitudeDelta: 0.003,
+            longitudeDelta: 0.003,
+          }}></Marker>
       </MapView>
 
       <BottomSheets
@@ -371,51 +382,56 @@ const MapScreen = props => {
         // onChange={handleSheetChange}
       >
         {/* {vehicleLoading ? ( */}
-          <View>
-            <View style={styles.NearByText}>
-              <Text
-                style={{
-                  color: Colors.lightPurple,
-                  fontWeight: 'bold',
-                  fontSize: 15,
-                }}>
-                Vehicles Near By
-              </Text>
-            </View>
-            <View style={styles.headerList}>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={styles.headerNearText}>
-                {userAddress}
-              </Text>
-            </View>
-            <View
+        <View>
+          <View style={styles.NearByText}>
+            <Text
               style={{
-                // justifyContent: 'flex-end',
-                // flexDirection: 'row',
-                alignItems: 'flex-end',
-                marginHorizontal: 10,
+                color: Colors.lightPurple,
+                fontWeight: 'bold',
+                fontSize: 15,
               }}>
-              {/* {data.length > 0 ? ( */}
-              {/* <TouchableOpacity> */}
-              {/* <TouchableOpacity onPress={() => navigation.navigate('AllVehicle')}> */}
-              <TouchableOpacity onPress={changeFilter}>
-                {/* <TouchableOpacity onPress={() => navigation.getParent('RightDrawer').openDrawer()}> */}
-                {/* <Text style={styles.headerListText}>List All</Text> */}
-                <CustomIcons
-                  type="ionicon"
-                  name="options-sharp"
-                  size={28}
-                  color={Colors.lightPurple}
-                />
-              </TouchableOpacity>
-            </View>
+              Vehicles Near By
+            </Text>
           </View>
+          <View style={styles.headerList}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.headerNearText}>
+              {userAddress}
+            </Text>
+          </View>
+          <View
+            style={{
+              // justifyContent: 'flex-end',
+              // flexDirection: 'row',
+              alignItems: 'flex-end',
+              marginHorizontal: 10,
+            }}>
+            {/* {data.length > 0 ? ( */}
+            {/* <TouchableOpacity> */}
+            {/* <TouchableOpacity onPress={() => navigation.navigate('AllVehicle')}> */}
+            <TouchableOpacity onPress={changeFilter}>
+              {/* <TouchableOpacity onPress={() => navigation.getParent('RightDrawer').openDrawer()}> */}
+              {/* <Text style={styles.headerListText}>List All</Text> */}
+              <CustomIcons
+                type="ionicon"
+                name="options-sharp"
+                size={28}
+                color={Colors.lightPurple}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
         {/* ) : null} */}
         {vehicleLoading ? (
           <BottomSheetSkelton />
-        ) : vehicles?.length < 1 ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'black'}}>Sorry there are no Resuls</Text></View>  : 
+        ) : vehicles?.length < 1 ? (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: 'black'}}>Sorry there are no Resuls</Text>
+          </View>
+        ) : (
           <BottomSheetFlatList
             contentContainerStyle={styles.contentContainer}
             data={vehicles}
@@ -429,7 +445,7 @@ const MapScreen = props => {
             renderItem={({item}) => (
               <ListItem item={item} onPressElement={handleNavigateToPoint} />
             )}></BottomSheetFlatList>
-        }
+        )}
       </BottomSheets>
 
       {showfilterModal ? (
