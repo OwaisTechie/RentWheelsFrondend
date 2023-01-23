@@ -12,6 +12,7 @@ import {
   Keyboard,
   Dimensions,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import CheckBox from '@react-native-community/checkbox';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useFormik} from 'formik';
@@ -41,6 +42,7 @@ const RegisteredVehicles = () => {
   const navigation = useNavigation();
   const [pickupFlag, setPickupFlag] = useState(false);
   const [isEnable, setIsEnable] = useState(false);
+  const [spinner,setSpinner] = useState(false);
   const [pickupText, setPickupText] = useState('');
   const [inputs, setInputs] = useState({
     vehicleCategory: '',
@@ -221,17 +223,20 @@ const RegisteredVehicles = () => {
       isAutomatic:isAutomatic
     };
     console.log("SUBMIT DATA ->>",Payload)
+    setSpinner(true);
     setIsEnable(true);
     addVehicle(Payload,onVehicleSuccess,onVehicleFailure)
   };
 
   const onVehicleSuccess = (data) => {
-    setIsEnable(false)
+    setIsEnable(false);
+    setSpinner(false);
     navigation.navigate('OwnerVehicleNavigator', { screen: 'OwnerVehicle' });
   }
   const onVehicleFailure = () => {
-    console.log("RESPONSE ->> ")
-    setIsEnable(false)
+    console.log("RESPONSE ->> ");
+    setSpinner(false);
+    setIsEnable(false);
   }
 
   const openImageLibrary = () => {
@@ -1579,6 +1584,12 @@ const RegisteredVehicles = () => {
           </View>
         </View>
       </ModalPoup>
+
+      <Spinner
+          visible={spinner}
+          textContent={'Please Wait...'}
+          textStyle={styles.spinnerTextStyle}
+        />
     </View>
   );
 };
@@ -1589,6 +1600,9 @@ const styles = StyleSheet.create({
 
     // backgroundColor: '#05375a',
     // backgroundColor: '#3E3D40',
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
   inputContainer: {
     height: 60,

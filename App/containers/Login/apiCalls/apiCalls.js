@@ -11,7 +11,7 @@ export function loginRequest(payload, onSuccess, onFailure){
   const URL = `${baseUrl}${endpoint.user.login}`;
 
   axios
-    .post(URL, payload)
+    .post(URL, payload,{timeout:10000})
     .then(res => {
         Toast.show({
           topOffset: 60,
@@ -56,7 +56,7 @@ export function loginRequest(payload, onSuccess, onFailure){
           topOffset: 60,
           type: 'error',
           text1: 'Server Not Found!',
-          text2: `${error.request.status}`,
+          text2: `${error.request._response}`,
           visibilityTime: 5000,
           autoHide: true,
         });
@@ -84,7 +84,7 @@ export function forgotPassword(payload, onSuccess, onFailure){
 
   const URL = `${baseUrl}${endpoint.user.forgotPassword}`;
   axios
-    .post(URL, payload)
+    .post(URL, payload,{timeout:10000})
     .then(res => {
         Toast.show({
           topOffset: 60,
@@ -123,7 +123,7 @@ export function forgotPassword(payload, onSuccess, onFailure){
           topOffset: 60,
           type: 'error',
           text1: 'Server Not Found!',
-          text2: `${error.request.status}`,
+          text2: `${error.request._response}`,
           visibilityTime: 5000,
           autoHide: true,
         });
