@@ -157,11 +157,11 @@ const CustomDrawer = props => {
                 fontFamily: 'Roboto-Medium',
                 marginLeft: 5,
               }}>
-              {userMode === "P" ? 'Rental Mode' : 'Passenger Mode'}
+              {userMode === "P" ? 'Car Owner Mode' : 'Renter Mode'}
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{paddingVertical: 15}}>
+        {/* <TouchableOpacity onPress={() => {}} style={{paddingVertical: 15}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Ionicons name="share-social-outline" size={22} color={Colors.paleorange} />
             <Text
@@ -173,7 +173,7 @@ const CustomDrawer = props => {
               Tell a Friend
             </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={logOut} style={{paddingVertical: 15}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Ionicons name="exit-outline" size={22} color={Colors.paleorange}/>

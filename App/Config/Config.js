@@ -3,8 +3,8 @@ import ip from './IpAddress'
 console.log("GET IP =>> ",ip.getIp())
 export const Config = {
   baseUrl: {
-    // main: `http://${ip.getIp()}:8000/api/v1/`
-    main: `http://10.0.112.106:8000/api/v1/`
+    main: `http://${ip.getIp()}:8000/api/v1/`
+    // main: `http://192.168.43.197:8000/api/v1/`
   },
   endpoint: {
     user:{

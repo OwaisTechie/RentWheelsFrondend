@@ -1,4 +1,10 @@
-import React, {useEffect, useState, useRef,useContext, useCallback} from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+  useCallback,
+} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   ActivityIndicator,
@@ -31,52 +37,89 @@ import auth from '@react-native-firebase/auth';
 import registeration from './apiCalls/apiCalls';
 
 // import {AuthContext}  from '../../Context/context';
-import { userAuth } from '../userAuthentication/userAuth';
-import { useFocusEffect } from '@react-navigation/native';
+import {userAuth} from '../userAuthentication/userAuth';
+import {useFocusEffect} from '@react-navigation/native';
+import {useLayoutEffect} from 'react';
 const OtpScreen = props => {
- 
-
   // If null, no SMS has been sent
   const [confirm, setConfirm] = useState(null);
+  const [resend, setResend] = useState(false);
 
   const [code, setCode] = useState('');
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // const [phone, setPhone] = useState('');
   const {registerInfo} = props.route.params;
-  console.log("PROPSS",registerInfo.phone)
   const {phone} = registerInfo;
 
-  // // Handle user state changes
-  // const onAuthStateChanged = (user) => {
-  //   console.log("USER =>> ",user);
-  //   // setUser(user);
-  //   // if (initializing) setInitializing(false);
-  // }
+  let resendOtpTimerInterval;
+  let autoSubmitOtpTimerInterval;
+  const RESEND_OTP_TIME_LIMIT = 60; // 30 secs
+  const [resendButtonDisabledTime, setResendButtonDisabledTime] = useState(
+    RESEND_OTP_TIME_LIMIT,
+  );
+
+  const startResendOtpTimer = () => {
+    if (resendOtpTimerInterval) {
+      clearInterval(resendOtpTimerInterval);
+    }
+    resendOtpTimerInterval = setInterval(() => {
+      if (resendButtonDisabledTime <= 0) {
+        clearInterval(resendOtpTimerInterval);
+      } else {
+        setResendButtonDisabledTime(resendButtonDisabledTime - 1);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    startResendOtpTimer();
+
+    return () => {
+      if (resendOtpTimerInterval) {
+        clearInterval(resendOtpTimerInterval);
+      }
+    };
+  }, [resendButtonDisabledTime]);
+
+  const logOutFirebase = () => {
+    auth().signOut();
+  };
+
+  useEffect(() => {
+    auth().onAuthStateChanged(user => {
+      if (user) {
+        // if user data exist
+
+        //clear previous user session
+        logOutFirebase();
+      }
+    });
+  }, []);
 
   // useFocusEffect(
   //   useCallback(() => {
   //     return () => {
-        
+
   //     }
   //   }, [])
 
-
   // );
+
   useEffect(() => {
-  
     signInWithPhoneNumber();
-  },[])
+  }, [resend]);
 
   async function signInWithPhoneNumber() {
-      try{
-         console.log("ABC ->> ",phone);
-         const confirmation = await auth().signInWithPhoneNumber(phone);
-         console.log("confirmation =>> ",confirmation.confirm)
-         setConfirm(confirmation);
-       }catch(e){
-        alert('Network Error');
-      }
-     }
+    try {
+      console.log('ABC ->> ', phone);
+      const confirmation = await auth().signInWithPhoneNumber(phone);
+      console.log('confirmation =>> ', confirmation.confirm);
+      setConfirm(confirmation);
+    } catch (e) {
+      console.log(e);
+      alert('Network Error', e);
+    }
+  }
 
   // useEffect(() => {
   //   const responseObj = props.route.params.responseObj;
@@ -84,7 +127,7 @@ const OtpScreen = props => {
   //   // const subscriber =  auth().onAuthStateChanged(user => {
   //     // if (user) {
   //   console.log("The user is logged in");
-    
+
   //       // make sure to catch any error
   //       // .catch(console.error);
   //   //   } else {
@@ -99,7 +142,7 @@ const OtpScreen = props => {
   //     }
 
   //     signInWithPhoneNumber(responseObj?.phone);
-      
+
   // }, []);
 
   // useEffect(() => {
@@ -130,17 +173,11 @@ const OtpScreen = props => {
   //     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
   //     setConfirm(confirmation);
   //     }
-      
-     
-      
+
   //     return () => {
   //       subscriber();
   //   };
   // }, []);
-
-  
-
- 
 
   // useEffect(() => {
   //   if (code.length >= 6 ){
@@ -150,42 +187,40 @@ const OtpScreen = props => {
   //   console.log("code",code)
   // },[code])
 
-
   // const onOtp = () => {
   //   Keyboard.dismiss;
   //   confirmCode()
   // }
 
-
-   const confirmCode = async () => {
+  const confirmCode = async () => {
     try {
-      console.log("Code ->> ",code)
+      console.log('Code ->> ', code);
       const response = await confirm.confirm(code);
-      console.log("RES",response);
-      if(response){
+      console.log('RES', response);
+      if (response) {
         setCode('');
-        console.log("RES21213",response);
+        console.log('RES21213', response);
         setIsLoading(true);
         let payload12 = {
           ...registerInfo,
-          phone:"0".concat(registerInfo.phoneInput)
-        }
-        registeration(payload12,onSuccess,onFailure);
+          phone: '0'.concat(registerInfo.phoneInput),
+        };
+        registeration(payload12, onSuccess, onFailure);
       }
     } catch (error) {
-      alert("Incorrect Code")
-      console.log('Invalid code.',error);
+      alert(error);
+      console.log('Invalid code.', error);
     }
-  }
+  };
 
-  const onSuccess = (data) => {
-    console.log('Success =>> ',data);
+  const onSuccess = data => {
+    console.log('Success =>> ', data);
     setIsLoading(false);
     props.navigation.navigate('Login');
-  }
+  };
   const onFailure = () => {
     setIsLoading(false);
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -194,12 +229,12 @@ const OtpScreen = props => {
       
         </View> */}
         <View style={styles.Logo}>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
-              <Icon
-                name="arrow-left"
-                style={{fontSize: 30, color: Colors.White}}
-              />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={() => props.navigation.goBack()}>
+            <Icon
+              name="arrow-left"
+              style={{fontSize: 30, color: Colors.White}}
+            />
+          </TouchableOpacity>
           <Icon
             // name="email-seal-outline"
             name="message-lock-outline"
@@ -213,7 +248,7 @@ const OtpScreen = props => {
       <View
         style={[styles.bottonView, {overflow: 'hidden'}]}
         // animation="fadeInUpBig"
-        >
+      >
         <View
           style={{
             flexDirection: 'row',
@@ -266,9 +301,7 @@ const OtpScreen = props => {
               borderRadius: 24,
               borderColor: Colors.darkgrey,
               backgroundColor: 'white',
-              
             }}
-            
             cellStyleFocused={{
               borderColor: Colors.darkgrey,
               // color:'black'
@@ -279,7 +312,7 @@ const OtpScreen = props => {
             textStyle={{
               fontSize: 24,
               // color: 'black',
-              color: '#EFB250'
+              color: '#EFB250',
             }}
             // textStyleFocused={{
             //   color: 'White',
@@ -287,12 +320,24 @@ const OtpScreen = props => {
             autoFocus={true}
             value={code}
             codeLength={6}
-            onTextChange={(code) => setCode(code)}
-            
+            onTextChange={code => setCode(code)}
           />
-          <View style={{alignItems: 'center',marginVertical:hp('5%')}}>
+          <View style={{alignItems: 'center', marginVertical: hp('5%')}}>
             <Text style={{fontWeight: '15'}}>Didn't Recieve an OTP?</Text>
-            <TouchableOpacity style={{marginTop: 15}}>
+            {resendButtonDisabledTime > 0 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      marginBottom: hp('2%'),
+                    }}>
+                    <Text>Resend OTP in</Text>
+                    <Text style={{marginHorizontal:wp('1%') ,fontWeight:'bold',color:Colors.lightPurple }}>{`${resendButtonDisabledTime}s`}</Text>
+                  </View>
+                ) : (
+            <TouchableOpacity
+              onPress={() => setResend(true)}
+              style={{marginTop: 15}}>
               <Text
                 style={{
                   // textAlign: 'center',
@@ -306,15 +351,19 @@ const OtpScreen = props => {
                 Resend OTP
               </Text>
             </TouchableOpacity>
+                )}
           </View>
         </View>
-          <View style={{width:'60%'}}>
-          <CustomButton loader={isLoading} onPress={() => confirmCode()} title="Verify" />
-          </View>
+        <View style={{width: '60%'}}>
+          <CustomButton
+            loader={isLoading}
+            onPress={() => confirmCode()}
+            title="Verify"
+          />
+        </View>
       </View>
       {isLoading && <Custom_Loader />}
     </SafeAreaView>
-    
   );
 };
 const styles = StyleSheet.create({
@@ -337,7 +386,7 @@ const styles = StyleSheet.create({
   },
   bottonView: {
     flex: 4,
-    
+
     backgroundColor: Colors.White,
     alignItems: 'center',
     // bottom:60,
@@ -364,11 +413,11 @@ const styles = StyleSheet.create({
     // justifyContent:'center',
     // borderRadius: 100,
     // flex: 1
-    marginLeft:5,
-    width:wp('60%'),
-    marginBottom:hp('1%'),
-    flexDirection:'row',
-    justifyContent:'space-between',
+    marginLeft: 5,
+    width: wp('60%'),
+    marginBottom: hp('1%'),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     // marginTop: 0,
     // alignItems: 'center',
   },

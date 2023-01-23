@@ -26,8 +26,8 @@ import Bookings from '../../../containers/Rental/Bookings/Bookings';
 import BookingDetails from '../../../containers/Rental/Bookings/BookingDetails';
 const height = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-const BookingNavigator = (props) => {
-    const {navigation}= props;
+const BookingNavigator = props => {
+  const {navigation} = props;
   function HeaderLeft(properties) {
     return (
       <TouchableOpacity
@@ -44,7 +44,7 @@ const BookingNavigator = (props) => {
       <TouchableOpacity
         style={{alignSelf: 'center', marginLeft: 8}}
         onPress={() => {
-            navigation.openDrawer();
+          navigation.openDrawer();
         }}>
         <Icon size={35} color={Colors.lightPurple} name={'ios-menu-sharp'} />
       </TouchableOpacity>
@@ -88,20 +88,18 @@ const BookingNavigator = (props) => {
 
   const BookingStack = createStackNavigator();
   return (
-    <BookingStack.Navigator
-      screenOptions={header}
-      initialRouteName={'Booking'}>
+    <BookingStack.Navigator screenOptions={header} initialRouteName={'Booking'}>
       <BookingStack.Screen
         name="Booking"
         component={Bookings}
         options={{
-            // drawerLabel:'List of Bookings',
-            drawerIcon: ({color}) => (
-              <Ionicons name="home-outline" size={22} color={color} />
-            ),
-            title: 'List Of Bookings',
-            headerTitle: props => <Headercenter {...props} />,
-            headerLeft: props => <BookingHeaderLeft {...props} />
+          // drawerLabel:'List of Bookings',
+          drawerIcon: ({color}) => (
+            <Ionicons name="home-outline" size={22} color={color} />
+          ),
+          title: 'List Of Bookings',
+          headerTitle: props => <Headercenter {...props} />,
+          headerLeft: props => <BookingHeaderLeft {...props} />,
         }}
       />
 
@@ -110,13 +108,11 @@ const BookingNavigator = (props) => {
         component={BookingDetails}
         options={{headerShown: false}}
       />
-       <BookingStack.Screen
-          name="BookingDetailseMap"
-          component={VehicleMap}
-          options={{
-            headerShown: false,
-          }}
-        />
+      <BookingStack.Screen
+        name="BookingDetailsMap"
+        component={VehicleMap}
+        options={{headerShown: false}}
+      />
     </BookingStack.Navigator>
   );
 };

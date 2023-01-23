@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {getAllVehicles, getAllCategories} from './apiCalls/apiCalls';
-import {Container, Header, Icon, Item, Input} from 'native-base';
 import CategoryFilter from './CategoryFilter';
 import {Colors, CustomIcons} from '../../Theme';
 import {

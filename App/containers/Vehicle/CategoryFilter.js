@@ -1,76 +1,76 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
-import {ListItem, Badge, Text} from 'native-base';
-import { Colors } from '../../Theme';
+// import React from 'react';
+// import {StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
+// import {ListItem, Badge, Text} from 'native-base';
+// import { Colors } from '../../Theme';
 
-const CategoryFilter = props => {
-  return (
-    <ScrollView
-      bounces={true}
-      horizontal={true}
-      style={{backgroundColor: '#f2f2f2'}}>
-      <ListItem style={{margin: 0, padding: 0, borderRadius: 0}}>
-        <TouchableOpacity
-          key={1}
-          onPress={() => {
-            props.categoryFilter('all'), props.setActive(-1);
-          }}>
-          <Badge
-            style={[
-              styles.center,
-              {margin: 5},
-              props.active == -1 ? styles.active : styles.inactive,
-            ]}>
-            <Text style={{color: 'white'}}>All</Text>
-          </Badge>
-        </TouchableOpacity>
+// const CategoryFilter = props => {
+//   return (
+//     <ScrollView
+//       bounces={true}
+//       horizontal={true}
+//       style={{backgroundColor: '#f2f2f2'}}>
+//       <ListItem style={{margin: 0, padding: 0, borderRadius: 0}}>
+//         <TouchableOpacity
+//           key={1}
+//           onPress={() => {
+//             props.categoryFilter('all'), props.setActive(-1);
+//           }}>
+//           <Badge
+//             style={[
+//               styles.center,
+//               {margin: 5},
+//               props.active == -1 ? styles.active : styles.inactive,
+//             ]}>
+//             <Text style={{color: 'white'}}>All</Text>
+//           </Badge>
+//         </TouchableOpacity>
 
-        {props.categories.map(item => (
-          <TouchableOpacity
-            key={item._id}
-            onPress={() => {
-              props.categoryFilter(item._id),
-                props.setActive(props.categories.indexOf(item));
-            }}>
-            <Badge
-              style={[
-                styles.center,
-                {margin: 5},
-                props.active == props.categories.indexOf(item)
-                  ? styles.active
-                  : styles.inactive,
-              ]}>
-              {/* <Image
-                source={{
-                  uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
-                }}
-                style={styles.renderImage}
-              /> */}
-              <Text style={{color: 'white'}}>{item.vehicleType}</Text>
-            </Badge>
-          </TouchableOpacity>
-        ))}
-      </ListItem>
-    </ScrollView>
-  );
-};
+//         {props.categories.map(item => (
+//           <TouchableOpacity
+//             key={item._id}
+//             onPress={() => {
+//               props.categoryFilter(item._id),
+//                 props.setActive(props.categories.indexOf(item));
+//             }}>
+//             <Badge
+//               style={[
+//                 styles.center,
+//                 {margin: 5},
+//                 props.active == props.categories.indexOf(item)
+//                   ? styles.active
+//                   : styles.inactive,
+//               ]}>
+//               {/* <Image
+//                 source={{
+//                   uri: 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+//                 }}
+//                 style={styles.renderImage}
+//               /> */}
+//               <Text style={{color: 'white'}}>{item.vehicleType}</Text>
+//             </Badge>
+//           </TouchableOpacity>
+//         ))}
+//       </ListItem>
+//     </ScrollView>
+//   );
+// };
 
-const styles = StyleSheet.create({
-  center: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  active: {
-    backgroundColor: Colors.lightPurple,
-  },
-  inactive: {
-    backgroundColor: Colors.paleorange,
-  },
-  renderImage: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-  },
-});
+// const styles = StyleSheet.create({
+//   center: {
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   active: {
+//     backgroundColor: Colors.lightPurple,
+//   },
+//   inactive: {
+//     backgroundColor: Colors.paleorange,
+//   },
+//   renderImage: {
+//     width: 40,
+//     height: 40,
+//     resizeMode: 'contain',
+//   },
+// });
 
-export default CategoryFilter;
+// export default CategoryFilter;

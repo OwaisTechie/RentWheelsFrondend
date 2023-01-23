@@ -357,7 +357,7 @@ const CompletedBookingDetails = props => {
                 <View style={{flexDirection: 'column'}}>
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>User Name : </Text>
-                  <Text style={styles.titleInfo}>{rentee.username}</Text>
+                  <Text style={styles.titleInfo}>{rentee?.username}</Text>
                 </View>
                 
               </View>

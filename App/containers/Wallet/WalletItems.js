@@ -36,7 +36,7 @@ const WalletItems = props => {
               // textAlign:'center',
               color: Colors.paleorange,
             }}>
-            {item?.fromUser.username}
+            {item?.fromUser?.username}
           </Text>
         </View>
         <View>

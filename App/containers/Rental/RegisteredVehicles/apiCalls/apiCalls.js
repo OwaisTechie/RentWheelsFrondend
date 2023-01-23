@@ -82,13 +82,57 @@ export async function addVehicle(payload,onSuccess, onFailure) {
   const endpoint = Config.endpoint;
   console.log('baseURL ==>', baseUrl);
   console.log('payload ==>', payload);
+
+  const formData = new FormData();
+    formData.append('vehicleOwner', payload.userId);
+    formData.append('vehicleCategory', payload.vehicleCategory);
+    formData.append('brand', payload.brand);
+    formData.append('model', payload.model);
+    formData.append('year', payload.yearItems);
+    formData.append('registrationNumber', payload.registrationNumber);
+    formData.append('vehicleType', payload.vehicleType);
+    formData.append('pickupLocation[0]', payload.pickupLocation[0]);
+    formData.append('pickupLocation[1]', payload.pickupLocation[1]);
+    formData.append('description', payload.description);
+    formData.append('noOfSeats', payload.noOfSeats);
+    formData.append('fuelType', payload.fuelType);
+    formData.append('noOfAirbags', payload.noOfAirbags);
+    formData.append('isAutomatic', payload.isAutomatic);
+    formData.append('noOfDoors', payload.noOfDoors);
+    formData.append('isAircondition', payload.isAircondition);
+    formData.append('selfDriveDailyCharges', payload.selfDriveDailyCharges);
+    for (let i = 0; i < payload?.images?.length; i++) {
+      formData.append('images', {
+        name: payload.images[i].image.split('/').pop(),
+        type: payload.images[i].mime,
+        uri:
+        payload.images[i].image
+      });
+    }
+    for (let i = 0; i < payload?.vehicleInsurance?.length; i++) {
+      formData.append('vehicleInsurance', {
+        name: payload.vehicleInsurance[i].image.split('/').pop(),
+        type: payload.vehicleInsurance[i].mime,
+        uri:
+        payload.vehicleInsurance[i].image
+      });
+    }
+    for (let i = 0; i < payload?.vehiclePapers?.length; i++) {
+      formData.append('vehiclePapers', {
+        name: payload.vehiclePapers[i].image.split('/').pop(),
+        type: payload.vehiclePapers[i].mime,
+        uri:
+        payload.vehiclePapers[i].image
+      });
+    }
+
   const URL = `${baseUrl}vehicles`;
   console.log('baseURL1 ==>', URL);
   const header = await getHeaders('multipart').then(data => {
     return data;
   });
   axios
-    .post(URL,payload,header)
+    .post(URL,formData,header)
     .then(res => {
       console.log("RES>DATA ->> ",res.data)
       Toast.show({

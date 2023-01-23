@@ -14,8 +14,6 @@ export default {
   SEDAN: require('../Assets/VehicleType/SEDAN.png'),
   SportsCar: require('../Assets/VehicleType/SportsCar.png'),
   STATIONWAGON: require('../Assets/VehicleType/STATIONWAGON.png'),
-
-
   gradientBackgound : require('../Assets/backgroundGradient.jpg'),
 
 
@@ -28,14 +26,14 @@ export default {
   //donation
   menu11: require('../Assets/background11.jpg'),
   //slider
-  // slider_image1: require('../Assets/Appintro/banner_1.png'),
-  // slider_image2: require('../Assets/Appintro/banner_2.png'),
-  // slider_image3: require('../Assets/Appintro/banner_3.png'),
-
-  // slider_image1: require('../Assets/Appintrobanner/RentBanner.png'),
-  // slider_imageTesting: require('../Assets/Appintrobanner/bannerPNG.png'),
+  // slider_image1: require('../Assets/Appintro/banner1.png'),
   // slider_image2: require('../Assets/Appintrobanner/banner2.png'),
-  // slider_image3: require('../Assets/Appintrobanner/ban3.png'),
+  // slider_image3: require('../Assets/Appintro/banner3.png'),
+
+  slider_image1: require('../Assets/Appintrobanner/RentBanner.png'),
+  // slider_imageTesting: require('../Assets/Appintrobanner/bannerPNG.png'),
+  slider_image2: require('../Assets/Appintrobanner/banner2.png'),
+  slider_image3: require('../Assets/Appintrobanner/ban3.png'),
   // slider_image4: require('../Assets/Appintrobanner/banner11.png'),
 
 

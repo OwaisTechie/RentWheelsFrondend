@@ -153,11 +153,16 @@ const MapScreen = props => {
 
   // callbacks
   const handleRefresh = () => {
-    console.log('USER ->> ', userId);
-    let payload = {
-      ownerId: userId._id,
-      pickupLoc: [LocationMarker.longitude, LocationMarker.latitude],
-    };
+    var userData;
+      if (typeof userId == 'string') {
+        userData = JSON.parse(userId);
+      } else {
+        userData = userId;
+      }
+      let payload = {
+        ownerId: userData._id,
+        pickupLoc: [LocationMarker.longitude, LocationMarker.latitude],
+      };
     console.log('PAYLOAD ->> ', payload);
     // let location = [LocationMarker.latitude, LocationMarker.longitude];
     // let pickupLocation = [24.954179757526536, 67.14250599750613];
@@ -170,10 +175,16 @@ const MapScreen = props => {
     setVehicleLoading(true);
     setShowFilterModal(false);
     setVehicles([]);
+    var userData;
+      if (typeof userId == 'string') {
+        userData = JSON.parse(userId);
+      } else {
+        userData = userId;
+      }
     const payload = {
       ...filterData,
       pickupLocation: [LocationMarker.longitude, LocationMarker.latitude],
-      ownerId: userId._id,
+      ownerId: userData._id,
     };
     console.log('PAYLOAD ->> ', payload);
     getVehicle(payload, onFilterSuccess, onFailure);
@@ -251,11 +262,17 @@ const MapScreen = props => {
               console.log('DETAILS ->> ', details.geometry.location);
               console.log('data ->> ', data.description);
               setAddress(data.description);
+              var userData;
+      if (typeof userId == 'string') {
+        userData = JSON.parse(userId);
+      } else {
+        userData = userId;
+      }
               let payload = {
-                ownerId: userId._id,
+                ownerId: userData._id,
                 pickupLoc: [
                   details.geometry.location.lng,
-                  details.geometry.lat,
+                  details.geometry.location.lat,
                 ],
               };
               console.log('PAYLOAD ->> ', payload);

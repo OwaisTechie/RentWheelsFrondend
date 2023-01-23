@@ -268,7 +268,7 @@ const RenteeCompletedBookingDetails = props => {
                 </View>
 
                 <Text style={{fontSize: 30, color: 'white'}}>
-                  Scan Booking Start Code
+                  Scan Booking End Code
                 </Text>
               </View>
 

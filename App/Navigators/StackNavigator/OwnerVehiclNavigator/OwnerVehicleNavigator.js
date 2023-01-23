@@ -93,7 +93,7 @@ const OwnerVehicleNavigator = props => {
   return (
     <OwnerVehicleStack.Navigator
       screenOptions={header}
-      initialRouteName={'OwneVehicle'}>
+      initialRouteName={'OwnerVehicle'}>
       <OwnerVehicleStack.Screen
         name="OwnerVehicle"
         component={ListOfVehicles}

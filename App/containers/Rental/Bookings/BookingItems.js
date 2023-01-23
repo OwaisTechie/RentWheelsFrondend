@@ -61,18 +61,18 @@ export function BookingItems(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Username:</Text>
           <Text style={[styles.userDetail, {fontSize: 12}]}>
-            {rentee.username}
+            {rentee?.username}
           </Text>
         </View>
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Number:</Text>
           <Text style={[styles.userDetail, {fontSize: 12}]}>
-            {rentee.phone}
+            {rentee?.phone}
           </Text>
         </View>
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Email:</Text>
-          <Text style={styles.userDetail}>{rentee.email}</Text>
+          <Text style={styles.userDetail}>{rentee?.email}</Text>
         </View>
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Start Time:</Text>

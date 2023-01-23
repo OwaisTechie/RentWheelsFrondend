@@ -405,7 +405,7 @@ const Profile = () => {
     let Payload = {
       ...userData,
       email: email,
-      profilePicture: profilePicture.path,
+      profilePicture: profile.path,
       phone: phoneInput,
       username: username,
     };
@@ -531,7 +531,7 @@ const Profile = () => {
                   }}>
                   <Image
                     source={
-                      pictureImage == null
+                      pictureImage == ''
                         ? Images.menProfile
                         : {uri: pictureImage}
                     }

@@ -36,7 +36,7 @@ const AuthNavigator = () => {
   const AuthStack = createStackNavigator();
   return (
     firstLaunch != null && (
-      <AuthStack.Navigator initialRouteName={LOGIN}>
+      <AuthStack.Navigator initialRouteName={APPINTRO}>
         {firstLaunch && (
           <AuthStack.Screen
             name={APPINTRO}

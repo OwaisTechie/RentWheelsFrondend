@@ -142,6 +142,8 @@ const RegisteredVehicles = () => {
     }
   };
 
+  
+
   useEffect(() => {
     var minOffset = 0,
       maxOffset = 60; // Change to whatever you want
@@ -160,6 +162,31 @@ const RegisteredVehicles = () => {
 
   useEffect(() => {
     getVehicleCategies(onSuccess, onFailure);
+    return(() => {
+      setInputs({
+        vehicleCategory: '',
+        vehicleType: '',
+        fuelType: '',
+        images: [],
+        yearItems: '',
+        brand: '',
+        model: '',
+        registrationNumber: '',
+        noOfSeats: '',
+        noOfDoors: '',
+        noOfAirbags: '',
+        description: '',
+        selfDriveDailyCharges: '',
+      });
+      setPickupLocation({
+        latitude: 24.860966,
+        longitude: 66.990501,
+      });
+      setIsAircondition('');
+      setVehicleInsurance([]);
+      setVehiclePapers([]);
+      setIsAutomatic('');
+    })
   }, []);
 
   const onSuccess = data => {
@@ -177,60 +204,30 @@ const RegisteredVehicles = () => {
   };
 
   const onHandleSubmit = () => {
+    var userData; 
+      if (typeof userId == 'string') {
+        userData = JSON.parse(userId);
+      } else {
+        userData = userId;
+      }
     let Payload = {
       ...inputs,
+      userId:userData._id,
+      pickupLocation:[pickupLocation.latitude,pickupLocation.longitude],
+      isAircondition:isAircondition,
+      vehicleInsurance:vehicleInsurance,
+      vehiclePapers:vehiclePapers,
+      isAircondition:isAircondition,
+      isAutomatic:isAutomatic
     };
     console.log("SUBMIT DATA ->>",Payload)
     setIsEnable(true);
-    const formData = new FormData();
-    formData.append('vehicleOwner', JSON.parse(userId)._id);
-    formData.append('vehicleCategory', inputs.vehicleCategory);
-    formData.append('brand', inputs.brand);
-    formData.append('model', inputs.model);
-    formData.append('year', inputs.yearItems);
-    formData.append('registrationNumber', inputs.registrationNumber);
-    formData.append('vehicleType', inputs.vehicleType);
-    formData.append('pickupLocation[0]', pickupLocation.latitude);
-    formData.append('pickupLocation[1]', pickupLocation.longitude);
-    formData.append('description', inputs.description);
-    formData.append('noOfSeats', inputs.noOfSeats);
-    formData.append('fuelType', inputs.fuelType);
-    formData.append('noOfAirbags', inputs.noOfAirbags);
-    formData.append('isAutomatic', isAutomatic);
-    formData.append('noOfDoors', inputs.noOfDoors);
-    formData.append('isAircondition', isAircondition);
-    formData.append('selfDriveDailyCharges', inputs.selfDriveDailyCharges);
-    for (let i = 0; i < images.length; i++) {
-      formData.append('images', {
-        name: images[i].image.split('/').pop(),
-        type: images[i].mime,
-        uri:
-        images[i].image
-      });
-    }
-    for (let i = 0; i < vehicleInsurance.length; i++) {
-      formData.append('vehicleInsurance', {
-        name: vehicleInsurance[i].image.split('/').pop(),
-        type: vehicleInsurance[i].mime,
-        uri:
-        vehicleInsurance[i].image
-      });
-    }
-    for (let i = 0; i < vehiclePapers.length; i++) {
-      formData.append('vehiclePapers', {
-        name: vehiclePapers[i].image.split('/').pop(),
-        type: vehiclePapers[i].mime,
-        uri:
-        vehiclePapers[i].image
-      });
-    }
-    addVehicle(formData,onVehicleSuccess,onVehicleFailure)
+    addVehicle(Payload,onVehicleSuccess,onVehicleFailure)
   };
 
   const onVehicleSuccess = (data) => {
-    navigation.goBack();
     setIsEnable(false)
-
+    navigation.navigate('OwnerVehicleNavigator', { screen: 'OwnerVehicle' });
   }
   const onVehicleFailure = () => {
     console.log("RESPONSE ->> ")
@@ -345,7 +342,9 @@ const RegisteredVehicles = () => {
   };
 
   const deleteImageById = id => {
+    console.log("ID ->> ",id);
     const filteredData = inputs.images.filter(item => item.id !== id);
+    console.log("Filtered ->> ",filteredData)
     handleOnChange(filteredData, 'images');
     // this.setState({ data: filteredData });
   };
@@ -446,14 +445,17 @@ const RegisteredVehicles = () => {
   // };
 
   const handleOnChange = (value, input) => {
+    
     if(input == "vehicleCategory"){
       console.log("vehicleCategory ->> ",value._id)
       console.log("vehicleCategory ->> ",value.vehicleType)
+      console.log("input ->> ",input)
       setInputs(prevState => ({...prevState, [input]: value._id}));
       setInputs(prevState => ({...prevState, "vehicleType": value.vehicleType}));
     }
     else{
     setInputs(prevState => ({...prevState, [input]: value}));
+    setImages(value);
     }
   };
   const handleError = (errorMessage, input) => {
@@ -608,13 +610,13 @@ const RegisteredVehicles = () => {
               <View>
                 <View style={{alignItems: 'center'}}>
                   <Text>Photo Upload</Text>
-                  <Text>{`Photos · ${images.length} / 10 - You can add up to 10 photos.`}</Text>
+                  <Text>{`Photos · ${inputs.images.length} / 10 - You can add up to 10 photos.`}</Text>
                 </View>
 
                 {inputs.images.length > 0 ? (
                   <FlatList
                     horizontal={true}
-                    data={images}
+                    data={inputs.images}
                     // style={{ position: 'absolute', bottom: 80 }}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{

@@ -173,13 +173,13 @@ const BookingDetails = props => {
 
   const onRejectSucces = data => {
     console.log('Approve PAyload ->> ', data);
-    setRejectLoader(!rejectLoader);
+    setRejectLoader(false);
     navigation.goBack();
   };
 
   const onRejectFailure = () => {
     console.log('onFailure');
-    setRejectLoader(!rejectLoader);
+    setRejectLoader(false);
   };
 
   const startBooking = () => {
@@ -219,10 +219,12 @@ const BookingDetails = props => {
   };
 
   const onMapView = () => {
-    navigation.navigate({
-      name: 'BookingDetailseMap',
-      params: {LocationMarker: location},
-    });
+    console.log("first")
+    navigation.navigate('BookingNavigator', { screen: 'BookingDetailsMap',params: {LocationMarker: location} });
+    // navigation.navigate({
+    //   name: 'BookingDetailsMap',
+    //   params: {LocationMarker: location},
+    // });
   };
 
   //product horizontal scroll product card
@@ -440,7 +442,7 @@ const BookingDetails = props => {
                 <View style={{flexDirection: 'column'}}>
                 <View style={{flexDirection: 'row', marginVertical: 3}}>
                   <Text style={styles.title}>User Name : </Text>
-                  <Text style={styles.titleInfo}>{rentee.username}</Text>
+                  <Text style={styles.titleInfo}>{rentee?.username}</Text>
                 </View>
                 
               </View>

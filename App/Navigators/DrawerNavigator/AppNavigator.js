@@ -160,7 +160,7 @@ const AppStack = props => {
               component={RenteeOnGoingBookingNavigator}
               options={{
                 headerShown: false,
-                drawerLabel: 'Current or Complete Bookings',
+                drawerLabel: 'My Rentals',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),
@@ -217,7 +217,7 @@ const AppStack = props => {
               component={BookingNavigator}
               options={{
                 headerShown: false,
-                drawerLabel: 'List of Bookings',
+                drawerLabel: 'Bookings',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),
@@ -247,7 +247,7 @@ const AppStack = props => {
               component={OnGoingBookingNavigator}
               options={{
                 headerShown: false,
-                drawerLabel: 'Current Bookings',
+                drawerLabel: 'Rentals',
                 drawerIcon: ({color}) => (
                   <Ionicons name="home-outline" size={22} color={color} />
                 ),
@@ -302,11 +302,7 @@ const AppStack = props => {
               }}
             />
 
-            {/* <Drawer.Screen
-              name={'VehicleRegistration'}
-              component={VehicleRegistration}
-              options={{headerShown: false}}
-            /> */}
+
           </>
         )}
       </Drawer.Navigator>

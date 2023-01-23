@@ -316,7 +316,7 @@ export default Login = ({navigation}) => {
       validationSchema: LoginSchema,
       initialValues: {username: '', password: ''},
       onSubmit: payload => {
-        setLoader(!loader);
+        setLoader(true);
         var Payload = {
           ...payload,
           firebaseToken: fcmToken,

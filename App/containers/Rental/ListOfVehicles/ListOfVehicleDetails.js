@@ -44,6 +44,7 @@ const ListOfVehicleDetails = props => {
   const [switchValue, setSwitchValue] = useState('1');
   const [loader, setLoader] = useState(false);
   const Vehicle = route?.params.vehicle;
+  console.log("Vehicle?.images ->> ",Vehicle)
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
   var location = Vehicle?.pickupLocation?.coordinates;
@@ -254,7 +255,7 @@ const ListOfVehicleDetails = props => {
         <View
           style={{
             // paddingHorizontal: 16,
-            // padding: 2,
+            padding: 5,
             // marginTop: 6,
             height: hp('60%'),
             // flex:2,

@@ -365,7 +365,7 @@ export default Registration = ({navigation}) => {
                   Already have an account?{' '}
                 </Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                  <Text style={{fontWeight: 'bold', color: '#9A9A9A'}}>
+                  <Text style={{fontWeight: 'bold', color: Colors.paleorange}}>
                     Sign in
                   </Text>
                 </TouchableOpacity>

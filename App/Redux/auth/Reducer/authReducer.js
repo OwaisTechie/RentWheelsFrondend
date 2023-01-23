@@ -17,6 +17,7 @@ export const AuthSlice = createSlice({
         state.users.ipAddress=action.payload;
     },
     updateProfiles: (state,action) => {
+        console.log(action.payload,"CHECK PAYLOAD")
         state.users.user=action.payload;
     },
     login: (state,action) => {
