@@ -56,13 +56,14 @@ const VehicleMap = ({navigation, route}) => {
       <MapView
         style={styles.map}
         ref={mapRef}
+        zoomControlEnabled
         customMapStyle={mapStyle}
         provider={PROVIDER_GOOGLE}
         region={{
           latitude:LocationMarker[0],
           longitude: LocationMarker[1],
-          latitudeDelta: 0.003,
-          longitudeDelta: 0.003,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
         }}
         mapType="standard"
         onMapReady={() => {

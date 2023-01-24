@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {CustomIcons} from '../../Theme';
-const ModalPoup = ({visible,onClose, children}) => {
+const ModalPoup = ({visible,onClose, children,removeButton}) => {
   const [showModal, setShowModal] = React.useState(visible);
   const scaleValue = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {
@@ -56,7 +56,7 @@ const ModalPoup = ({visible,onClose, children}) => {
              
 
           <View>
-            <View style={styles.header}>
+          {!removeButton && (<View style={styles.header}>
               <TouchableOpacity onPress={() => onClose()}>
                 <CustomIcons
                   name={'close'}
@@ -64,7 +64,7 @@ const ModalPoup = ({visible,onClose, children}) => {
                   style={{fontSize: 22, color: '#05375a'}}
                 />
               </TouchableOpacity>
-            </View>
+            </View>)}
           {children}
           </View>
         </Animated.View>

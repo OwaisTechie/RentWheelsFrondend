@@ -305,7 +305,7 @@ const RegisteredVehicles = () => {
         // setImages([...images]);
         ToastAndroid.show('Maximum of 4 images allowed', ToastAndroid.SHORT);
       }
-      handleOnChange(result, 'images');
+      // handleOnChange(result, 'images');
       handleError(null, 'images');
       setVehiclePapers(result);
       return result;

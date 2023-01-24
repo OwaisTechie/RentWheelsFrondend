@@ -113,7 +113,7 @@ const RenteeBookingNavigator = (props) => {
         options={{headerShown: false}}
       />
        <BookingStack.Screen
-          name="RenteeBookingDetailseMap"
+          name="RenteeBookingDetailsMap"
           component={VehicleMap}
           options={{
             headerShown: false,

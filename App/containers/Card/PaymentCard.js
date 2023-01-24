@@ -10,6 +10,7 @@ import {
   Button,
   StatusBar,
 } from 'react-native';
+import LottieView from 'lottie-react-native';
 import * as Yup from 'yup';
 // import CreditCard from 'react-native-credit-card-form-ui';
 import CreditCardDisplay from 'react-native-credit-card-display';
@@ -23,13 +24,15 @@ import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import { addBookings } from './apiCalls/apiCalls';
-import { useNavigation,StackActions  } from '@react-navigation/native';
+import {addBookings} from './apiCalls/apiCalls';
+import {useNavigation, StackActions} from '@react-navigation/native';
+import ModalPoup from '../../Components/CustomModal/ModalPopup';
 const PaymentCard = props => {
   // const {navigation, route} = props;
   const navigation = useNavigation();
   const {booking} = props.route.params;
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showfilterModal, setShowFilterModal] = useState(false);
   const [cardHolderName, setCardHolderName] = useState('CARD HOLDER NAME');
   const [cvv, setCvv] = useState(123);
   const [expiry, setExpiry] = useState('12/12');
@@ -59,11 +62,9 @@ const PaymentCard = props => {
 
   const onhandleChange = (name, value, extracted) => {
     if (name == 'Cvv') {
-      setIsFlipped(true);
       setCvv(value);
       handleChange(name)(value);
     } else {
-      setIsFlipped(false);
       setExpiry(value);
       handleChange(name)(value);
     }
@@ -90,25 +91,30 @@ const PaymentCard = props => {
           startTime:booking.startTime,
           endTime:booking.endTime,
           vehicle:booking.vehicle,
-          cardNo:payload.cardNumber,
-          cvv:payload.Cvv,
-          cardHolderName:payload.HolderName,
-          expiry:payload.expire
-        }
-
+          cardNo: payload.cardNumber,
+          cvv: payload.Cvv,
+          cardHolderName: payload.HolderName,
+          expiry: payload.expire,
+        };
+        setLoader(true);
+        // setShowFilterModal(true);
         addBookings(Payload,onSuccess,onFailure);
-
       },
     });
 
-  
-    const onSuccess = (data) => {
-      setLoader(false);
+    const handleSuccess = () => {
+      setShowFilterModal(false);
       navigation.dispatch(StackActions.popToTop());
     }
-    const onFailure = () => {
-      setLoader(false);
-    }
+
+  const onSuccess = data => {
+    setLoader(false);
+    setShowFilterModal(true);
+    // navigation.dispatch(StackActions.popToTop());
+  };
+  const onFailure = () => {
+    setLoader(false);
+  };
 
   const onPressLearnMore = () => {
     setIsFlipped(!isFlipped);
@@ -122,8 +128,12 @@ const PaymentCard = props => {
       />
       {/* <View style={{flex:}} /> */}
 
-        <ScrollView style={{width: '90%',marginVertical:heightPercentageToDP('2%')}} showsVerticalScrollIndicator={false}>
-      <View style={{alignSelf:'center'}} >
+      {/* <View style={{width: '90%',marginTop:heightPercentageToDP('1%')}}> */}
+      <View
+        style={{
+          alignSelf: 'center',
+          marginVertical: heightPercentageToDP('2%'),
+        }}>
         <CreditCardDisplay
           number={cardNo}
           cvc={cvv}
@@ -133,9 +143,11 @@ const PaymentCard = props => {
           // since="2004"
         />
       </View>
-
-        <View style={{marginVertical:heightPercentageToDP('2%')}}>
-          <View >
+      <ScrollView
+        style={{width: '90%', marginTop: heightPercentageToDP('1%')}}
+        showsVerticalScrollIndicator={false}>
+        <View style={{paddingBottom: heightPercentageToDP('2%')}}>
+          <View>
             <CustomInput
               placeholder="Enter your Card Holder Name"
               iconName="account-key-outline"
@@ -143,6 +155,7 @@ const PaymentCard = props => {
               label="Card Holder Name"
               returnKeyType="next"
               returnKeyLabel="next"
+              onFocus={() => setIsFlipped(false)}
               onSubmitEditing={() => {
                 HolderName.current.focus();
               }}
@@ -156,11 +169,12 @@ const PaymentCard = props => {
               // returnKeyLabel='next'
             />
           </View>
-          <View >
+          <View>
             <CustomInput
               placeholder="Enter your Card Number"
               iconName="card-account-details-outline"
               maxLength={16}
+              onFocus={() => setIsFlipped(false)}
               keyboardType="numeric"
               type="materialCommunity"
               label="Card Number"
@@ -202,6 +216,7 @@ const PaymentCard = props => {
                   iconName="account-key-outline"
                   type="materialCommunity"
                   label="Cvv"
+                  onFocus={() => setIsFlipped(true)}
                   returnKeyType="next"
                   returnKeyLabel="next"
                   onSubmitEditing={() => {
@@ -224,19 +239,18 @@ const PaymentCard = props => {
                   mask={'[000]'}
                   {...props}
                 />
-                
               </View>
               {errors.Cvv && (
-                  <Text
-                    style={{
-                      color: '#FF5A5F',
-                      fontSize: 12,
-                      paddingTop: heightPercentageToDP('1%'),
-                      marginHorizontal: widthPercentageToDP('3%'),
-                    }}>
-                    {errors.Cvv}
-                  </Text>
-                )}
+                <Text
+                  style={{
+                    color: '#FF5A5F',
+                    fontSize: 12,
+                    paddingTop: heightPercentageToDP('1%'),
+                    marginHorizontal: widthPercentageToDP('3%'),
+                  }}>
+                  {errors.Cvv}
+                </Text>
+              )}
             </View>
             <View style={{width: '45%'}}>
               <Text style={styles.label}>{'Expiry'}</Text>
@@ -257,6 +271,7 @@ const PaymentCard = props => {
                   label="Expiry"
                   returnKeyType="next"
                   returnKeyLabel="next"
+                  onFocus={() => setIsFlipped(false)}
                   // onSubmitEditing={() => {
                   //   expire.current.focus();
                   // }}
@@ -278,32 +293,32 @@ const PaymentCard = props => {
                   mask={'[00]/[00]'}
                   {...props}
                 />
-                
               </View>
               {errors.expire && (
-                  <Text
-                    style={{
-                      color: '#FF5A5F',
-                      fontSize: 12,
-                      paddingTop: heightPercentageToDP('1%'),
-                      marginHorizontal: widthPercentageToDP('3%'),
-                    }}>
-                    {errors.expire}
-                  </Text>
-                )}
+                <Text
+                  style={{
+                    color: '#FF5A5F',
+                    fontSize: 12,
+                    paddingTop: heightPercentageToDP('1%'),
+                    marginHorizontal: widthPercentageToDP('3%'),
+                  }}>
+                  {errors.expire}
+                </Text>
+              )}
             </View>
           </View>
         </View>
         <View style={styles.item}>
-          <View style={{width:'100%'}}>
-
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.title}>Total Amount:</Text>
-            <Text style={styles.direction}>Rs. {booking.total}</Text>
+          <View style={{width: '100%'}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.title}>Total Amount:</Text>
+              <Text style={styles.direction}>Rs. {booking.total}</Text>
+            </View>
           </View>
         </View>
-        </View>
-        <View style={{width: '100%',marginVertical:heightPercentageToDP('2%')}}>
+        <View
+          style={{width: '100%', marginVertical: heightPercentageToDP('2%')}}>
           <CustomButton
             loader={loader}
             onPress={() => handleSubmit()}
@@ -311,9 +326,43 @@ const PaymentCard = props => {
           />
         </View>
       </ScrollView>
+      {/* </View> */}
       {/* <View>
         <Button onPress={onPressLearnMore} title="Learn More" color="#841584" />
       </View> */}
+      <ModalPoup
+        visible={showfilterModal}
+        onClose={() => setShowFilterModal(false)}
+        removeButton={true}
+        >
+        <View
+          style={{
+            alignItems:'center'
+          }}>
+          <View>
+            <LottieView
+              style={{
+                width: 150,
+                height: 150,
+
+              }}
+              resizeMode="cover"
+              source={require('../../Assets/animations/CardPayment.json')}
+              autoPlay
+              loop
+            />
+          </View>
+          <View><Text style={styles.Paymenttitle}>Payment Successful!</Text></View>
+          <View
+          style={{width: '40%', marginTop: heightPercentageToDP('1%')}}>
+          <CustomButton
+            // loader={loader}
+            onPress={() => handleSuccess()}
+            title="Done"
+          />
+        </View>
+        </View>
+      </ModalPoup>
     </View>
   );
 };
@@ -335,11 +384,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     padding: 20,
-    backgroundColor:'white',
+    backgroundColor: 'white',
     elevation: 5,
   },
   inputContainer: {
-
     backgroundColor: Colors.White,
     borderRadius: 18,
     flexDirection: 'row',
@@ -351,6 +399,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
+    color: Colors.lightPurple,
+  },
+  Paymenttitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
     color: Colors.lightPurple,
   },
   direction: {

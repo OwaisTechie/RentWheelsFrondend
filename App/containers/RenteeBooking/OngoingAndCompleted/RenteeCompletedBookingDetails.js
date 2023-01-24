@@ -204,7 +204,7 @@ const RenteeCompletedBookingDetails = props => {
 
   const onMapView = () => {
     navigation.navigate({
-      name: 'BookingDetailseMap',
+      name: 'RenteeonGoingBookingDetailsMap',
       params: {LocationMarker: location},
     });
   };

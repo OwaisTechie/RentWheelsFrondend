@@ -132,7 +132,7 @@ export async function addVehicle(payload,onSuccess, onFailure) {
     return data;
   });
   axios
-    .post(URL,formData,{timeout:10000},header)
+    .post(URL,formData,header)
     .then(res => {
       console.log("RES>DATA ->> ",res.data)
       Toast.show({

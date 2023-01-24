@@ -93,7 +93,7 @@ const AppStack = props => {
       <Drawer.Navigator
         id="LeftDrawer"
         useLegacyImplementation
-        // initialRouteName={userMode === 'R' ? 'Profile' : 'RegisteredVehicles'}
+        initialRouteName={userMode === 'P' ? 'HomeNavigator' : 'BookingNavigator'}
         // initialRouteName={'HomeNavigator'}
         screenOptions={{
           drawerPosition: 'left',

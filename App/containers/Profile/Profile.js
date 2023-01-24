@@ -272,7 +272,7 @@ const Profile = () => {
     }
     const {username, email, phone, profilePicture, verification} = userData;
     if (verification) {
-      let {image, cnicBack, cnicFront, licenseBack, licenseFront, utilityBill} =
+      let {image, cnicBack, cnicFront, licenseBack, licenseFront, utilityBill,cnicNo} =
         verification;
 
       console.log('utilityBills ->> ', utilityBill);
@@ -284,8 +284,8 @@ const Profile = () => {
       setlicenseBack(getLocalHost(licenseBack));
       setCnicVerification(getLocalHost(image));
       setUtilityBills(getLocalHost(utilityBill));
-      
-    }
+      setCnic(cnicNo);
+    };
     // var imageProfile = getLocalHost(profilePicture ? profilePicture : '');
     // console.log(imageProfile,"imageProfile")
     if(profilePicture){
