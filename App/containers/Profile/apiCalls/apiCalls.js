@@ -87,12 +87,10 @@ export async function updateProfile(Payload, onSuccess, onFailure) {
   formData.append('email', Payload.email);
   formData.append('phone', Payload.phone);
   formData.append('profilePicture', {
-    name: Payload.profilePicture.path.split('/').pop(),
-    type: Payload.profilePicture.mime,
+    name: Payload.profilePicture?.path ? Payload.profilePicture?.path.split('/').pop() : Payload.profilePicture?.split('/').pop(),
+    type: Payload.profilePicture?.mime ? Payload.profilePicture?.mime: "image/jpeg",
     uri:
-      Platform.OS === 'android'
-        ? Payload.profilePicture.path
-        : Payload.profilePicture.path.replace('file://', ''),
+        Payload.profilePicture?.path ? Payload.profilePicture?.path: Payload?.profilePicture
   });
 
   const baseUrl = Config.baseUrl.main;

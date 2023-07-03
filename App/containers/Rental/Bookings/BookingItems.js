@@ -93,7 +93,7 @@ export function BookingItems(props) {
         <View style={styles.BookingInfo}>
           <Text style={styles.title}>Booking Status :</Text>
           <Text style={styles.userDetail}>
-           {item.rentalStatus == "0" ? "Pending " : item.rentalStatus == "1" ? "Approve" : item.rentalStatus == "2" ? "Rejected" : null}
+           {item.rentalStatus == "0" ? "Request" : item.rentalStatus == "1" ? "Approved" : item.rentalStatus == "2" ? "Rejected" : null}
           </Text>
         </View>
         <View

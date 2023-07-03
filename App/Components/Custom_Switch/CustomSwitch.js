@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Colors} from '../../Theme';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 
 export default function CustomSwitch({
   selectionMode,
@@ -22,7 +23,7 @@ export default function CustomSwitch({
   return (
     <View
       style={{
-        height: 44,
+        height: heightPercentageToDP('6%'),
         width: '100%',
         backgroundColor: Colors.darkgrey,
         borderRadius: 10,

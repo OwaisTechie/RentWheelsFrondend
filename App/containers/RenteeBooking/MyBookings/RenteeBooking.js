@@ -222,7 +222,7 @@ const RenteeBooking = () => {
         <View
           style={{
             // height: General_Styles.generalHeight / 4,
-            marginVertical: hp('3%'),
+            marginVertical: hp('5%'),
             // paddingVertical:hp('5%'),
             // width: General_Styles.generalWidth,
             // backgroundColor: Colors,
@@ -230,7 +230,7 @@ const RenteeBooking = () => {
           }}>
           <CustomSwitch
             selectionMode={1}
-            option1="Pending"
+            option1="Request"
             option2="Approve"
             option3="Rejected"
             Thirdbtn={true}

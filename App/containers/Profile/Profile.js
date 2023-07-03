@@ -47,8 +47,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import {updateProfile} from './apiCalls/apiCalls';
 import {updateProfiles} from '../../Redux/auth/Reducer/authReducer';
-import Toast  from 'react-native-toast-message';
-import { getLocalHost } from '../../Constant/ConvertLocalHost';
+import Toast from 'react-native-toast-message';
+import {getLocalHost} from '../../Constant/ConvertLocalHost';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -176,55 +176,49 @@ const Profile = () => {
       setLoader(true);
       const formData = new FormData();
 
-      formData.append('cnicNo',cnic);
+      formData.append('cnicNo', cnic);
 
       formData.append('cnicFront', {
-        name: cnicFront.path.split('/').pop(),
-        type: cnicFront.mime,
-        uri:
-          Platform.OS === 'android'
-            ? cnicFront.path
-            : cnicFront.path.replace('file://', ''),
+        name: cnicFront?.path
+          ? cnicFront?.path?.split('/').pop()
+          : cnicFront?.split('/').pop(),
+        type: cnicFront?.mime ? cnicFront.mime : 'image/jpeg',
+        uri: cnicFront?.path ? cnicFront?.path : cnicFront,
       });
       formData.append('cnicBack', {
-        name: cnicBack.path.split('/').pop(),
-        type: cnicBack.mime,
-        uri:
-          Platform.OS === 'android'
-            ? cnicBack.path
-            : cnicBack.path.replace('file://', ''),
+        name: cnicBack?.path
+          ? cnicBack.path.split('/').pop()
+          : cnicBack?.split('/').pop(),
+        type: cnicBack?.mime ? cnicBack?.mime : 'image/jpeg',
+        uri: cnicBack?.path ? cnicBack.path : cnicBack,
       });
       formData.append('licenseFront', {
-        name: licenseFront.path.split('/').pop(),
-        type: licenseFront.mime,
-        uri:
-          Platform.OS === 'android'
-            ? licenseFront.path
-            : licenseFront.path.replace('file://', ''),
+        name: licenseFront.path
+          ? licenseFront.path.split('/').pop()
+          : licenseFront?.split('/').pop(),
+        type: licenseFront.mime ? licenseFront.mime : 'image/jpeg',
+        uri: licenseFront?.path ? licenseFront.path : licenseFront,
       });
       formData.append('licenseBack', {
-        name: licenseBack.path.split('/').pop(),
-        type: licenseBack.mime,
-        uri:
-          Platform.OS === 'android'
-            ? licenseBack.path
-            : licenseBack.path.replace('file://', ''),
+        name: licenseBack?.path
+          ? licenseBack.path.split('/').pop()
+          : licenseBack?.split('/').pop(),
+        type: licenseBack.mime ? licenseBack.mime : 'image/jpeg',
+        uri: licenseBack.path ? licenseBack.path : licenseBack,
       });
       formData.append('utilityBill', {
-        name: utilityBills.path.split('/').pop(),
-        type: utilityBills.mime,
-        uri:
-          Platform.OS === 'android'
-            ? utilityBills.path
-            : utilityBills.path.replace('file://', ''),
+        name: utilityBills?.path
+          ? utilityBills.path.split('/').pop()
+          : utilityBills.split('/').pop(),
+        type: utilityBills?.mime ? utilityBills.mime : 'image/jpeg',
+        uri: utilityBills?.path ? utilityBills.path : utilityBills,
       });
       formData.append('image', {
-        name: cnicVerification.path.split('/').pop(),
-        type: cnicVerification.mime,
-        uri:
-          Platform.OS === 'android'
-            ? cnicVerification.path
-            : cnicVerification.path.replace('file://', ''),
+        name: cnicVerification?.path
+          ? cnicVerification.path.split('/').pop()
+          : cnicVerification?.split('/').pop(),
+        type: cnicVerification.mime ? cnicVerification.mime : 'image/jpeg',
+        uri: cnicVerification?.path ? cnicVerification.path : cnicVerification,
       });
 
       console.log('FORM DATA', formData);
@@ -237,6 +231,8 @@ const Profile = () => {
         .post(URL, formData, header)
         .then(response => {
           setLoader(false);
+          console.log('response ->> ', response.data);
+
           Toast.show({
             topOffset: 60,
             type: 'success',
@@ -247,7 +243,7 @@ const Profile = () => {
           });
         })
         .catch(error => {
-          console.log("ERR ->>",error)
+          console.log('ERR ->>', error);
           setLoader(false);
           Toast.show({
             topOffset: 60,
@@ -272,8 +268,15 @@ const Profile = () => {
     }
     const {username, email, phone, profilePicture, verification} = userData;
     if (verification) {
-      let {image, cnicBack, cnicFront, licenseBack, licenseFront, utilityBill,cnicNo} =
-        verification;
+      let {
+        image,
+        cnicBack,
+        cnicFront,
+        licenseBack,
+        licenseFront,
+        utilityBill,
+        cnicNo,
+      } = verification;
 
       console.log('utilityBills ->> ', utilityBill);
       console.log('utilityBills ->> ', licenseFront);
@@ -285,11 +288,11 @@ const Profile = () => {
       setCnicVerification(getLocalHost(image));
       setUtilityBills(getLocalHost(utilityBill));
       setCnic(cnicNo);
-    };
+    }
     // var imageProfile = getLocalHost(profilePicture ? profilePicture : '');
     // console.log(imageProfile,"imageProfile")
-    if(profilePicture){
-      let pic=getLocalHost(profilePicture);
+    if (profilePicture) {
+      let pic = getLocalHost(profilePicture);
       setPictureImage(pic);
     }
     setPhoneInput(phone);
@@ -366,12 +369,7 @@ const Profile = () => {
   };
 
   const updateUser = () => {
-    if (
-      email == '' ||
-      phoneInput == '' ||
-      username == '' ||
-      profile == null
-    ) {
+    if (email == '' || phoneInput == '' || username == '' || profile == null) {
       Alert.alert('User Details', 'Please fill all User Detail!', [
         {
           text: 'Cancel',
@@ -383,7 +381,7 @@ const Profile = () => {
     } else {
       let Payload = {
         email: email,
-        profilePicture: profile,
+        profilePicture: profile ? profile : pictureImage,
         phone: phoneInput,
         username: username,
       };
@@ -405,7 +403,7 @@ const Profile = () => {
     let Payload = {
       ...userData,
       email: email,
-      profilePicture: profile.path,
+      profilePicture: profile ? profile.path : pictureImage,
       phone: phoneInput,
       username: username,
     };
@@ -459,10 +457,10 @@ const Profile = () => {
           setPictureImage(image.path);
           setprofilePicture(image);
           setDocumentValue('');
-          break
+          break;
         default:
-        setCnicVerification(image);
-        setDocumentValue('');
+          setCnicVerification(image);
+          setDocumentValue('');
       }
 
       setShowFilterModal(false);
@@ -652,25 +650,24 @@ const Profile = () => {
               <View style={styles.gap} />
 
               <View>
-                  <CustomInput
-                    placeholder="Enter your Cnic"
-                    iconName="account-key-outline"
-                    type="materialCommunity"
-                    label="Cnic"
-                    returnKeyType="next"
-                    returnKeyLabel="next"
-                    value={cnic}
-                    // onSubmitEditing={() => {
-                    //   password.current.focus();
-                    // }}
-                    // onBlur={'handleBlur('username')'}
-                    // error={errors.username}
-                    // touched={touched.username}
-                    onChangeText={e => setCnic(e)}
-                    keyboardAppearance="dark"
-                  />
-
-                </View>
+                <CustomInput
+                  placeholder="Enter your Cnic"
+                  iconName="account-key-outline"
+                  type="materialCommunity"
+                  label="Cnic"
+                  returnKeyType="next"
+                  returnKeyLabel="next"
+                  value={cnic}
+                  // onSubmitEditing={() => {
+                  //   password.current.focus();
+                  // }}
+                  // onBlur={'handleBlur('username')'}
+                  // error={errors.username}
+                  // touched={touched.username}
+                  onChangeText={e => setCnic(e)}
+                  keyboardAppearance="dark"
+                />
+              </View>
               <View style={styles.gap} />
 
               {/* // Cnic front and back */}
@@ -743,7 +740,11 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   // borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicFront.path ? cnicFront.path : cnicFront}}
+                                source={{
+                                  uri: cnicFront.path
+                                    ? cnicFront.path
+                                    : cnicFront,
+                                }}
                                 resizeMode="contain"
                               />
 
@@ -824,7 +825,9 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicBack.path ? cnicBack.path : cnicBack}}
+                                source={{
+                                  uri: cnicBack.path ? cnicBack.path : cnicBack,
+                                }}
                                 resizeMode="contain"
                               />
 
@@ -913,7 +916,11 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: licenseFront.path ? licenseFront.path : licenseFront}}
+                                source={{
+                                  uri: licenseFront.path
+                                    ? licenseFront.path
+                                    : licenseFront,
+                                }}
                                 resizeMode="contain"
                               />
 
@@ -994,7 +1001,11 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: licenseBack.path ? licenseBack.path : licenseBack}}
+                                source={{
+                                  uri: licenseBack.path
+                                    ? licenseBack.path
+                                    : licenseBack,
+                                }}
                                 resizeMode="contain"
                               />
 
@@ -1084,7 +1095,11 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: utilityBills.path ? utilityBills.path : utilityBills}}
+                                source={{
+                                  uri: utilityBills.path
+                                    ? utilityBills.path
+                                    : utilityBills,
+                                }}
                                 resizeMode="contain"
                               />
 
@@ -1128,8 +1143,7 @@ const Profile = () => {
                           borderColor: Colors.backgroundMedium,
                         }}>
                         {cnicVerification == '' ? (
-                          <TouchableOpacity
-                            onPress={openCameraLibray}>
+                          <TouchableOpacity onPress={openCameraLibray}>
                             <View
                               style={{
                                 flex: 1,
@@ -1170,7 +1184,11 @@ const Profile = () => {
                                   //   index === indexSelected ? Colors.lightPurple : 'white',
                                   borderColor: Colors.lightPurple,
                                 }}
-                                source={{uri: cnicVerification.path ? cnicVerification.path : cnicVerification}}
+                                source={{
+                                  uri: cnicVerification.path
+                                    ? cnicVerification.path
+                                    : cnicVerification,
+                                }}
                                 resizeMode="contain"
                               />
 

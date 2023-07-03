@@ -4,6 +4,7 @@ console.log("GET IP =>> ",ip.getIp())
 export const Config = {
   baseUrl: {
     main: `http://${ip.getIp()}:8000/api/v1/`
+    // main: `https://rent-wheels.netlify.app/.netlify/functions/app/api/v1/`
     // main: `http://192.168.43.197:8000/api/v1/`
   },
   endpoint: {

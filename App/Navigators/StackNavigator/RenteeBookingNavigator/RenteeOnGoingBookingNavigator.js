@@ -78,7 +78,7 @@ const RenteeOnGoingBookingNavigator = (props) => {
   return (
     <BookingStack.Navigator
       screenOptions={header}
-      initialRouteName={'Booking'}>
+      initialRouteName={'RenteeCompletedAndOngoing'}>
       <BookingStack.Screen
         name="RenteeCompletedAndOngoing"
         component={RenteeCompletedAndOngoing}

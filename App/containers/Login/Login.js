@@ -64,7 +64,7 @@ import {NotificationListner, requestUserPermission} from '../../Helpers/Helper';
 import PushNotification, {Importance} from 'react-native-push-notification';
 const heighto = Dimensions.get('screen').height;
 const width = Dimensions.get('screen').width;
-import notifee from '@notifee/react-native';
+// import notifee from '@notifee/react-native';
 export default Login = ({navigation}) => {
   const dispatch = useDispatch();
   const scrollViewRef = useRef();
@@ -149,7 +149,6 @@ export default Login = ({navigation}) => {
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
- 
       getToken();
     } else {
       console.log('NOT AUTHORIZED');
@@ -162,7 +161,7 @@ export default Login = ({navigation}) => {
       try {
         await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
-  
+
         if (token) {
           setFcmToken(token);
 
@@ -208,7 +207,6 @@ export default Login = ({navigation}) => {
       });
 
     messaging().onMessage(async remoteMessage => {
-
       const channelId = Math.random().toString(36).substring(7);
       createChannel(channelId);
       showNotification(channelId, {
@@ -223,8 +221,6 @@ export default Login = ({navigation}) => {
       console.log('Message handled in the background!', remoteMessage);
     });
   };
-
-  
 
   const forgotEmailHandler = payload => {
     const data = {
@@ -321,13 +317,13 @@ export default Login = ({navigation}) => {
           ...payload,
           firebaseToken: fcmToken,
         };
-   
+
         loginRequest(Payload, onSuccess, onFailure);
       },
     });
 
   const onSuccess = async response => {
-    console.log("response.data.Payload ->> ",response.data.Payload)
+    console.log('response.data.Payload ->> ', response.data.Payload);
     const payload = {
       userToken: response.Token,
       user: response.data.Payload,
@@ -338,10 +334,10 @@ export default Login = ({navigation}) => {
     };
     const userToken = ['userToken', response.Token];
     const userMode = ['userMode', 'P'];
-    const userDetail =['userDetail',JSON.stringify(response.data.Payload)]
+    const userDetail = ['userDetail', JSON.stringify(response.data.Payload)];
 
     try {
-      await AsyncStorage.multiSet([userToken,userMode,userDetail]);
+      await AsyncStorage.multiSet([userToken, userMode, userDetail]);
       // await AsyncStorage.set('userToken',response.Token);
       // await AsyncStorage.set('userMode',response.Token);
       // await AsyncStorage.set('userDetail',JSON.stringify(response.data.Payload));
@@ -378,10 +374,7 @@ export default Login = ({navigation}) => {
     // Container Start
     <SafeAreaView style={styles.container}>
       {/*  Header */}
-      <StatusBar
-        backgroundColor={Colors.lightgrey}
-        barStyle="dark-content"
-      />
+      <StatusBar backgroundColor={Colors.lightgrey} barStyle="dark-content" />
       <View style={{flex: 1, overflow: 'hidden'}}>
         <View style={styles.brandView}>
           <Icon

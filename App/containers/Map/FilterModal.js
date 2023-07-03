@@ -42,6 +42,7 @@ const Section = ({containerStyle, title, children}) => {
   );
 };
 
+const screenHeight = Dimensions.get('screen').height;
 const FilterModal = ({isVisible, onClose, applyFilter}) => {
   const BodyType = [
     {
@@ -497,17 +498,18 @@ const FilterModal = ({isVisible, onClose, applyFilter}) => {
           <View
             style={{
               position: 'absolute',
-              bottom: heightPercentageToDP('13%'),
+              // bottom: heightPercentageToDP('10%'),
+              bottom: screenHeight / 10,
               left: 0,
               right: 0,
               paddingHorizontal: Fonts.SIZES.padding,
-              paddingVertical: Fonts.SIZES.radius,
+              // paddingVertical: Fonts.SIZES.radius,
               // backgroundColor: Colors.White,
             }}>
             <TextButton
               label="Apply Filters"
               buttonContainerStyle={{
-                height: 50,
+                height: heightPercentageToDP('7%'),
                 borderRadius: Fonts.SIZES.base,
                 backgroundColor: Colors.lightPurple,
               }}

@@ -18,6 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector,useDispatch } from 'react-redux';
 import { modeChange ,globalLoader, logout} from '../../../Redux/auth/Reducer/authReducer';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 const CustomDrawer = props => {
   const [mode, setMode] = useState(true);
@@ -153,9 +154,10 @@ const CustomDrawer = props => {
             <CustomIcons type='materialCommunity' name="account-convert-outline" size={22} color={Colors.paleorange} />
             <Text
               style={{
-                fontSize: 15,
+                fontSize: widthPercentageToDP('4%'),
                 fontFamily: 'Roboto-Medium',
-                marginLeft: 5,
+                fontWeight:'bold',
+                marginLeft: widthPercentageToDP('2%'),
               }}>
               {userMode === "P" ? 'Car Owner Mode' : 'Renter Mode'}
             </Text>
@@ -179,9 +181,10 @@ const CustomDrawer = props => {
             <Ionicons name="exit-outline" size={22} color={Colors.paleorange}/>
             <Text
               style={{
-                fontSize: 15,
+                fontSize: widthPercentageToDP('4%'),
                 fontFamily: 'Roboto-Medium',
-                marginLeft: 5,
+                fontWeight:'bold',
+                marginLeft: widthPercentageToDP('2%'),
               }}>
               Sign Out
             </Text>

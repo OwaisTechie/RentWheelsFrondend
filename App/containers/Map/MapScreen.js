@@ -216,6 +216,13 @@ const MapScreen = props => {
       vehicleType: item?.vehicleType,
     });
   }, []);
+
+  const onNearByFailure = (data) => {
+    console.log("data -> ",data);
+    setVehicleLoading(false);
+    setVehicles(data?.data);
+  };
+
   return (
     <View style={styles.container}>
       {/* <TopBar onPressElement={handelResetInitialPosition} /> */}
@@ -278,7 +285,7 @@ const MapScreen = props => {
               console.log('PAYLOAD ->> ', payload);
               // let pickupLocation = [67.0699,24.8604]
               setVehicleLoading(true);
-              getNearByLocation(payload, onSuccess, onFailure);
+              getNearByLocation(payload, onSuccess, onNearByFailure);
               // setRegion({
               // 	latitude: details.geometry.location.lat,
               // 	longitude: details.geometry.location.lng,
@@ -338,10 +345,10 @@ const MapScreen = props => {
         ref={mapRef}
         customMapStyle={mapStyle}
         provider={PROVIDER_GOOGLE}
-        loadingEnabled={vehicles?.length > 0 ? false : true}
+        // loadingEnabled={vehicles?.length > 0 ? false : true}
         // showsUserLocation={true}
         showsMyLocationButton={true}
-        loadingIndicatorColor={Colors.lightPurple}
+        // loadingIndicatorColor={Colors.lightPurple}
         style={{
           width: Dimensions.get('window').width,
           height: vehicleLoading

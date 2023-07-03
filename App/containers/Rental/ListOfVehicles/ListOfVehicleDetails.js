@@ -32,8 +32,12 @@ import {
   setCarAddress,
   setCarLatLong,
 } from '../../../Redux/auth/Reducer/AddressReducer';
-import { getLocalHost } from '../../../Constant/ConvertLocalHost';
-import { Colors, CustomIcons } from '../../../Theme';
+import {getLocalHost} from '../../../Constant/ConvertLocalHost';
+import {Colors, CustomIcons} from '../../../Theme';
+import {getReviewsOfVehicle} from '../../Vehicle/apiCalls/apiCalls';
+import BottomSheetSkelton from '../../Map/BottomSheet/BottomSheetSkelton';
+import CustomSwitch from '../../../Components/Custom_Switch/CustomSwitch';
+import ReviewList from '../../Vehicle/ReviewList/ReviewList';
 
 const ListOfVehicleDetails = props => {
   const {navigation, route} = props;
@@ -44,11 +48,11 @@ const ListOfVehicleDetails = props => {
   const [switchValue, setSwitchValue] = useState('1');
   const [loader, setLoader] = useState(false);
   const Vehicle = route?.params.vehicle;
-  console.log("Vehicle?.images ->> ",Vehicle)
+  console.log('Vehicle?.images ->> ', Vehicle);
   const dispatch = useDispatch();
   // const getVehicle = useSelector(getVehicleById(VehicleId));
   var location = Vehicle?.pickupLocation?.coordinates;
-  console.log("LOCATIOn ->> ",location);
+  console.log('LOCATIOn ->> ', location);
   const markerAddress = useSelector(state => state.address.userAddress);
 
   const [Specification, setSpecification] = useState({
@@ -58,6 +62,22 @@ const ListOfVehicleDetails = props => {
     noOfSeats: Vehicle?.noOfSeats,
     fuelType: Vehicle?.fuelType,
   });
+
+  useEffect(() => {
+    setReviewLoading(true);
+    let VehicleID = Vehicle._id;
+    getReviewsOfVehicle(VehicleID, onSuccessReview, onSuccessFailure);
+  }, []);
+
+  const onSuccessReview = data => {
+    console.log('DATA ->> ', data);
+    let {Payload} = data;
+    setReviewLoading(false);
+    setReviews(Payload);
+  };
+  const onSuccessFailure = () => {
+    onSuccessFailure(false);
+  };
 
   useEffect(() => {
     Geocoder.init('AIzaSyC6Vo_6ohnkLyGIw2IPmZka0TarRaeWJ2g'); // use a valid API key
@@ -91,8 +111,6 @@ const ListOfVehicleDetails = props => {
     setLoader(true);
     isVerified(onSuccess, onFailure);
   };
-
- 
 
   //   useEffect(() => {
   //     const unsubscribe = navigation.addListener('focus', () => {
@@ -163,7 +181,9 @@ const ListOfVehicleDetails = props => {
         <Image
           onLoadEnd={() => setLoading(false)}
           source={{
-            uri: item ? item :'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
+            uri: item
+              ? item
+              : 'https://freepngimg.com/thumb/car/7-2-car-free-png-image.png',
           }}
           style={styles.renderImage}
           onLoadStart={() => setLoading(true)}
@@ -255,7 +275,7 @@ const ListOfVehicleDetails = props => {
         <View
           style={{
             // paddingHorizontal: 16,
-            padding: 5,
+            // padding: 5,
             // marginTop: 6,
             height: hp('60%'),
             // flex:2,
@@ -263,7 +283,15 @@ const ListOfVehicleDetails = props => {
             borderTopRightRadius: 40,
             backgroundColor: Colors.White,
           }}>
-          
+          <View>
+            <CustomSwitch
+              selectionMode={1}
+              option1="Vehicle Details"
+              option2="Reviews"
+              onSelectSwitch={e => setSwitchValue(e)}
+            />
+          </View>
+          {switchValue == '1' ? (
             <View>
               <View
                 style={{
@@ -410,10 +438,43 @@ const ListOfVehicleDetails = props => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                
               </View>
             </View>
+          ) : (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              nestedScrollEnabled={true}>
+              {/* <View> */}
+              {reviewLoading ? (
+                <BottomSheetSkelton />
+              ) : Reviews?.length < 1 ? (
+                <View
+                  style={{
+                    height: heightPercentageToDP('50%'),
 
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: 'black'}}>
+                    Sorry there are no Reviews
+                  </Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={Reviews}
+                  contentContainerStyle={styles.contentContainer}
+                  //   refreshing={true}
+                  // style={{height: '100%'}}
+                  keyExtractor={key => {
+                    return key._id;
+                  }}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({item}) => <ReviewList item={item} />}
+                />
+              )}
+              {/* </View> */}
+            </ScrollView>
+          )}
         </View>
       </ScrollView>
 
@@ -525,7 +586,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '20%',
     paddingHorizontal: 4,
-    paddingVertical:10,
+    paddingVertical: 10,
     justifyContent: 'center',
   },
 });

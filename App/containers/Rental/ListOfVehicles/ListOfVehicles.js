@@ -945,7 +945,7 @@ const ListOfVehicles = () => {
           }}>
           <CustomSwitch
             selectionMode={1}
-            option1="Pending"
+            option1="Request"
             option2="Approved"
             option3="Rejected"
             Thirdbtn={true}

@@ -96,11 +96,11 @@ export function RenteeBookingItem(props) {
           <Text style={styles.title}>Booking Status :</Text>
           <Text style={styles.userDetail}>
             {item.rentalStatus == '0'
-              ? 'Pending Bookings'
+              ? 'Request'
               : item.rentalStatus == '1'
-              ? 'Approved Bookings'
+              ? 'Approved'
               : item.rentalStatus == '2'
-              ? 'Rejected Bookings'
+              ? 'Rejected'
               : null}
           </Text>
         </View>
@@ -156,8 +156,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 5,
     paddingBottom: 5,
+    flex:1,
     // height:hp('50%'),
-    // width:wp('6%'),
+    // width:wp('100%'),
     marginVertical: 10,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
@@ -167,8 +168,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   logo: {
-    height: 100,
-    width: 100,
+    height: hp('12%'),
+    width: wp('25%'),
     // backgroundColor:'black',
     borderRadius: 20,
     borderWidth: 2,

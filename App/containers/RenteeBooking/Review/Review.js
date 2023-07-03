@@ -20,6 +20,7 @@ import {Rating} from 'react-native-ratings';
 import CustomInput from '../../../Components/CustomTextField/CustomInput';
 import CustomButton from '../../../Components/Custom_btn/CustomButton';
 import { addReview } from '../apiCalls/apiCall';
+import { StackActions } from '@react-navigation/native';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Review = props => {
@@ -36,12 +37,13 @@ const Review = props => {
     address: 'R-20 Bagh-e-Malir',
     gender: 'male',
   };
-  const ratingCompleted = rating => {
+  const ratingCompleted = (rating) => {
     console.log('Rating is: ' + rating);
     setRating(rating);
   };
   const onSkip = () => {
-    navigation.navigate('HomeNavigator');
+    // navigation.navigate('HomeNavigator');
+    navigation.dispatch(StackActions.popToTop());
   };
 
   const handleSubmit = () => {
@@ -56,7 +58,8 @@ const Review = props => {
 
   const onSuccess = (dat) => {
     setLoader(false);
-    navigation.navigate('HomeNavigator');
+    // navigation.navigate('HomeNavigator');
+    navigation.dispatch(StackActions.popToTop());
   }
   const onFailure = () => {
     setLoader(false);
@@ -124,6 +127,7 @@ const Review = props => {
               fractions
               ratingCount={5}
               imageSize={30}
+              onFinishRating={ratingCompleted}
               onSwipeRating={ratingCompleted}
               style={{paddingVertical: 10}}
             />

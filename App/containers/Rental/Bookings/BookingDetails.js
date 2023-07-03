@@ -483,7 +483,7 @@ const BookingDetails = props => {
                   <Text style={styles.title}>Booking Status :</Text>
                   <Text style={styles.titleInfo}>
                     {Bookings.BookingInfo.rentalStatus == '0'
-                      ? 'Pending'
+                      ? 'Request'
                       : Bookings.BookingInfo.rentalStatus == '1'
                       ? 'Approve'
                       : Bookings.BookingInfo.rentalStatus == '2'

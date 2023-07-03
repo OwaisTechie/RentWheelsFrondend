@@ -61,7 +61,7 @@ export function getNearByLocation(payload,onSuccess, onFailure) {
     }
       if (error.response) {
         console.log('ERR =>> ', error.response.data);
-        onFailure(error.response.status);
+        onFailure(error.response?.data?.Payload);
         if (error.response.status !== 404) {
           Toast.show({
             topOffset: 60,
@@ -130,7 +130,7 @@ export function getVehicle(payload, onSuccess, onFailure) {
   const baseUrl = Config.baseUrl.main;
   const endpoint = Config.endpoint.vehicles.getAllVehicles;
   // const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&pickupLocation=${payload.longitude},${payload.latitude}`;
-  const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&averageRating=${payload.ratings}&excludeOwner=${payload.ownerId}`;
+  const URL = `${baseUrl}${endpoint}?selfDriveCharges.selfDriveDailyCharges[gte]=${payload.priceRange[0]}&selfDriveCharges.selfDriveDailyCharges[lte]=${payload.priceRange[1]}&vehicleType=${payload.vehicleType}&isAutomatic=${payload.isAutomatic}&fuelType=${payload.fuelType}&averageRating[gte]=${payload.ratings}&excludeOwner=${payload.ownerId}`;
 
   console.log("URL ->> ",URL)
   console.log("payload ->> ",payload)
